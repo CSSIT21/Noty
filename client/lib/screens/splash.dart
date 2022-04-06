@@ -1,13 +1,27 @@
-import 'package:flutter/material.dart';
+import 'dart:async' as async;
 
-class Splash extends StatefulWidget {
-  const Splash({Key? key}) : super(key: key);
+import 'package:flutter/material.dart';
+import 'package:noty_client/screens/start/welcome.dart';
+
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({Key? key}) : super(key: key);
 
   @override
-  State<Splash> createState() => _SplashState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashState extends State<Splash> {
+class _SplashScreenState extends State<SplashScreen> {
+  late async.Timer _timer;
+
+  _SplashScreenState() {
+    _timer = async.Timer(const Duration(milliseconds: 2500), () {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const WelcomeScreen()) // Use pushReplacement for clear backstack.
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

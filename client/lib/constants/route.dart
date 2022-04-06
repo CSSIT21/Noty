@@ -1,10 +1,12 @@
-import 'package:flutter/material.dart' show WidgetBuilder;
-import 'package:noty_client/screens/splash.dart' show Splash;
+import 'package:flutter/material.dart' as material;
+import 'package:noty_client/screens/splash.dart' show SplashScreen;
+import 'package:noty_client/screens/start/welcome.dart' show WelcomeScreen;
 
 class RouteConstant {
-  static Map<String, WidgetBuilder> route() {
-    return <String, WidgetBuilder>{
-      '/': (_) => const Splash(),
+  static Map<String, material.WidgetBuilder> route() {
+    return <String, material.WidgetBuilder>{
+      '/': (_) => const SplashScreen(),
+      '/welcome': (_) => const WelcomeScreen(),
     };
   }
 }

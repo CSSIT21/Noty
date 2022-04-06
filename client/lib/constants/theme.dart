@@ -1,15 +1,15 @@
-import 'package:flutter/material.dart' show Color, MaterialColor, ThemeData;
-import 'package:noty_client/utils/graphics/color.dart' show createMaterialColor;
+import 'package:flutter/material.dart' as material;
+import 'package:noty_client/utils/graphics/color.dart' as color;
 
 class ThemeConstant {
   // Colors
-  static Color colorPrimaryLight = const Color(0xffb77fff);
+  static material.Color colorPrimaryLight = const material.Color(0xffb77fff);
 
   // Color swatch
-  static MaterialColor materialColorSwatch = createMaterialColor(colorPrimaryLight);
+  static material.MaterialColor materialColorSwatch = color.createMaterialColor(colorPrimaryLight);
 
   // Theme data
-  static ThemeData theme = ThemeData(
+  static material.ThemeData theme = material.ThemeData(
     primarySwatch: materialColorSwatch,
   );
 }

@@ -1,15 +1,15 @@
-import 'package:flutter/material.dart' show StatefulWidget, Key, State, Widget, BuildContext, Container;
+import 'package:flutter/material.dart' as material;
 
-class Core extends StatefulWidget {
-  const Core({Key? key}) : super(key: key);
+class CoreScreen extends material.StatefulWidget {
+  const CoreScreen({material.Key? key}) : super(key: key);
 
   @override
-  State<Core> createState() => _CoreState();
+  material.State<CoreScreen> createState() => _CoreScreenState();
 }
 
-class _CoreState extends State<Core> {
+class _CoreScreenState extends material.State<CoreScreen> {
   @override
-  Widget build(BuildContext context) {
-    return Container();
+  material.Widget build(material.BuildContext context) {
+    return material.Container();
   }
 }
