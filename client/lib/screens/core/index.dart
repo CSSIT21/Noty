@@ -16,7 +16,7 @@ class _CoreScreenState extends material.State<CoreScreen> with material.TickerPr
   void initState() {
     super.initState();
     _tabController = material.TabController(
-      initialIndex: 1,
+      initialIndex: 0,
       length: 4,
       vsync: this,
     );

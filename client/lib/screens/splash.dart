@@ -11,14 +11,11 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  late async.Timer _timer;
-
   _SplashScreenState() {
-    _timer = async.Timer(const Duration(milliseconds: 2500), () {
-      Navigator.pushReplacement(
-          context,
+    async.Timer(const Duration(milliseconds: 2500), () {
+      Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (context) => const WelcomeScreen()) // Use pushReplacement for clear backstack.
-      );
+          );
     });
   }
 
