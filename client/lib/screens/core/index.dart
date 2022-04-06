@@ -34,26 +34,33 @@ class _CoreScreenState extends material.State<CoreScreen> with material.TickerPr
         title: const material.Text("Main"),
       ),
       bottomNavigationBar: motion_tab_bar.MotionTabBar(
-        initialSelectedTab: "Home",
-        useSafeArea: true, // default: true, apply safe area wrapper
-        labels: const ["Dashboard", "Home", "Profile", "Settings"],
-        icons: const [material.Icons.dashboard, material.Icons.home, material.Icons.people_alt, material.Icons.settings],
+        initialSelectedTab: "Notes",
+        useSafeArea: true,
+        // Apply safe area wrapper
+        labels: const ["Notes", "Reminders", "Tags", "Me"],
+        icons: const [
+          //TODO: Change logo
+          material.Icons.dashboard,
+          material.Icons.home,
+          material.Icons.people_alt,
+          material.Icons.settings
+        ],
         tabSize: 50,
         tabBarHeight: 55,
         textStyle: const material.TextStyle(
           fontSize: 12,
-          color: material.Colors.black,
+          color: material.Color(0xFFBA68C8),
           fontWeight: material.FontWeight.w500,
         ),
-        tabIconColor: material.Colors.blue[600],
+        tabIconColor: material.Colors.purple[300],
         tabIconSize: 28.0,
         tabIconSelectedSize: 26.0,
-        tabSelectedColor: material.Colors.blue[900],
+        tabSelectedColor: material.Colors.purple[300],
         tabIconSelectedColor: material.Colors.white,
-        tabBarColor: const material.Color(0xFFAFAFAF),
+        tabBarColor: const material.Color(0xFFFFFFFF),
         onTabItemSelected: (int value) {
           setState(() {
-            _tabController!.index = value;
+            _tabController.index = value;
           });
         },
       ),
