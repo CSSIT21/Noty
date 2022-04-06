@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart' as material;
-import 'package:noty_client/screens/core/index.dart';
+import 'package:noty_client/screens/start/fragment_login.dart';
+import 'package:noty_client/screens/start/fragment_register.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class LoginScreen extends material.StatefulWidget {
   const LoginScreen({material.Key? key}) : super(key: key);
@@ -9,6 +11,8 @@ class LoginScreen extends material.StatefulWidget {
 }
 
 class _LoginScreenState extends material.State<LoginScreen> {
+  final RoundedLoadingButtonController _btnController = RoundedLoadingButtonController();
+
   @override
   material.Widget build(material.BuildContext context) {
     // Learn more about tab bar: https://docs.flutter.dev/cookbook/design/tabs
@@ -16,7 +20,6 @@ class _LoginScreenState extends material.State<LoginScreen> {
         length: 2,
         child: material.Scaffold(
           appBar: material.AppBar(
-            title: const material.Text("Get into your account"),
             bottom: const material.TabBar(
               tabs: [
                 material.Tab(text: "Login", icon: material.Icon(material.Icons.login)),
@@ -24,21 +27,8 @@ class _LoginScreenState extends material.State<LoginScreen> {
               ],
             ),
           ),
-          body: material.TabBarView(
-            children: [
-              material.Column(
-                mainAxisAlignment: material.MainAxisAlignment.center,
-                children: [
-                  material.ElevatedButton(
-                      onPressed: () {
-                        material.Navigator.push(
-                            context, material.MaterialPageRoute(builder: (context) => const CoreScreen()));
-                      },
-                      child: const material.Text("Login")),
-                ],
-              ),
-              const material.Text("Page 2")
-            ],
+          body: const material.TabBarView(
+            children: [LoginFragment(), RegisterFragment()],
           ),
         ));
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart' as material;
 import 'package:motion_tab_bar_v2/motion-tab-bar.dart' as motion_tab_bar;
+import 'package:noty_client/screens/core/fragment_notes.dart';
 
 class CoreScreen extends material.StatefulWidget {
   const CoreScreen({material.Key? key}) : super(key: key);
@@ -31,7 +32,8 @@ class _CoreScreenState extends material.State<CoreScreen> with material.TickerPr
   material.Widget build(material.BuildContext context) {
     return material.Scaffold(
       appBar: material.AppBar(
-        title: const material.Text("Main"),
+        title: const material.Text("Noty"),
+        automaticallyImplyLeading: false,
       ),
       bottomNavigationBar: motion_tab_bar.MotionTabBar(
         initialSelectedTab: "Notes",
@@ -65,20 +67,18 @@ class _CoreScreenState extends material.State<CoreScreen> with material.TickerPr
         },
       ),
       body: material.TabBarView(
-        physics: const material.NeverScrollableScrollPhysics(), // swipe navigation handling is not supported
+        physics: const material.NeverScrollableScrollPhysics(), // Swipe navigation handling is not supported
         controller: _tabController,
         // ignore: prefer_const_literals_to_create_immutables
-        children: [
-          const material.Center(
-            child: material.Text("Dashboard"),
-          ),
-          const material.Center(
+        children: const [
+          NotesFragment(),
+          material.Center(
             child: material.Text("Home"),
           ),
-          const material.Center(
+          material.Center(
             child: material.Text("Profile"),
           ),
-          const material.Center(
+          material.Center(
             child: material.Text("Settings"),
           ),
         ],

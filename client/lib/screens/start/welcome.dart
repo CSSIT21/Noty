@@ -25,7 +25,8 @@ class _WelcomeScreenState extends material.State<WelcomeScreen> {
             material.ElevatedButton(
                 child: const material.Text("Login"),
                 onPressed: () {
-                  material.Navigator.push(context, material.MaterialPageRoute(builder: (context) => const LoginScreen()));
+                  material.Navigator.push(
+                      context, material.MaterialPageRoute(builder: (context) => const LoginScreen()));
                 }),
           ],
         ),
