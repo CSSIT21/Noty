@@ -1,4 +1,4 @@
-module backend
+module noty-backend
 
 go 1.18
 

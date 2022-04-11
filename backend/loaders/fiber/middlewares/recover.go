@@ -4,7 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 
-	"backend/utils/config"
+	"noty-backend/utils/config"
 )
 
 var Recover = func() fiber.Handler {
