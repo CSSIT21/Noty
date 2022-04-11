@@ -6,7 +6,7 @@ run:
 dev:
 	air run
 
-swagger:
+swag:
 	swag init -g ./swagger/index.go -o ./swagger
 
 tidy:
