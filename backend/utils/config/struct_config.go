@@ -8,18 +8,8 @@ type config struct {
 	ServerHeader string
 	Cors         []string
 
-	JwtSecret       string
-	RecaptchaSecret string
+	JwtSecret string
 
-	MySqlDsn     string
-	MySqlMigrate bool
-
-	InternalIps   []string
-	InternalAuths []struct {
-		Username string
-		Password string
-	}
-
-	MsJwtPublicKey  string
-	MsJwtPrivateKey string
+	MongoUri    string
+	MongoDbName string
 }
