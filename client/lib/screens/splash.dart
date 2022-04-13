@@ -13,8 +13,11 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   _SplashScreenState() {
     async.Timer(const Duration(milliseconds: 2500), () {
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => const WelcomeScreen()) // Use pushReplacement for clear backstack.
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  const WelcomeScreen()) // Use pushReplacement for clear backstack.
           );
     });
   }
@@ -30,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
               child: Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                      colors: [Colors.purple, Colors.purpleAccent],
+                      colors: [Color(0xff6ABFF9), Colors.purpleAccent],
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       tileMode: TileMode.mirror,

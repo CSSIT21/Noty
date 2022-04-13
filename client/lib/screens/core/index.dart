@@ -9,7 +9,8 @@ class CoreScreen extends material.StatefulWidget {
   material.State<CoreScreen> createState() => _CoreScreenState();
 }
 
-class _CoreScreenState extends material.State<CoreScreen> with material.TickerProviderStateMixin {
+class _CoreScreenState extends material.State<CoreScreen>
+    with material.TickerProviderStateMixin {
   late material.TabController _tabController;
 
   @override
@@ -41,7 +42,7 @@ class _CoreScreenState extends material.State<CoreScreen> with material.TickerPr
         // Apply safe area wrapper
         labels: const ["Notes", "Reminders", "Tags", "Me"],
         icons: const [
-          //TODO: Change logo
+          //todo: Change logo
           material.Icons.dashboard,
           material.Icons.home,
           material.Icons.people_alt,
@@ -67,7 +68,8 @@ class _CoreScreenState extends material.State<CoreScreen> with material.TickerPr
         },
       ),
       body: material.TabBarView(
-        physics: const material.NeverScrollableScrollPhysics(), // Swipe navigation handling is not supported
+        physics: const material
+            .NeverScrollableScrollPhysics(), // Swipe navigation handling is not supported
         controller: _tabController,
         // ignore: prefer_const_literals_to_create_immutables
         children: const [

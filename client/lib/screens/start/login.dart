@@ -11,7 +11,8 @@ class LoginScreen extends material.StatefulWidget {
 }
 
 class _LoginScreenState extends material.State<LoginScreen> {
-  final RoundedLoadingButtonController _btnController = RoundedLoadingButtonController();
+  final RoundedLoadingButtonController _btnController =
+      RoundedLoadingButtonController();
 
   @override
   material.Widget build(material.BuildContext context) {
@@ -22,8 +23,11 @@ class _LoginScreenState extends material.State<LoginScreen> {
           appBar: material.AppBar(
             bottom: const material.TabBar(
               tabs: [
-                material.Tab(text: "Login", icon: material.Icon(material.Icons.login)),
-                material.Tab(text: "Signup", icon: material.Icon(material.Icons.person_add)),
+                material.Tab(
+                    text: "Login", icon: material.Icon(material.Icons.login)),
+                material.Tab(
+                    text: "Signup",
+                    icon: material.Icon(material.Icons.person_add)),
               ],
             ),
           ),

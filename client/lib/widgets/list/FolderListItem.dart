@@ -1,10 +1,13 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 class FolderListItem extends StatelessWidget {
   final String name;
   final int count;
 
-  const FolderListItem({Key? key, required this.name, required this.count}) : super(key: key);
+  const FolderListItem({Key? key, required this.name, required this.count})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
