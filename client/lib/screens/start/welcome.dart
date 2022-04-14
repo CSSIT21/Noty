@@ -33,7 +33,7 @@ class _WelcomeScreenState extends material.State<WelcomeScreen> {
                       textAlign: material.TextAlign.center,
                       style: material.TextStyle(
                           fontSize: 34,
-                          fontWeight: material.FontWeight.w700,
+                          fontWeight: material.FontWeight.w800,
                           color: material.Color(0xff6ABFF9)),
                     ),
                   ),
