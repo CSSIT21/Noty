@@ -13,7 +13,7 @@ var C = new(config)
 
 func init() {
 	// * Load configurations to struct
-	yml, err := ioutil.ReadFile("config.yaml")
+	yml, err := ioutil.ReadFile("config.yml")
 	if err != nil {
 		logger.Log(logrus.Fatal, "UNABLE TO READ YAML CONFIGURATION FILE")
 	}

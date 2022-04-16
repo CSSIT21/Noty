@@ -9,4 +9,5 @@ type User struct {
 	Username         string `json:"username" bson:"username"`
 	Email            string `json:"email" bson:"email"`
 	Password         string `json:"password" bson:"password"`
+	PictureId        uint64 `json:"picture_id" bson:"picture_id"`
 }

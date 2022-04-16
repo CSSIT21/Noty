@@ -26,6 +26,10 @@ func Init() {
 
 	// Initialize models
 	Collections = &collectionList{
-		User: mgm.Coll(new(models.User)),
+		User:     mgm.Coll(new(models.User)),
+		Picture:  mgm.Coll(new(models.Picture)),
+		Reminder: mgm.Coll(new(models.Reminder)),
+		Notes:    mgm.Coll(new(models.Notes)),
+		Folder:   mgm.Coll(new(models.Folder)),
 	}
 }
