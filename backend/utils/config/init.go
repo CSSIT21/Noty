@@ -15,11 +15,11 @@ func init() {
 	// * Load configurations to struct
 	yml, err := ioutil.ReadFile("config.yml")
 	if err != nil {
-		logger.Log(logrus.Fatal, "UNABLE TO READ YAML CONFIGURATION FILE")
+		logger.Log(logrus.Fatal, "UNABLE TO READ YML CONFIGURATION FILE")
 	}
 	err = yaml.Unmarshal(yml, C)
 	if err != nil {
-		logger.Log(logrus.Fatal, "UNABLE TO PARSE YAML CONFIGURATION FILE")
+		logger.Log(logrus.Fatal, "UNABLE TO PARSE YML CONFIGURATION FILE")
 	}
 
 	// * Apply log level configuration
