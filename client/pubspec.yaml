@@ -74,9 +74,14 @@ flutter:
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a
-  # list giving the asset and other descriptors for the font. For
-  # example:
-  #
-  #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/custom-fonts/#from-packages
+  # list giving the asset and other descriptors for the font.
+  fonts:
+    - family: SF-Pro-Display
+      fonts:
+        - asset: assts/fonts/SF-Pro-Display-Bold.ttf
+        - asset: assts/fonts/SF-Pro-Display-Heavy.ttf
+        - asset: assts/fonts/SF-Pro-Display-Light.ttf
+        - asset: assts/fonts/SF-Pro-Display-Medium.ttf
+        - asset: assts/fonts/SF-Pro-Display-Regular.ttf
+        - asset: assts/fonts/SF-Pro-Display-Semibold.ttf
+        - asset: assts/fonts/SF-Pro-Display-Thin.ttf
