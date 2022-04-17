@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:noty_client/constants/theme.dart';
 import 'package:noty_client/screens/core/index.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
@@ -12,7 +13,10 @@ class LoginFragment extends StatefulWidget {
 }
 
 class _LoginFragmentState extends State<LoginFragment> {
-  final RoundedLoadingButtonController _loginBtnController = RoundedLoadingButtonController();
+  final RoundedLoadingButtonController _loginBtnController =
+      RoundedLoadingButtonController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   // Just a mock function to simulating network activity delay
   void _loginCall() async {
@@ -24,8 +28,16 @@ class _LoginFragmentState extends State<LoginFragment> {
 
   void _loginNavigate() async {
     Timer(const Duration(milliseconds: 1500), () {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const CoreScreen()));
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => const CoreScreen()));
     });
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -34,12 +46,63 @@ class _LoginFragmentState extends State<LoginFragment> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        RoundedLoadingButton(
-          child: const Text('Login', style: TextStyle(color: Colors.white)),
-          color: Colors.amber,
-          controller: _loginBtnController,
-          onPressed: _loginCall,
+        Image.asset(
+          "assets/images/logo.png",
+          width: 200,
         ),
+        Container(
+          width: double.infinity,
+          height: 270,
+          margin: const EdgeInsets.only(top: 50),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                "Login",
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
+              ),
+              TextField(
+                controller: _emailController,
+                decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    labelText: 'Email',
+                    labelStyle:
+                        TextStyle(color: ThemeConstant.textFieldTextColor),
+                    filled: true,
+                    fillColor: ThemeConstant.textFieldBgColor),
+              ),
+              TextField(
+                controller: _passwordController,
+                obscureText: true,
+                decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    labelText: 'Password',
+                    labelStyle:
+                        TextStyle(color: ThemeConstant.textFieldTextColor),
+                    filled: true,
+                    fillColor: ThemeConstant.textFieldBgColor),
+              ),
+              Container(
+                width: double.infinity,
+                margin: const EdgeInsets.only(bottom: 12),
+                child: Text(
+                  "Forgot password?",
+                  textAlign: TextAlign.end,
+                  style: TextStyle(color: ThemeConstant.colorPrimaryLight),
+                ),
+              ),
+              RoundedLoadingButton(
+                child: const Text('Sign In',
+                    style: TextStyle(color: Colors.white, fontSize: 16)),
+                color: ThemeConstant.colorPrimaryLight,
+                borderRadius: 10,
+                controller: _loginBtnController,
+                onPressed: _loginCall,
+              ),
+            ],
+          ),
+        )
       ],
     );
   }

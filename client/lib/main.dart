@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:noty_client/constants/manifest.dart';
 import 'package:noty_client/constants/route.dart';
 import 'package:noty_client/constants/theme.dart';
@@ -13,6 +14,8 @@ class MyApp extends StatelessWidget {
   // Root widget of the application.
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+
     return MaterialApp(
       title: ManifestConstant.appName,
       debugShowCheckedModeBanner: false,
