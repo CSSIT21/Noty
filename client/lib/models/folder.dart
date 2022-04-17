@@ -7,14 +7,10 @@ class Folder {
     required this.id,
     required this.name,
     required this.count,
-  })
+  });
 
   factory Folder.fromJson(Map<String, dynamic> json) {
-    return Folder(
-        id: json["id"],
-        name: json["name"],
-        count: json["count"]
-    );
+    return Folder(id: json["id"], name: json["name"], count: json["count"]);
   }
 
   Map<String, dynamic> toJson() {

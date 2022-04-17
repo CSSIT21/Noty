@@ -78,10 +78,10 @@ flutter:
   fonts:
     - family: SF-Pro-Display
       fonts:
-        - asset: assts/fonts/SF-Pro-Display-Bold.ttf
-        - asset: assts/fonts/SF-Pro-Display-Heavy.ttf
-        - asset: assts/fonts/SF-Pro-Display-Light.ttf
-        - asset: assts/fonts/SF-Pro-Display-Medium.ttf
-        - asset: assts/fonts/SF-Pro-Display-Regular.ttf
-        - asset: assts/fonts/SF-Pro-Display-Semibold.ttf
-        - asset: assts/fonts/SF-Pro-Display-Thin.ttf
+        - asset: assets/fonts/sf-pro-display/SF-Pro-Display-Bold.ttf
+        - asset: assets/fonts/sf-pro-display/SF-Pro-Display-Heavy.ttf
+        - asset: assets/fonts/sf-pro-display/SF-Pro-Display-Light.ttf
+        - asset: assets/fonts/sf-pro-display/SF-Pro-Display-Medium.ttf
+        - asset: assets/fonts/sf-pro-display/SF-Pro-Display-Regular.ttf
+        - asset: assets/fonts/sf-pro-display/SF-Pro-Display-Semibold.ttf
+        - asset: assets/fonts/sf-pro-display/SF-Pro-Display-Thin.ttf

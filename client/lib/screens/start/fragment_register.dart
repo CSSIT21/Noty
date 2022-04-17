@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:noty_client/constants/theme.dart';
 
@@ -28,8 +27,7 @@ class _RegisterFragmentState extends State<RegisterFragment> {
                   ),
                   Text(
                     "Back",
-                    style: TextStyle(
-                        fontSize: 16, color: ThemeConstant.colorPrimaryLight),
+                    style: TextStyle(fontSize: 16, color: ThemeConstant.colorPrimaryLight),
                   )
                 ],
               ),
