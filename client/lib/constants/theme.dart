@@ -12,27 +12,31 @@ class ThemeConstant {
   static material.Color appBarColor = const material.Color(0xff1c1c1c);
 
   // Color swatch
-  static material.MaterialColor materialColorSwatch = color.createMaterialColor(colorPrimaryLight);
+  static material.MaterialColor materialColorSwatch =
+      color.createMaterialColor(colorPrimaryLight);
 
   // Theme data
   static material.ThemeData theme = material.ThemeData(
-    primarySwatch: materialColorSwatch,
-    primaryColor: colorPrimaryLight,
-    scaffoldBackgroundColor: colorPrimaryDark,
-    textTheme: material.Typography().white,
-    fontFamily: "SF-Pro-Display",
-    primaryTextTheme: material.Typography().white,
-    elevatedButtonTheme: material.ElevatedButtonThemeData(
-      style: material.ButtonStyle(
-        foregroundColor: material.MaterialStateProperty.all<material.Color>(textColorPrimary),
-        shape: material.MaterialStateProperty.all<material.RoundedRectangleBorder>(
-          material.RoundedRectangleBorder(
-            borderRadius: material.BorderRadius.circular(10.0),
+      primarySwatch: materialColorSwatch,
+      primaryColor: colorPrimaryLight,
+      scaffoldBackgroundColor: colorPrimaryDark,
+      textTheme: material.Typography().white,
+      fontFamily: "SF-Pro-Display",
+      primaryTextTheme: material.Typography().white,
+      elevatedButtonTheme: material.ElevatedButtonThemeData(
+        style: material.ButtonStyle(
+          foregroundColor: material.MaterialStateProperty.all<material.Color>(
+              textColorPrimary),
+          shape: material.MaterialStateProperty.all<
+              material.RoundedRectangleBorder>(
+            material.RoundedRectangleBorder(
+              borderRadius: material.BorderRadius.circular(10.0),
+            ),
           ),
         ),
       ),
-    ),
-    appBarTheme:
-        material.AppBarTheme(systemOverlayStyle: SystemUiOverlayStyle.light, foregroundColor: textColorPrimary),
-  );
+      appBarTheme: material.AppBarTheme(
+          systemOverlayStyle: SystemUiOverlayStyle.light,
+          foregroundColor: textColorPrimary),
+      unselectedWidgetColor: colorPrimaryLight);
 }
