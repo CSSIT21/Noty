@@ -5,14 +5,12 @@ import (
 )
 
 type Folder struct {
-	mgm.Model
 	mgm.DefaultModel `bson:"inline"`
 	UserId           uint64           `json:"user_id" bson:"user_id"`
 	Folders          FolderCollection `json:"folders" bson:"folders"`
 }
 
 type FolderCollection struct {
-	mgm.Model
 	mgm.DefaultModel `bson:"inline"`
 	Name             string   `json:"name" bson:"name"`
 	NotesId          []uint64 `json:"notes_id" bson:"notes_id"`

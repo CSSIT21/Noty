@@ -3,7 +3,6 @@ package models
 import "github.com/kamva/mgm/v3"
 
 type Notes struct {
-	mgm.Model
 	mgm.DefaultModel `bson:"inline"`
 	UserId           uint64 `json:"user_id" bson:"user_id"`
 	Title            string `json:"title" bson:"title"`
