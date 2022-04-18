@@ -5,9 +5,10 @@ import (
 	"github.com/kamva/mgm/v3"
 	"noty-backend/loaders/mongo/models"
 	"noty-backend/procedure/profile"
+	"noty-backend/procedure/signing"
+	"noty-backend/types/common"
 	"noty-backend/types/responder"
 	"noty-backend/utils/crypto"
-	"noty-backend/utils/logger"
 	"noty-backend/utils/text"
 )
 
@@ -39,7 +40,7 @@ func RegisterHandler(c *fiber.Ctx) error {
 
 	// * Validate Basic Registration
 	if err := profile.ValidateBasicRegistration(&models.User{
-		Email: body.Email,
+		Email: &body.Email,
 	}, body.Password); err != nil {
 		return err
 	}
@@ -47,13 +48,16 @@ func RegisterHandler(c *fiber.Ctx) error {
 	// * Hash Password
 	hashedPassword, _ := crypto.HashPassword(body.Password)
 
+	var pictureDefaultId uint64
+	pictureDefaultId = 1
+
 	// * Create User
 	user := &models.User{
-		Email:     body.Email,
-		Password:  hashedPassword,
-		Firstname: body.Firstname,
-		Lastname:  body.Lastname,
-		PictureId: 1,
+		Email:     &body.Email,
+		Password:  &hashedPassword,
+		Firstname: &body.Firstname,
+		Lastname:  &body.Lastname,
+		PictureId: &pictureDefaultId,
 	}
 	if err := mgm.Coll(user).Create(user); err != nil {
 		return &responder.GenericError{
@@ -62,9 +66,18 @@ func RegisterHandler(c *fiber.Ctx) error {
 		}
 	}
 
-	logger.Dump(user.ID)
+	// * Parse ObjectID to string
+	idString := user.ID.Hex()
+
+	// * Sign JWT
+	token, err := signing.SignJwt(&common.UserClaim{
+		UserId: &idString,
+	})
+	if err != nil {
+		return err
+	}
 
 	return c.JSON(responder.NewInfoResponse(&registerResponse{
-		Token: "abcd",
+		Token: token,
 	}))
 }
