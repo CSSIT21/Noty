@@ -18,10 +18,12 @@ func ValidateBasicRegistration(profile *models.User, password string) *responder
 	}
 
 	// * Check Duplicate Email
-	var user *models.User
-	if err := mongo.Collections.User.First(bson.M{"email": profile.Email}, user); err != mongoDriver.ErrNoDocuments {
+	user := new(models.User)
+	if err := mongo.Collections.User.First(bson.M{
+		"email": profile.Email,
+	}, user); err != mongoDriver.ErrNoDocuments {
 		return &responder.GenericError{
-			Message: "Unable to fetch user",
+			Message: "This email already used",
 			Err:     err,
 		}
 	}
