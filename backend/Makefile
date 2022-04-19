@@ -11,7 +11,7 @@ swag:
 
 tidy:
 	go mod tidy
-	go fmt backend/...
+	go fmt noty-backend/...
 
 build:
 	go build -o ./local/backend .
