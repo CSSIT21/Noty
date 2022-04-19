@@ -37,6 +37,7 @@ class ThemeConstant {
       ),
       appBarTheme: material.AppBarTheme(
           systemOverlayStyle: SystemUiOverlayStyle.light,
-          foregroundColor: textColorPrimary),
+          foregroundColor: textColorPrimary,
+          backgroundColor: appBarColor),
       unselectedWidgetColor: colorPrimaryLight);
 }

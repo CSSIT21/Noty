@@ -27,7 +27,6 @@ class _RegisterFragmentState extends State<RegisterFragment> {
           "Register",
           style: TextStyle(fontSize: 17),
         ),
-        backgroundColor: ThemeConstant.appBarColor,
         leadingWidth: 100,
         leading: GestureDetector(
           child: Padding(

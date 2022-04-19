@@ -29,7 +29,7 @@ class _LoginScreenState extends material.State<LoginScreen> {
                 material.Row(
                   mainAxisAlignment: material.MainAxisAlignment.center,
                   children: [
-                    const material.Text("Don’t have an account yet? "),
+                    const material.Text("Doesn't have an account yet? "),
                     material.GestureDetector(
                       onTap: () {
                         material.Navigator.push(
