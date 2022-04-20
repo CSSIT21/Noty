@@ -6,6 +6,7 @@ type Notes struct {
 	mgm.DefaultModel `bson:",inline"`
 	UserId           *uint64 `json:"user_id" bson:"user_id"`
 	Title            *string `json:"title" bson:"title"`
+	FolderId         *string `json:"folder_id" bson:"folder_id"`
 	NoteDetail       *[]any  `json:"note_detail" bson:"note_detail"`
 }
 
