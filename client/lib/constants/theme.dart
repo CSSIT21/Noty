@@ -5,8 +5,10 @@ import 'package:noty_client/utils/graphics/color.dart' as color;
 class ThemeConstant {
   // Colors
   static material.Color colorPrimaryLight = const material.Color(0xff6ABFF9);
-  static material.Color textColorPrimary = const material.Color(0xffffffff);
   static material.Color colorPrimaryDark = const material.Color(0xff161616);
+  static material.Color colorSecondaryDark = const material.Color(0xff1C1C1E);
+  static material.Color textColorPrimary = const material.Color(0xffffffff);
+  static material.Color textColorSecondary = const material.Color(0xff99989F);
   static material.Color textFieldBgColor = const material.Color(0xff2d2d2f);
   static material.Color textFieldTextColor = const material.Color(0xff98989f);
   static material.Color appBarColor = const material.Color(0xff1c1c1c);

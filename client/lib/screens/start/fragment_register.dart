@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:noty_client/constants/theme.dart';
 import 'package:noty_client/screens/core/index.dart';
-import 'package:noty_client/widgets/textfield/TextFieldDark.dart';
-import 'package:noty_client/widgets/typography/TitleText.dart';
+import 'package:noty_client/widgets/textfield/textfield.dart';
+import 'package:noty_client/widgets/typography/app_bar_text.dart';
+import 'package:noty_client/widgets/typography/title_text.dart';
 
 class RegisterFragment extends StatefulWidget {
   const RegisterFragment({Key? key}) : super(key: key);
@@ -23,10 +24,7 @@ class _RegisterFragmentState extends State<RegisterFragment> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Register",
-          style: TextStyle(fontSize: 17),
-        ),
+        title: const AppBarText(text: "Register"),
         leadingWidth: 100,
         leading: GestureDetector(
           child: Padding(

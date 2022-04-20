@@ -1,6 +1,5 @@
-// ignore_for_file: file_names
-
 import 'package:flutter/material.dart';
+import 'package:noty_client/constants/theme.dart';
 
 class FolderListItem extends StatelessWidget {
   final String name;
@@ -11,17 +10,45 @@ class FolderListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(name),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(count.toString()),
-        )
-      ],
+    return Container(
+      padding: const EdgeInsets.fromLTRB(15, 2, 15, 2),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Row(
+            children: [
+              Container(
+                margin: const EdgeInsets.only(right: 10),
+                child: Icon(
+                  Icons.folder_rounded,
+                  size: 26,
+                  color: ThemeConstant.colorPrimaryLight,
+                ),
+              ),
+              Text(
+                name,
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Text(
+                count.toString(),
+                style: TextStyle(color: ThemeConstant.textColorSecondary),
+              ),
+              Container(
+                margin: const EdgeInsets.only(left: 8),
+                child: Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  size: 16,
+                  color: ThemeConstant.colorPrimaryLight,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

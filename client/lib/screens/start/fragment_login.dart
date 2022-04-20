@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:noty_client/constants/theme.dart';
 import 'package:noty_client/screens/core/index.dart';
-import 'package:noty_client/widgets/textfield/TextFieldDark.dart';
+import 'package:noty_client/widgets/textfield/textfield.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class LoginFragment extends StatefulWidget {
