@@ -14,6 +14,7 @@ class FolderSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           child: const HeaderText(text: "Folders", size: Size.medium),
@@ -22,7 +23,10 @@ class FolderSection extends StatelessWidget {
         CurvedCard(
           child: Column(
             children: dividerInsert(
-                folders.map((folder) => FolderListItem(name: folder.name, count: folder.count)).toList(),
+                folders
+                    .map((folder) =>
+                        FolderListItem(name: folder.name, count: folder.count))
+                    .toList(),
                 const Divider(
                   color: Color(0xff434345),
                   indent: 50,

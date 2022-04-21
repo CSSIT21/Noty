@@ -14,9 +14,11 @@ class WelcomeScreen extends material.StatefulWidget {
 class _WelcomeScreenState extends material.State<WelcomeScreen> {
   @override
   material.Widget build(material.BuildContext context) {
+    double screenHeight = material.MediaQuery.of(context).size.height;
+
     return material.Scaffold(
       body: material.Padding(
-        padding: const material.EdgeInsets.only(top: 150, bottom: 50),
+        padding: material.EdgeInsets.only(top: screenHeight / 5.5, bottom: 50),
         child: material.SizedBox(
           width: double.infinity,
           child: material.Column(
@@ -30,7 +32,7 @@ class _WelcomeScreenState extends material.State<WelcomeScreen> {
                     width: 200,
                   ),
                   material.Padding(
-                    padding: const material.EdgeInsets.fromLTRB(50, 50, 50, 30),
+                    padding: const material.EdgeInsets.fromLTRB(50, 40, 50, 30),
                     child: material.Text(
                       "Place to make you PAIN",
                       textAlign: material.TextAlign.center,

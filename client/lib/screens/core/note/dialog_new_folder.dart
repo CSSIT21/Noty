@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:noty_client/constants/theme.dart';
@@ -21,11 +20,13 @@ showNewFolderDialog(BuildContext context) {
               ),
               CupertinoTextField(
                 controller: _folderController,
+                autofocus: true,
                 placeholder: "Name",
                 placeholderStyle: const TextStyle(
                   color: Color(0xff636367),
                 ),
-                style: TextStyle(color: ThemeConstant.textColorPrimary, fontSize: 12),
+                style: TextStyle(
+                    color: ThemeConstant.textColorPrimary, fontSize: 12),
               )
             ],
           ),

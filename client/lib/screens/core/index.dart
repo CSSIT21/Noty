@@ -75,7 +75,7 @@ class _CoreScreenState extends material.State<CoreScreen>
                         controller: _textController,
                         style: TextStyle(
                             color: ThemeConstant.textColorPrimary,
-                            fontSize: 16),
+                            fontSize: 14),
                         itemColor: ThemeConstant.colorPrimaryLight,
                       ),
                     ],

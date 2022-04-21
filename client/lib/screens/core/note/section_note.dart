@@ -11,6 +11,7 @@ class NoteSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           child: const HeaderText(text: "Notes", size: Size.medium),

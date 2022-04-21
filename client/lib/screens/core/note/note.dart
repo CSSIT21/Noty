@@ -19,7 +19,8 @@ class _NotesFragmentState extends State<NotesFragment> {
   List<Folder> _folders = [];
 
   Future<void> _readJson() async {
-    final String response = await rootBundle.loadString('assets/json/folders.json');
+    final String response =
+        await rootBundle.loadString('assets/json/folders.json');
     final List<dynamic> datas = await json.decode(response);
     List<Folder> temp = datas.map((data) {
       return Folder(id: data["id"], name: data["name"], count: data["count"]);
@@ -52,7 +53,9 @@ class _NotesFragmentState extends State<NotesFragment> {
           child: SizedBox(
             width: 75,
             height: 75,
-            child: menuPopup(context),
+            child: WidgetsBinding.instance!.window.viewInsets.bottom > 0
+                ? null
+                : menuPopup(context),
           ),
         )
       ],
