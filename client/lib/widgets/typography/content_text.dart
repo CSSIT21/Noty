@@ -3,8 +3,8 @@ import 'package:noty_client/types/widget/placement.dart';
 
 Map<Size, double> sizeMapper = {
   Size.tiny: 10,
-  Size.small: 14,
-  Size.medium: 16,
+  Size.small: 12,
+  Size.medium: 14,
   Size.large: 24,
 };
 

@@ -35,7 +35,7 @@ class _WelcomeScreenState extends material.State<WelcomeScreen> {
                       "Place to make you PAIN",
                       textAlign: material.TextAlign.center,
                       style: material.TextStyle(
-                          fontSize: 36,
+                          fontSize: 34,
                           fontWeight: material.FontWeight.w800,
                           color: ThemeConstant.colorPrimaryLight),
                     ),
