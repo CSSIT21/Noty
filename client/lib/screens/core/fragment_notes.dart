@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:noty_client/models/folder.dart';
 import 'package:noty_client/constants/theme.dart';
+import 'package:noty_client/types/widget/placement.dart';
 import 'package:noty_client/widgets/list/folder_list_item.dart';
 import 'package:noty_client/widgets/list/note_list_item.dart';
 import 'package:noty_client/widgets/typography/header_text.dart';
@@ -18,9 +19,9 @@ class NotesFragment extends StatefulWidget {
 class _NotesFragmentState extends State<NotesFragment> {
   late TextEditingController _folderController;
   List<Folder> folders = [];
+
   Future<void> _readJson() async {
-    final String response =
-        await rootBundle.loadString('assets/json/folders.json');
+    final String response = await rootBundle.loadString('assets/json/folders.json');
     final List<dynamic> datas = await json.decode(response);
     List<Folder> temp = datas.map((data) {
       return Folder(id: data["id"], name: data["name"], count: data["count"]);
@@ -56,8 +57,7 @@ class _NotesFragmentState extends State<NotesFragment> {
                   placeholderStyle: const TextStyle(
                     color: Color(0xff636367),
                   ),
-                  style: TextStyle(
-                      color: ThemeConstant.textColorPrimary, fontSize: 12),
+                  style: TextStyle(color: ThemeConstant.textColorPrimary, fontSize: 12),
                 )
               ],
             ),
@@ -157,7 +157,7 @@ class _NotesFragmentState extends State<NotesFragment> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                child: const HeaderText(text: "Folders"),
+                child: const HeaderText(text: "Folders", size: Size.medium),
                 margin: const EdgeInsets.only(bottom: 20),
               ),
               Container(
@@ -178,15 +178,14 @@ class _NotesFragmentState extends State<NotesFragment> {
                                   indent: 50,
                                 )
                               : Container(),
-                          FolderListItem(
-                              name: folder.name, count: folder.count),
+                          FolderListItem(name: folder.name, count: folder.count),
                         ],
                       ),
                   ],
                 ),
               ),
               Container(
-                child: const HeaderText(text: "Notes"),
+                child: const HeaderText(text: "Notes", size: Size.medium),
                 margin: const EdgeInsets.only(bottom: 20),
               ),
               Container(
