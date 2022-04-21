@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:noty_client/models/folder.dart';
 import 'package:noty_client/constants/theme.dart';
 import 'package:noty_client/types/widget/placement.dart';
+import 'package:noty_client/utils/widget/divider_insert.dart';
 import 'package:noty_client/widgets/list/folder_list_item.dart';
 import 'package:noty_client/widgets/list/note_list_item.dart';
 import 'package:noty_client/widgets/surface/curved_card.dart';
@@ -163,20 +164,12 @@ class _NotesFragmentState extends State<NotesFragment> {
               ),
               CurvedCard(
                 child: Column(
-                  children: [
-                    for (var folder in folders)
-                      Column(
-                        children: [
-                          folder.id != folders[0].id
-                              ? const Divider(
-                                  color: Color(0xff434345),
-                                  indent: 50,
-                                )
-                              : Container(),
-                          FolderListItem(name: folder.name, count: folder.count),
-                        ],
-                      ),
-                  ],
+                  children: dividerInsert(
+                      folders.map((folder) => FolderListItem(name: folder.name, count: folder.count)).toList(),
+                      const Divider(
+                        color: Color(0xff434345),
+                        indent: 50,
+                      )),
                 ),
               ),
               Container(
@@ -185,54 +178,43 @@ class _NotesFragmentState extends State<NotesFragment> {
               ),
               CurvedCard(
                 child: Column(
-                  children: const [
-                    NoteListItem(
-                      name: "IEEE Spectrum",
-                      date: "18/03/2022",
-                      reminder: true,
-                      tag: true,
-                    ),
-                    Divider(
-                      color: Color(0xff434345),
-                      indent: 25,
-                    ),
-                    NoteListItem(
-                      name: "12345678901234567890123456aaasss",
-                      date: "18/03/2022",
-                      reminder: false,
-                      tag: true,
-                    ),
-                    Divider(
-                      color: Color(0xff434345),
-                      indent: 25,
-                    ),
-                    NoteListItem(
-                      name: "Just a simple note",
-                      date: "18/03/2022",
-                      reminder: true,
-                      tag: false,
-                    ),
-                    Divider(
-                      color: Color(0xff434345),
-                      indent: 25,
-                    ),
-                    NoteListItem(
-                      name: "Hate Flutter",
-                      date: "18/03/2022",
-                      reminder: false,
-                      tag: false,
-                    ),
-                    Divider(
-                      color: Color(0xff434345),
-                      indent: 25,
-                    ),
-                    NoteListItem(
-                      name: "Hate Flutter",
-                      date: "18/03/2022",
-                      reminder: true,
-                      tag: false,
-                    ),
-                  ],
+                  children: dividerInsert(
+                      const [
+                        NoteListItem(
+                          name: "IEEE Spectrum",
+                          date: "18/03/2022",
+                          reminder: true,
+                          tag: true,
+                        ),
+                        NoteListItem(
+                          name: "12345678901234567890123456aaasss",
+                          date: "18/03/2022",
+                          reminder: false,
+                          tag: true,
+                        ),
+                        NoteListItem(
+                          name: "Just a simple note",
+                          date: "18/03/2022",
+                          reminder: true,
+                          tag: false,
+                        ),
+                        NoteListItem(
+                          name: "Hate Flutter",
+                          date: "18/03/2022",
+                          reminder: false,
+                          tag: false,
+                        ),
+                        NoteListItem(
+                          name: "Hate Flutter",
+                          date: "18/03/2022",
+                          reminder: true,
+                          tag: false,
+                        ),
+                      ],
+                      const Divider(
+                        color: Color(0xff434345),
+                        indent: 25,
+                      )),
                 ),
               ),
             ],
