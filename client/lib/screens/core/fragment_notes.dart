@@ -20,17 +20,18 @@ class NotesFragment extends StatefulWidget {
 
 class _NotesFragmentState extends State<NotesFragment> {
   late TextEditingController _folderController;
-  List<Folder> folders = [];
+  List<Folder> _folders = [];
 
   Future<void> _readJson() async {
-    final String response = await rootBundle.loadString('assets/json/folders.json');
+    final String response =
+        await rootBundle.loadString('assets/json/folders.json');
     final List<dynamic> datas = await json.decode(response);
     List<Folder> temp = datas.map((data) {
       return Folder(id: data["id"], name: data["name"], count: data["count"]);
     }).toList();
-    setState(() {
-      folders = temp;
-    });
+    if (mounted) {
+      setState(() => _folders = temp);
+    }
   }
 
   @override
@@ -59,7 +60,8 @@ class _NotesFragmentState extends State<NotesFragment> {
                   placeholderStyle: const TextStyle(
                     color: Color(0xff636367),
                   ),
-                  style: TextStyle(color: ThemeConstant.textColorPrimary, fontSize: 12),
+                  style: TextStyle(
+                      color: ThemeConstant.textColorPrimary, fontSize: 12),
                 )
               ],
             ),
@@ -165,11 +167,15 @@ class _NotesFragmentState extends State<NotesFragment> {
               CurvedCard(
                 child: Column(
                   children: dividerInsert(
-                      folders.map((folder) => FolderListItem(name: folder.name, count: folder.count)).toList(),
-                      const Divider(
-                        color: Color(0xff434345),
-                        indent: 50,
-                      )),
+                    _folders
+                        .map((folder) => FolderListItem(
+                            name: folder.name, count: folder.count))
+                        .toList(),
+                    const Divider(
+                      color: Color(0xff434345),
+                      indent: 50,
+                    ),
+                  ),
                 ),
               ),
               Container(

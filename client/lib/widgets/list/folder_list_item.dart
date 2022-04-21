@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:noty_client/constants/theme.dart';
+import 'package:noty_client/types/widget/placement.dart';
+import 'package:noty_client/widgets/typography/content_text.dart';
 
 class FolderListItem extends StatelessWidget {
   final String name;
@@ -26,9 +28,7 @@ class FolderListItem extends StatelessWidget {
                   color: ThemeConstant.colorPrimaryLight,
                 ),
               ),
-              Text(
-                name,
-              ),
+              ContentText(text: name, size: Size.medium)
             ],
           ),
           Row(

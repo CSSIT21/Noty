@@ -12,7 +12,7 @@ class _MeFragementState extends State<MeFragement> {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [Text("Hi")],
+      children: const [Text("Hi")],
     );
   }
 }

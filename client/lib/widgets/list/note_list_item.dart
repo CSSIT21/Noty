@@ -33,7 +33,8 @@ class NoteListItem extends StatelessWidget {
                   margin: const EdgeInsets.only(bottom: 2),
                   child: Text(
                     name,
-                    style: const TextStyle(fontWeight: FontWeight.w500),
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w500),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -42,7 +43,7 @@ class NoteListItem extends StatelessWidget {
                   child: Text(
                     date,
                     style: const TextStyle(
-                        fontSize: 10, fontWeight: FontWeight.w300),
+                        fontSize: 12, fontWeight: FontWeight.w300),
                   ),
                 ),
                 Row(
