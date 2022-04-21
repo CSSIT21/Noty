@@ -4,7 +4,7 @@ import 'package:motion_tab_bar_v2/motion-tab-bar.dart' as motion_tab_bar;
 import 'package:noty_client/constants/theme.dart';
 import 'package:noty_client/screens/core/fragment_me.dart';
 import 'package:noty_client/screens/core/fragment_notes.dart';
-import 'package:noty_client/widgets/typography/app_bar_text.dart';
+import 'package:noty_client/widgets/typography/appbar_text.dart';
 
 class CoreScreen extends material.StatefulWidget {
   const CoreScreen({material.Key? key}) : super(key: key);
