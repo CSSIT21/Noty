@@ -3,7 +3,7 @@ import 'package:flutter/material.dart' as material;
 import 'package:motion_tab_bar_v2/motion-tab-bar.dart' as motion_tab_bar;
 import 'package:noty_client/constants/theme.dart';
 import 'package:noty_client/screens/core/fragment_me.dart';
-import 'package:noty_client/screens/core/fragment_notes.dart';
+import 'package:noty_client/screens/core/note/note.dart';
 import 'package:noty_client/widgets/typography/appbar_text.dart';
 
 class CoreScreen extends material.StatefulWidget {
