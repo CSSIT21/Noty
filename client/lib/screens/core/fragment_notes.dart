@@ -7,6 +7,7 @@ import 'package:noty_client/constants/theme.dart';
 import 'package:noty_client/types/widget/placement.dart';
 import 'package:noty_client/widgets/list/folder_list_item.dart';
 import 'package:noty_client/widgets/list/note_list_item.dart';
+import 'package:noty_client/widgets/surface/curved_card.dart';
 import 'package:noty_client/widgets/typography/header_text.dart';
 
 class NotesFragment extends StatefulWidget {
@@ -160,13 +161,7 @@ class _NotesFragmentState extends State<NotesFragment> {
                 child: const HeaderText(text: "Folders", size: Size.medium),
                 margin: const EdgeInsets.only(bottom: 20),
               ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 25),
-                padding: const EdgeInsets.only(top: 8, bottom: 8),
-                decoration: BoxDecoration(
-                  color: ThemeConstant.colorSecondaryDark,
-                  borderRadius: BorderRadius.circular(10),
-                ),
+              CurvedCard(
                 child: Column(
                   children: [
                     for (var folder in folders)
@@ -188,13 +183,7 @@ class _NotesFragmentState extends State<NotesFragment> {
                 child: const HeaderText(text: "Notes", size: Size.medium),
                 margin: const EdgeInsets.only(bottom: 20),
               ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 25),
-                padding: const EdgeInsets.only(top: 8, bottom: 8),
-                decoration: BoxDecoration(
-                  color: ThemeConstant.colorSecondaryDark,
-                  borderRadius: BorderRadius.circular(10),
-                ),
+              CurvedCard(
                 child: Column(
                   children: const [
                     NoteListItem(
