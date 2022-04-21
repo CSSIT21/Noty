@@ -25,6 +25,7 @@ class _RegisterFragmentState extends State<RegisterFragment> {
     return Scaffold(
       appBar: AppBar(
         title: const AppBarText(text: "Register"),
+        centerTitle: true,
         leadingWidth: 100,
         leading: GestureDetector(
           child: Padding(

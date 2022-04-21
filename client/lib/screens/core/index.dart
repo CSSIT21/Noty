@@ -60,6 +60,7 @@ class _CoreScreenState extends material.State<CoreScreen>
         appBar: currentTitle == "Me"
             ? material.AppBar(
                 title: AppBarText(text: currentTitle),
+                centerTitle: true,
                 automaticallyImplyLeading: false,
               )
             : material.AppBar(
@@ -80,6 +81,7 @@ class _CoreScreenState extends material.State<CoreScreen>
                     ],
                   ),
                 ),
+                centerTitle: true,
                 automaticallyImplyLeading: false,
               ),
         bottomNavigationBar: motion_tab_bar.MotionTabBar(
