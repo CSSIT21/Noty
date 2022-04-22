@@ -4,7 +4,7 @@ import "github.com/kamva/mgm/v3"
 
 type Notes struct {
 	mgm.DefaultModel `bson:",inline"`
-	UserId           *uint64 `json:"user_id" bson:"user_id"`
+	UserId           *string `json:"user_id" bson:"user_id"`
 	Title            *string `json:"title" bson:"title"`
 	FolderId         *string `json:"folder_id" bson:"folder_id"`
 	NoteDetail       *[]any  `json:"note_detail" bson:"note_detail"`
@@ -18,5 +18,5 @@ type NoteText struct {
 
 type ReminderContent struct {
 	Type       *string `json:"type" bson:"type"`
-	ReminderId *uint64 `json:"reminder_id" bson:"reminder_id"`
+	ReminderId *string `json:"reminder_id" bson:"reminder_id"`
 }

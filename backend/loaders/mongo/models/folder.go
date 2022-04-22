@@ -6,6 +6,6 @@ import (
 
 type Folder struct {
 	mgm.DefaultModel `bson:",inline"`
-	UserId           *uint64 `json:"user_id" bson:"user_id"`
+	UserId           *string `json:"user_id" bson:"user_id"`
 	Name             *string `json:"name" bson:"name"`
 }
