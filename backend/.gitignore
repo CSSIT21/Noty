@@ -6,7 +6,7 @@
 !/swagger/index.go
 
 # Config file
-/config.yml
+/config.yaml
 
 # Log file
 /*.log
