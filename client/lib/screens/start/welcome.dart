@@ -54,7 +54,7 @@ class _WelcomeScreenState extends material.State<WelcomeScreen> {
                     child: const ContentText(
                         text: "Get Started", size: Size.medium),
                     onPressed: () {
-                      material.Navigator.push(
+                      material.Navigator.pushReplacement(
                           context,
                           material.MaterialPageRoute(
                               builder: (context) => const LoginScreen()));

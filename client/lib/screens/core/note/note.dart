@@ -1,12 +1,13 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:noty_client/models/folder.dart';
+import 'package:noty_client/models/note_detail.dart';
+import 'package:noty_client/models/notes.dart';
 import 'package:noty_client/screens/core/note/popup_menu.dart';
 import 'package:noty_client/screens/core/note/section_folder.dart';
 import 'package:noty_client/screens/core/note/section_note.dart';
+import 'package:http/http.dart' as http;
 
 class NotesFragment extends StatefulWidget {
   const NotesFragment({Key? key}) : super(key: key);
@@ -17,16 +18,53 @@ class NotesFragment extends StatefulWidget {
 
 class _NotesFragmentState extends State<NotesFragment> {
   List<Folder> _folders = [];
+  List<Notes> _notes = [];
 
   Future<void> _readJson() async {
-    final String response =
-        await rootBundle.loadString('assets/json/folders.json');
-    final List<dynamic> datas = await json.decode(response);
-    List<Folder> temp = datas.map((data) {
-      return Folder(id: data["id"], name: data["name"], count: data["count"]);
+    final response = await http
+        .get(Uri.parse('https://mock-noty.mixkoap.com/test-payload.json'));
+    final Map<String, dynamic> datas = await json.decode(response.body);
+    // List<Folder> tempFolder = datas.map((data) {
+    //   return Folder(id: data["id"], name: data["name"], count: data["count"]);
+    // }).toList();
+
+    List<dynamic> foldersData = datas["folders"];
+    List<dynamic> notesData = datas["notes"];
+
+    List<Folder> tempFolders = foldersData.map((folder) {
+      return Folder(
+          folderId: folder["folder_id"],
+          title: folder["title"],
+          count: folder["count"]);
     }).toList();
+    // List noteDetails = notesData.map((noteDetail) {}).toList();
+    List<Notes> tempNotes = notesData.map((note) {
+      List<dynamic> tempNoteDetail = note["note_detail"];
+      List<NoteDetail> noteDetails = tempNoteDetail.map((noteDetail) {
+        List<dynamic> tempTags = noteDetail["tags"] ?? [];
+        List<String> tags = tempTags.map((tag) => tag.toString()).toList();
+        return NoteDetail(
+            type: noteDetail["type"],
+            detail: noteDetail["detail"] ?? "",
+            createdAt: noteDetail["created_at"] ?? "",
+            reminderId: noteDetail["reminder_id"] ?? "",
+            tags: tags);
+      }).toList();
+      return Notes(
+        id: note["id"],
+        userId: note["user_id"],
+        title: note["title"],
+        folderId: note["folder_id"],
+        createdAt: note["created_at"],
+        noteDetail: noteDetails,
+      );
+    }).toList();
+
     if (mounted) {
-      setState(() => _folders = temp);
+      setState(() {
+        _folders = tempFolders;
+        _notes = tempNotes;
+      });
     }
   }
 
@@ -44,7 +82,10 @@ class _NotesFragmentState extends State<NotesFragment> {
         SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [FolderSection(folders: _folders), const NoteSection()],
+            children: [
+              FolderSection(folders: _folders),
+              NoteSection(notes: _notes),
+            ],
           ),
         ),
         Positioned(

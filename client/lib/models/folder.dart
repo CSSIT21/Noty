@@ -1,22 +1,25 @@
 class Folder {
-  int id;
-  String name;
+  String folderId;
+  String title;
   int count;
 
   Folder({
-    required this.id,
-    required this.name,
+    required this.folderId,
+    required this.title,
     required this.count,
   });
 
   factory Folder.fromJson(Map<String, dynamic> json) {
-    return Folder(id: json["id"], name: json["name"], count: json["count"]);
+    return Folder(
+        folderId: json["folder_id"],
+        title: json["title"],
+        count: json["count"]);
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "id": id,
-      "name": name,
+      "id": folderId,
+      "title": title,
       "count": count,
     };
   }

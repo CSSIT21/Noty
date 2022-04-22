@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:noty_client/constants/theme.dart';
 import 'package:noty_client/screens/core/index.dart';
 import 'package:noty_client/types/widget/placement.dart';
+import 'package:noty_client/widgets/leading_button.dart';
 import 'package:noty_client/widgets/textfield/textfield.dart';
 import 'package:noty_client/widgets/typography/appbar_text.dart';
 import 'package:noty_client/widgets/typography/header_text.dart';
@@ -23,120 +24,115 @@ class _RegisterFragmentState extends State<RegisterFragment> {
 
   @override
   Widget build(BuildContext context) {
+    var screenPadding = MediaQuery.of(context).padding;
+    double height = MediaQuery.of(context).size.height;
+    double screenHeight = height - screenPadding.top - screenPadding.bottom;
+
     return Scaffold(
       appBar: AppBar(
         title: const AppBarText(text: "Register"),
         centerTitle: true,
         leadingWidth: 100,
-        leading: GestureDetector(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 15),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.arrow_back_ios,
-                  color: ThemeConstant.colorPrimaryLight,
-                ),
-                Text(
-                  "Back",
-                  style: TextStyle(
-                      fontSize: 17, color: ThemeConstant.colorPrimaryLight),
-                )
-              ],
-            ),
-          ),
-          onTap: () {
-            Navigator.pop(context);
-          },
+        leading: const LeadingButton(
+          text: "Back",
         ),
       ),
       body: SingleChildScrollView(
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.fromLTRB(30, 30, 30, 50),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                  margin: const EdgeInsets.only(bottom: 40),
-                  child: const HeaderText(
-                    text: "Create an account",
-                    size: Size.large,
-                  )),
-              Container(
-                margin: const EdgeInsets.only(bottom: 20),
-                height: 160,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: ConstrainedBox(
+          constraints: BoxConstraints.tightFor(
+            height: screenHeight - 20,
+          ),
+          child: Container(
+            width: double.infinity,
+            height: double.infinity,
+            padding: const EdgeInsets.fromLTRB(30, 30, 30, 50),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Column(
                   children: [
-                    const SizedBox(
-                      width: double.infinity,
-                      child: Text("Firstname-Lastname"),
-                    ),
-                    TextFieldDark(
-                        controller: _firstNameController,
-                        labelText: 'Firstname'),
-                    TextFieldDark(
-                        controller: _lastNameController, labelText: 'Lastname'),
-                  ],
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 20),
-                height: 90,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const SizedBox(
-                      width: double.infinity,
-                      child: Text("Email"),
-                    ),
-                    TextFieldDark(
-                        controller: _emailController, labelText: 'Email'),
-                  ],
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 45),
-                height: 160,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const SizedBox(
-                      width: double.infinity,
-                      child: Text("Password"),
-                    ),
-                    TextField(
-                      controller: _passwordController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
+                    Container(
+                        margin: const EdgeInsets.only(bottom: 40),
+                        child: const HeaderText(
+                          text: "Create an account",
+                          size: Size.large,
+                        )),
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 20),
+                      height: 160,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const SizedBox(
+                            width: double.infinity,
+                            child: Text("Firstname-Lastname"),
                           ),
-                          labelText: 'Password',
-                          labelStyle: TextStyle(
-                              color: ThemeConstant.textFieldTextColor),
-                          filled: true,
-                          fillColor: ThemeConstant.textFieldBgColor),
+                          TextFieldDark(
+                              controller: _firstNameController,
+                              labelText: 'Firstname'),
+                          TextFieldDark(
+                              controller: _lastNameController,
+                              labelText: 'Lastname'),
+                        ],
+                      ),
                     ),
-                    TextField(
-                      controller: _confirmPasswordController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 20),
+                      height: 90,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const SizedBox(
+                            width: double.infinity,
+                            child: Text("Email"),
                           ),
-                          labelText: 'Confirm Password',
-                          labelStyle: TextStyle(
-                              color: ThemeConstant.textFieldTextColor),
-                          filled: true,
-                          fillColor: ThemeConstant.textFieldBgColor),
+                          TextFieldDark(
+                              controller: _emailController, labelText: 'Email'),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 160,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const SizedBox(
+                            width: double.infinity,
+                            child: Text("Password"),
+                          ),
+                          TextField(
+                            controller: _passwordController,
+                            obscureText: true,
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                labelText: 'Password',
+                                labelStyle: TextStyle(
+                                    color: ThemeConstant.textFieldTextColor),
+                                filled: true,
+                                fillColor: ThemeConstant.textFieldBgColor),
+                          ),
+                          TextField(
+                            controller: _confirmPasswordController,
+                            obscureText: true,
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                labelText: 'Confirm Password',
+                                labelStyle: TextStyle(
+                                    color: ThemeConstant.textFieldTextColor),
+                                filled: true,
+                                fillColor: ThemeConstant.textFieldBgColor),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
-              ),
-              SizedBox(
-                child: Column(
+                Column(
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -167,16 +163,16 @@ class _RegisterFragmentState extends State<RegisterFragment> {
                       child: ElevatedButton(
                           child: const Text("Sign Up"),
                           onPressed: () {
-                            Navigator.push(
+                            Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => const CoreScreen()));
                           }),
                     )
                   ],
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),

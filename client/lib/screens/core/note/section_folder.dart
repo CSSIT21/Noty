@@ -24,8 +24,10 @@ class FolderSection extends StatelessWidget {
           child: Column(
             children: dividerInsert(
                 folders
-                    .map((folder) =>
-                        FolderListItem(name: folder.name, count: folder.count))
+                    .map(
+                      (folder) => FolderListItem(
+                          title: folder.title, count: folder.count),
+                    )
                     .toList(),
                 const Divider(
                   color: Color(0xff434345),
