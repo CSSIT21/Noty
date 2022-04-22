@@ -48,16 +48,12 @@ func RegisterHandler(c *fiber.Ctx) error {
 	// * Hash Password
 	hashedPassword, _ := crypto.HashPassword(body.Password)
 
-	var pictureDefaultId uint64
-	pictureDefaultId = 1
-
 	// * Create User
 	user := &models.User{
 		Email:     &body.Email,
 		Password:  &hashedPassword,
 		Firstname: &body.Firstname,
 		Lastname:  &body.Lastname,
-		PictureId: &pictureDefaultId,
 	}
 	if err := mgm.Coll(user).Create(user); err != nil {
 		return &responder.GenericError{
