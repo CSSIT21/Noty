@@ -16,51 +16,56 @@ class _WelcomeScreenState extends material.State<WelcomeScreen> {
   material.Widget build(material.BuildContext context) {
     double screenHeight = material.MediaQuery.of(context).size.height;
 
-    return material.Scaffold(
-      body: material.Padding(
-        padding: material.EdgeInsets.only(top: screenHeight / 5.5, bottom: 50),
-        child: material.SizedBox(
-          width: double.infinity,
-          child: material.Column(
-            mainAxisAlignment: material.MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: material.CrossAxisAlignment.center,
-            children: [
-              material.Column(
-                children: [
-                  material.Image.asset(
-                    "assets/images/logo.png",
-                    width: 200,
-                  ),
-                  material.Padding(
-                    padding: const material.EdgeInsets.fromLTRB(50, 40, 50, 30),
-                    child: material.Text(
-                      "Place to make you PAIN",
-                      textAlign: material.TextAlign.center,
-                      style: material.TextStyle(
-                          fontSize: 34,
-                          fontWeight: material.FontWeight.w800,
-                          color: ThemeConstant.colorPrimaryLight),
+    return material.WillPopScope(
+      onWillPop: () async => false,
+      child: material.Scaffold(
+        body: material.Padding(
+          padding:
+              material.EdgeInsets.only(top: screenHeight / 5.5, bottom: 50),
+          child: material.SizedBox(
+            width: double.infinity,
+            child: material.Column(
+              mainAxisAlignment: material.MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: material.CrossAxisAlignment.center,
+              children: [
+                material.Column(
+                  children: [
+                    material.Image.asset(
+                      "assets/images/logo.png",
+                      width: 200,
                     ),
-                  ),
-                  const ContentText(
-                      text: "Easy and convenience place to note?",
-                      size: Size.medium),
-                ],
-              ),
-              material.SizedBox(
-                width: 320,
-                height: 50,
-                child: material.ElevatedButton(
-                    child: const ContentText(
-                        text: "Get Started", size: Size.medium),
-                    onPressed: () {
-                      material.Navigator.pushReplacement(
-                          context,
-                          material.MaterialPageRoute(
-                              builder: (context) => const LoginScreen()));
-                    }),
-              )
-            ],
+                    material.Padding(
+                      padding:
+                          const material.EdgeInsets.fromLTRB(50, 40, 50, 30),
+                      child: material.Text(
+                        "Place to make you PAIN",
+                        textAlign: material.TextAlign.center,
+                        style: material.TextStyle(
+                            fontSize: 34,
+                            fontWeight: material.FontWeight.w800,
+                            color: ThemeConstant.colorPrimaryLight),
+                      ),
+                    ),
+                    const ContentText(
+                        text: "Easy and convenience place to note?",
+                        size: Size.medium),
+                  ],
+                ),
+                material.SizedBox(
+                  width: 320,
+                  height: 50,
+                  child: material.ElevatedButton(
+                      child: const ContentText(
+                          text: "Get Started", size: Size.medium),
+                      onPressed: () {
+                        material.Navigator.pushReplacement(
+                            context,
+                            material.MaterialPageRoute(
+                                builder: (context) => const LoginScreen()));
+                      }),
+                )
+              ],
+            ),
           ),
         ),
       ),

@@ -158,7 +158,7 @@ class _RegisterFragmentState extends State<RegisterFragment> {
                       ],
                     ),
                     SizedBox(
-                      width: 320,
+                      width: double.infinity,
                       height: 50,
                       child: ElevatedButton(
                           child: const Text("Sign Up"),

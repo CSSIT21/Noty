@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:noty_client/constants/theme.dart';
 import 'package:noty_client/models/note_detail.dart';
 import 'package:noty_client/widgets/reminder/reminder_label.dart';
 import 'package:noty_client/widgets/tag/tag_label.dart';
@@ -18,6 +17,7 @@ class NoteListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     var tag = false;
     var reminder = false;
     for (var i = 0; i < noteDetails.length; i++) {
@@ -42,7 +42,7 @@ class NoteListItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
-              width: 250,
+              width: screenWidth / 1.5,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -76,10 +76,9 @@ class NoteListItem extends StatelessWidget {
                 ],
               ),
             ),
-            Icon(
+            const Icon(
               Icons.arrow_forward_ios_rounded,
               size: 14,
-              color: ThemeConstant.colorPrimaryLight,
             ),
           ],
         ),

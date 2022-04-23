@@ -22,10 +22,9 @@ class FolderListItem extends StatelessWidget {
             children: [
               Container(
                 margin: const EdgeInsets.only(right: 10),
-                child: Icon(
+                child: const Icon(
                   Icons.folder_rounded,
                   size: 26,
-                  color: ThemeConstant.colorPrimaryLight,
                 ),
               ),
               SizedBox(
@@ -45,10 +44,9 @@ class FolderListItem extends StatelessWidget {
               ),
               Container(
                 margin: const EdgeInsets.only(left: 8),
-                child: Icon(
+                child: const Icon(
                   Icons.arrow_forward_ios_rounded,
                   size: 14,
-                  color: ThemeConstant.colorPrimaryLight,
                 ),
               ),
             ],

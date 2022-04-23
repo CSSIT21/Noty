@@ -37,6 +37,7 @@ class ThemeConstant {
           ),
         ),
       ),
+      iconTheme: material.IconThemeData(color: colorPrimaryLight),
       appBarTheme: material.AppBarTheme(
           systemOverlayStyle: SystemUiOverlayStyle.light,
           foregroundColor: textColorPrimary,

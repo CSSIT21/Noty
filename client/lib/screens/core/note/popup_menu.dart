@@ -63,6 +63,6 @@ Widget menuPopup(BuildContext context) => PopupMenuButton(
           color: ThemeConstant.colorPrimaryLight,
           shape: const StadiumBorder(),
         ),
-        child: const Icon(Icons.add_rounded, color: Colors.white),
+        child: const Icon(Icons.add_rounded, color: Colors.black),
       ),
     );
