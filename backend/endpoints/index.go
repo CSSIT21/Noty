@@ -23,4 +23,5 @@ func Init(router fiber.Router) {
 	// * Folder
 	folderHandler := router.Group("folder/", middlewares.Jwt)
 	folderHandler.Post("add", folder.FolderPostReminder)
+	folderHandler.Patch("edit", folder.FolderPatchHandler)
 }
