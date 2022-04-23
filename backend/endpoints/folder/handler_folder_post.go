@@ -6,7 +6,6 @@ import (
 	"github.com/kamva/mgm/v3"
 	"go.mongodb.org/mongo-driver/bson"
 	mongoDriver "go.mongodb.org/mongo-driver/mongo"
-	"noty-backend/loaders/mongo"
 	"noty-backend/loaders/mongo/models"
 	"noty-backend/types/common"
 	"noty-backend/types/responder"
@@ -50,7 +49,7 @@ func FolderPostReminder(c *fiber.Ctx) error {
 	}
 
 	// * Check Duplicate folder
-	if err := mongo.Collections.Folder.First(bson.M{
+	if err := mgm.Coll(folder).First(bson.M{
 		"user_id": claims.UserId,
 		"name":    body.Name,
 	}, folder); err != mongoDriver.ErrNoDocuments {

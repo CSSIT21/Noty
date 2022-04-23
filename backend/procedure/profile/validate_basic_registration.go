@@ -1,9 +1,9 @@
 package profile
 
 import (
+	"github.com/kamva/mgm/v3"
 	"go.mongodb.org/mongo-driver/bson"
 	mongoDriver "go.mongodb.org/mongo-driver/mongo"
-	"noty-backend/loaders/mongo"
 	"noty-backend/loaders/mongo/models"
 	"noty-backend/types/responder"
 )
@@ -19,7 +19,7 @@ func ValidateBasicRegistration(profile *models.User, password string) *responder
 
 	// * Check Duplicate Email
 	user := new(models.User)
-	if err := mongo.Collections.User.First(bson.M{
+	if err := mgm.Coll(user).First(bson.M{
 		"email": profile.Email,
 	}, user); err != mongoDriver.ErrNoDocuments {
 		return &responder.GenericError{
