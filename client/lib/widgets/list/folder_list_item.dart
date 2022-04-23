@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:noty_client/constants/theme.dart';
-import 'package:noty_client/screens/core/note/folder_view.dart';
-import 'package:noty_client/types/widget/placement.dart';
-import 'package:noty_client/widgets/typography/content_text.dart';
 
 class FolderListItem extends StatelessWidget {
   final String title;
@@ -13,53 +10,50 @@ class FolderListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => FolderDetailScreen(
-                      folderName: title,
-                    )));
-      },
-      behavior: HitTestBehavior.translucent,
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(15, 2, 15, 2),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Row(
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(right: 10),
-                  child: Icon(
-                    Icons.folder_rounded,
-                    size: 26,
-                    color: ThemeConstant.colorPrimaryLight,
-                  ),
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    return Container(
+      padding: const EdgeInsets.fromLTRB(15, 2, 15, 2),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Row(
+            children: [
+              Container(
+                margin: const EdgeInsets.only(right: 10),
+                child: Icon(
+                  Icons.folder_rounded,
+                  size: 26,
+                  color: ThemeConstant.colorPrimaryLight,
                 ),
-                ContentText(text: title, size: Size.medium)
-              ],
-            ),
-            Row(
-              children: [
-                Text(
-                  count.toString(),
-                  style: TextStyle(color: ThemeConstant.textColorSecondary),
+              ),
+              SizedBox(
+                width: screenWidth / 1.8,
+                child: Text(
+                  title,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                Container(
-                  margin: const EdgeInsets.only(left: 8),
-                  child: Icon(
-                    Icons.arrow_forward_ios_rounded,
-                    size: 14,
-                    color: ThemeConstant.colorPrimaryLight,
-                  ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Text(
+                count.toString(),
+                style: TextStyle(color: ThemeConstant.textColorSecondary),
+              ),
+              Container(
+                margin: const EdgeInsets.only(left: 8),
+                child: Icon(
+                  Icons.arrow_forward_ios_rounded,
+                  size: 14,
+                  color: ThemeConstant.colorPrimaryLight,
                 ),
-              ],
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

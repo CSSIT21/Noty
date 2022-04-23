@@ -8,7 +8,10 @@ class AppBarText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: const TextStyle(fontSize: 17),
+      style: const TextStyle(
+        fontSize: 17,
+      ),
+      textAlign: TextAlign.center,
     );
   }
 }

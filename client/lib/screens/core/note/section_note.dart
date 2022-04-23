@@ -20,6 +20,7 @@ class NoteSection extends StatelessWidget {
           margin: const EdgeInsets.only(bottom: 20),
         ),
         CurvedCard(
+          margin: 25,
           child: Column(
             children: dividerInsert(
                 notes

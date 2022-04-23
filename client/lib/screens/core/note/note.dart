@@ -21,12 +21,13 @@ class _NotesFragmentState extends State<NotesFragment> {
   List<Notes> _notes = [];
 
   Future<void> _readJson() async {
-    final response = await http
-        .get(Uri.parse('https://mock-noty.mixkoap.com/test-payload.json'));
+    final response = await http.get(
+        Uri.parse('https://mock-noty.mixkoap.com/test-payload.json'),
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+          'Charset': 'utf-8',
+        });
     final Map<String, dynamic> datas = await json.decode(response.body);
-    // List<Folder> tempFolder = datas.map((data) {
-    //   return Folder(id: data["id"], name: data["name"], count: data["count"]);
-    // }).toList();
 
     List<dynamic> foldersData = datas["folders"];
     List<dynamic> notesData = datas["notes"];
@@ -37,7 +38,7 @@ class _NotesFragmentState extends State<NotesFragment> {
           title: folder["title"],
           count: folder["count"]);
     }).toList();
-    // List noteDetails = notesData.map((noteDetail) {}).toList();
+
     List<Notes> tempNotes = notesData.map((note) {
       List<dynamic> tempNoteDetail = note["note_detail"];
       List<NoteDetail> noteDetails = tempNoteDetail.map((noteDetail) {
@@ -83,7 +84,7 @@ class _NotesFragmentState extends State<NotesFragment> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              FolderSection(folders: _folders),
+              FolderSection(folders: _folders, notes: _notes),
               NoteSection(notes: _notes),
             ],
           ),

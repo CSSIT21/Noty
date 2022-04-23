@@ -49,7 +49,7 @@ Widget menuPopup(BuildContext context) => PopupMenuButton(
           showNewFolderDialog(context);
         }
       },
-      color: const Color(0xb36ABFF9),
+      color: const Color(0xff232323),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
           Radius.circular(10.0),
