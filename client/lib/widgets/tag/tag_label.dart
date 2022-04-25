@@ -1,32 +1,41 @@
 import 'package:flutter/material.dart';
 
 class TagLabel extends StatelessWidget {
-  const TagLabel({Key? key}) : super(key: key);
+  final Color textColor;
+  final Color bgColor;
+  final String title;
+  final bool iconFilled;
+  const TagLabel(
+      {Key? key,
+      required this.textColor,
+      required this.bgColor,
+      required this.title,
+      required this.iconFilled})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xff252525),
+        color: bgColor,
         borderRadius: BorderRadius.circular(5),
       ),
-      width: 45,
-      height: 20,
+      padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
             margin: const EdgeInsets.only(right: 3),
-            child: const Icon(
-              Icons.sell_rounded,
+            child: Icon(
+              iconFilled ? Icons.sell_rounded : Icons.sell_outlined,
               size: 10,
-              color: Color(0xff828282),
+              color: textColor,
             ),
           ),
-          const Text(
-            "Tag",
-            style: TextStyle(fontSize: 10, color: Color(0xff828282)),
+          Text(
+            title,
+            style: TextStyle(fontSize: 10, color: textColor),
           )
         ],
       ),

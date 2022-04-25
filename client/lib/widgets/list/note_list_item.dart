@@ -36,7 +36,7 @@ class NoteListItem extends StatelessWidget {
       onTap: () {},
       behavior: HitTestBehavior.translucent,
       child: Container(
-        padding: const EdgeInsets.fromLTRB(25, 3, 20, 3),
+        padding: const EdgeInsets.fromLTRB(20, 3, 20, 3),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -70,7 +70,14 @@ class NoteListItem extends StatelessWidget {
                               margin: const EdgeInsets.only(right: 6),
                             )
                           : Container(),
-                      tag ? const TagLabel() : Container(),
+                      tag
+                          ? const TagLabel(
+                              textColor: Color(0xff828282),
+                              bgColor: Color(0xff252525),
+                              title: "Tag",
+                              iconFilled: true,
+                            )
+                          : Container(),
                     ],
                   ),
                 ],

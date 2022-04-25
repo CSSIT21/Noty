@@ -7,6 +7,8 @@ import 'package:noty_client/models/note_detail.dart';
 import 'package:noty_client/models/notes.dart';
 import 'package:noty_client/screens/core/me/me.dart';
 import 'package:noty_client/screens/core/note/note.dart';
+import 'package:noty_client/screens/core/reminder/reminder.dart';
+import 'package:noty_client/screens/core/tag/tag.dart';
 import 'package:noty_client/widgets/typography/appbar_text.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -120,6 +122,12 @@ class _CoreScreenState extends material.State<CoreScreen>
                 title: AppBarText(text: currentTitle),
                 centerTitle: true,
                 automaticallyImplyLeading: false,
+                actions: [
+                  material.TextButton(
+                    onPressed: () {},
+                    child: const Text("Edit"),
+                  )
+                ],
               )
             : material.AppBar(
                 toolbarHeight: 85,
@@ -179,11 +187,9 @@ class _CoreScreenState extends material.State<CoreScreen>
                 folders: _folders,
                 notes: _notes,
               ),
-              const material.Center(
-                child: material.Text("Home"),
-              ),
-              const material.Center(
-                child: material.Text("Profile"),
+              const ReminderFragment(),
+              TagFragment(
+                notes: _notes,
               ),
               MeFragement(
                 numFolder: _folders.length,

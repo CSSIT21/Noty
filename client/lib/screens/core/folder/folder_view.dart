@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:noty_client/constants/theme.dart';
 import 'package:noty_client/models/notes.dart';
 import 'package:noty_client/types/widget/placement.dart';
 import 'package:noty_client/utils/widget/divider_insert.dart';
@@ -20,46 +19,9 @@ class FolderDetailScreen extends StatefulWidget {
   State<FolderDetailScreen> createState() => _FolderDetailScreenState();
 }
 
-_showPopupMenu(context, screenHeight) {
-  showMenu(
-    context: context,
-    color: const Color(0xff232323),
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(
-        Radius.circular(10.0),
-      ),
-    ),
-    position: RelativeRect.fromLTRB(100, screenHeight - 180, 0, 0),
-    items: [
-      PopupMenuItem(
-        value: 1,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              "New Note",
-              style: TextStyle(
-                color: ThemeConstant.textColorPrimary,
-                fontSize: 16,
-              ),
-            ),
-            Icon(
-              Icons.edit_note_rounded,
-              color: ThemeConstant.colorPrimaryLight,
-              size: 24,
-            )
-          ],
-        ),
-      ),
-    ],
-  );
-}
-
 class _FolderDetailScreenState extends State<FolderDetailScreen> {
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
       appBar: AppBar(
         title: SizedBox(
@@ -108,10 +70,8 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _showPopupMenu(context, screenHeight);
-        },
-        child: const Icon(Icons.add_rounded),
+        onPressed: () {},
+        child: const Icon(Icons.edit_rounded),
       ),
     );
   }
