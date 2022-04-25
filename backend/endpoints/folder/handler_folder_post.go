@@ -23,7 +23,7 @@ import (
 // @Success 200 {object} folderPostRequest
 // @Failure 400 {object} responder.ErrorResponse
 // @Router /folder/add [post]
-func FolderPostReminder(c *fiber.Ctx) error {
+func FolderPostHandler(c *fiber.Ctx) error {
 	// * Parse user JWT token
 	token := c.Locals("user").(*jwt.Token)
 	claims := token.Claims.(*common.UserClaim)
