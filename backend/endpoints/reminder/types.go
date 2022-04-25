@@ -18,3 +18,7 @@ type reminderPatchRequest struct {
 	RemindDate  time.Time `json:"remind_date,omitempty"`
 	RemindTime  time.Time `json:"remind_time,omitempty"`
 }
+
+type reminderDeleteRequest struct {
+	ReminderId string `json:"reminder_id" validate:"required"`
+}
