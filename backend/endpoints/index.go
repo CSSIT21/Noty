@@ -19,6 +19,7 @@ func Init(router fiber.Router) {
 	// * Reminder
 	reminderHandler := router.Group("reminder/", middlewares.Jwt)
 	reminderHandler.Post("add", reminder.ReminderPostHandler)
+	reminderHandler.Patch("edit", reminder.ReminderPatchHandler)
 
 	// * Folder
 	folderHandler := router.Group("folder/", middlewares.Jwt)
