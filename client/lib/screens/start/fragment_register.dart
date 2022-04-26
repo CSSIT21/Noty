@@ -54,9 +54,12 @@ class _RegisterFragmentState extends State<RegisterFragment> {
                   children: [
                     Container(
                         margin: const EdgeInsets.only(bottom: 40),
-                        child: const HeaderText(
-                          text: "Create an account",
-                          size: Size.large,
+                        child: Text(
+                          "Create an account",
+                          style: TextStyle(
+                              color: ThemeConstant.colorPrimaryLight,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold),
                         )),
                     Container(
                       margin: const EdgeInsets.only(bottom: 20),
