@@ -4,11 +4,13 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
 	mongoDriver "go.mongodb.org/mongo-driver/mongo"
+	"noty-backend/procedure/signing"
+	"noty-backend/types/common"
+	"noty-backend/utils/crypto"
 
 	"noty-backend/loaders/mongo"
 	"noty-backend/loaders/mongo/models"
 	"noty-backend/types/responder"
-	"noty-backend/utils/logger"
 	"noty-backend/utils/text"
 )
 
@@ -39,7 +41,7 @@ func LoginHandler(c *fiber.Ctx) error {
 	}
 
 	// * Fetch user account
-	var user *models.User
+	user := new(models.User)
 	if err := mongo.Collections.User.First(
 		bson.M{"email": body.Email},
 		user,
@@ -55,9 +57,25 @@ func LoginHandler(c *fiber.Ctx) error {
 		}
 	}
 
-	logger.Dump(user)
+	// * Check Password
+	if !crypto.ComparePassword(*user.Password, body.Password) {
+		return &responder.GenericError{
+			Message: "Your email or password is incorrect",
+		}
+	}
+
+	// * Parse ObjectID to string
+	idString := user.ID.Hex()
+
+	// * Sign JWT
+	token, err := signing.SignJwt(&common.UserClaim{
+		UserId: &idString,
+	})
+	if err != nil {
+		return err
+	}
 
 	return c.JSON(responder.NewInfoResponse(&loginResponse{
-		Token: "abcd",
+		Token: token,
 	}))
 }

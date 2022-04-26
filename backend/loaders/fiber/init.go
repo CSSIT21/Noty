@@ -26,13 +26,14 @@ func Init() {
 		ServerHeader:  config.C.ServerHeader,
 		ReadTimeout:   5 * time.Second,
 		WriteTimeout:  5 * time.Second,
+		AppName:       "Noty API",
 	})
 
 	// Register root endpoint
 	app.All("/", func(c *fiber.Ctx) error {
 		return c.JSON(responder.InfoResponse{
 			Success: true,
-			Info:    "KONLAYUTH_HOMEPAGE_API_ROOT",
+			Info:    "NOTY_API_ROOT",
 		})
 	})
 
