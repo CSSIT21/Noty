@@ -64,7 +64,7 @@ class _TagFragmentState extends State<TagFragment> {
             child: const HeaderText(text: "All Tags", size: Size.medium),
           ),
           CurvedCard(
-            child: Container(
+            child: SizedBox(
               width: double.infinity,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,7 +95,7 @@ class _TagFragmentState extends State<TagFragment> {
             margin: 20,
           ),
           CurvedCard(
-            child: Container(
+            child: SizedBox(
               width: double.infinity,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

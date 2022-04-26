@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:noty_client/models/notes.dart';
+import 'package:noty_client/screens/core/folder/dialog_edit_folder.dart';
 import 'package:noty_client/types/widget/placement.dart';
 import 'package:noty_client/utils/widget/divider_insert.dart';
 import 'package:noty_client/widgets/leading_button.dart';
@@ -33,6 +34,17 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
         leading: const LeadingButton(
           text: "Folders",
         ),
+        actions: [
+          TextButton(
+            onPressed: () => showEditFolderDialog(context),
+            child: const Text(
+              "Edit",
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
+          )
+        ],
       ),
       body: SingleChildScrollView(
         child: Container(

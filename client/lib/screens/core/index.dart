@@ -6,6 +6,7 @@ import 'package:noty_client/models/folder.dart';
 import 'package:noty_client/models/note_detail.dart';
 import 'package:noty_client/models/notes.dart';
 import 'package:noty_client/screens/core/me/me.dart';
+import 'package:noty_client/screens/core/me/me_edit.dart';
 import 'package:noty_client/screens/core/note/note.dart';
 import 'package:noty_client/screens/core/reminder/reminder.dart';
 import 'package:noty_client/screens/core/tag/tag.dart';
@@ -34,19 +35,6 @@ class _CoreScreenState extends material.State<CoreScreen>
   late TextEditingController _textController;
   List<Folder> _folders = [];
   List<Notes> _notes = [];
-
-  @override
-  void initState() {
-    currentTitle = titleList[0];
-    _tabController = material.TabController(
-      initialIndex: 0,
-      length: 4,
-      vsync: this,
-    );
-    _tabController.addListener(changeTitle);
-    _textController = TextEditingController(text: '');
-    super.initState();
-  }
 
   void changeTitle() {
     setState(() {
@@ -111,9 +99,21 @@ class _CoreScreenState extends material.State<CoreScreen>
   }
 
   @override
-  material.Widget build(material.BuildContext context) {
+  void initState() {
+    currentTitle = titleList[0];
+    _tabController = material.TabController(
+      initialIndex: 0,
+      length: 4,
+      vsync: this,
+    );
+    _tabController.addListener(changeTitle);
+    _textController = TextEditingController(text: '');
     _readJson();
+    super.initState();
+  }
 
+  @override
+  material.Widget build(material.BuildContext context) {
     return material.WillPopScope(
       onWillPop: () async => false,
       child: material.Scaffold(
@@ -124,8 +124,20 @@ class _CoreScreenState extends material.State<CoreScreen>
                 automaticallyImplyLeading: false,
                 actions: [
                   material.TextButton(
-                    onPressed: () {},
-                    child: const Text("Edit"),
+                    onPressed: () {
+                      material.Navigator.push(
+                        context,
+                        material.MaterialPageRoute(
+                          builder: (context) => const EditProfileScreen(),
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      "Edit",
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
                   )
                 ],
               )

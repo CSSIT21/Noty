@@ -2,24 +2,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:noty_client/constants/theme.dart';
 
-TextEditingController _folderController = TextEditingController(text: '');
+TextEditingController _folderEditController = TextEditingController(text: '');
 
-showNewFolderDialog(BuildContext context) {
+showEditFolderDialog(BuildContext context) {
   showCupertinoDialog(
     context: context,
     builder: (context) {
       return Theme(
         data: ThemeData.dark(),
         child: CupertinoAlertDialog(
-          title: const Text('New folder'),
+          title: Container(
+            margin: const EdgeInsets.only(bottom: 14),
+            child: const Text('Rename Folder'),
+          ),
           content: Column(
             children: [
-              Container(
-                margin: const EdgeInsets.only(bottom: 10),
-                child: const Text('Enter a name for this folder.'),
-              ),
               CupertinoTextField(
-                controller: _folderController,
+                controller: _folderEditController,
                 autofocus: true,
                 placeholder: "Name",
                 placeholderStyle: const TextStyle(

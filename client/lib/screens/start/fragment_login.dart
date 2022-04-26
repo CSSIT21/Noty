@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:noty_client/constants/theme.dart';
 import 'package:noty_client/screens/core/index.dart';
-import 'package:noty_client/widgets/textfield/textfield.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class LoginFragment extends StatefulWidget {
@@ -65,19 +64,42 @@ class _LoginFragmentState extends State<LoginFragment> {
                   "Login",
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
                 ),
-                TextFieldDark(controller: _emailController, labelText: 'Email'),
+                TextField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    labelText: 'Email',
+                    labelStyle:
+                        TextStyle(color: ThemeConstant.textFieldTextColor),
+                    filled: true,
+                    fillColor: ThemeConstant.textFieldBgColor,
+                    prefixIcon: Icon(
+                      Icons.mail_rounded,
+                      color: ThemeConstant.colorPrimaryLight,
+                      size: 20,
+                    ),
+                  ),
+                ),
                 TextField(
                   controller: _passwordController,
                   obscureText: true,
                   decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      labelText: 'Password',
-                      labelStyle:
-                          TextStyle(color: ThemeConstant.textFieldTextColor),
-                      filled: true,
-                      fillColor: ThemeConstant.textFieldBgColor),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    labelText: 'Password',
+                    labelStyle:
+                        TextStyle(color: ThemeConstant.textFieldTextColor),
+                    filled: true,
+                    fillColor: ThemeConstant.textFieldBgColor,
+                    prefixIcon: Icon(
+                      Icons.lock_rounded,
+                      color: ThemeConstant.colorPrimaryLight,
+                      size: 20,
+                    ),
+                  ),
                 ),
                 Container(
                   width: double.infinity,

@@ -51,8 +51,9 @@ class _WelcomeScreenState extends material.State<WelcomeScreen> {
                         size: Size.medium),
                   ],
                 ),
-                material.SizedBox(
-                  width: 320,
+                material.Container(
+                  padding: const material.EdgeInsets.only(left: 35, right: 35),
+                  width: double.infinity,
                   height: 50,
                   child: material.ElevatedButton(
                       child: const ContentText(
