@@ -1,0 +1,342 @@
+basePath: /api
+definitions:
+  folder.folderDeleteRequest:
+    properties:
+      folder_id:
+        type: string
+    required:
+    - folder_id
+    type: object
+  folder.folderPatchRequest:
+    properties:
+      folder_id:
+        type: string
+      new_name:
+        maxLength: 40
+        type: string
+    required:
+    - folder_id
+    - new_name
+    type: object
+  folder.folderPostRequest:
+    properties:
+      name:
+        maxLength: 40
+        type: string
+    required:
+    - name
+    type: object
+  login.loginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  login.loginResponse:
+    properties:
+      token:
+        type: string
+    type: object
+  register.registerRequest:
+    properties:
+      email:
+        type: string
+      firstname:
+        type: string
+      lastname:
+        type: string
+      password:
+        type: string
+    type: object
+  register.registerResponse:
+    properties:
+      token:
+        type: string
+    type: object
+  reminder.reminderDeleteRequest:
+    properties:
+      reminder_id:
+        type: string
+    required:
+    - reminder_id
+    type: object
+  reminder.reminderPatchRequest:
+    properties:
+      description:
+        type: string
+      note_id:
+        type: string
+      remind_date:
+        type: string
+      remind_time:
+        type: string
+      reminder_id:
+        type: string
+      title:
+        maxLength: 255
+        type: string
+    required:
+    - reminder_id
+    - title
+    type: object
+  reminder.reminderPostRequest:
+    properties:
+      description:
+        type: string
+      note_id:
+        type: string
+      remind_date:
+        type: string
+      remind_time:
+        type: string
+      title:
+        maxLength: 255
+        type: string
+    required:
+    - title
+    type: object
+  responder.ErrorResponse:
+    properties:
+      code:
+        type: string
+      error:
+        type: string
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+host: localhost:3000
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: The Swagger API documentation for Noty Flutter Project.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Noty Swagger API
+  version: "1.0"
+paths:
+  /account/login:
+    post:
+      consumes:
+      - application/json
+      description: Login to account
+      operationId: account.login.post
+      parameters:
+      - description: login.loginRequest
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/login.loginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/login.loginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responder.ErrorResponse'
+      summary: Login to account
+      tags:
+      - account
+  /account/register:
+    post:
+      consumes:
+      - application/json
+      description: Register account
+      operationId: account.register.post
+      parameters:
+      - description: register.registerRequest
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/register.registerRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/register.registerResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responder.ErrorResponse'
+      summary: Register account
+      tags:
+      - account
+  /folder/add:
+    post:
+      consumes:
+      - application/json
+      description: Add folder
+      operationId: folder.post
+      parameters:
+      - description: folder.folderPostRequest
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/folder.folderPostRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/folder.folderPostRequest'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responder.ErrorResponse'
+      summary: Add folder
+      tags:
+      - folder
+  /folder/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Delete folder
+      operationId: folder.delete
+      parameters:
+      - description: folder.folderDeleteRequest
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/folder.folderDeleteRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/folder.folderDeleteRequest'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responder.ErrorResponse'
+      summary: Delete folder
+      tags:
+      - folder
+  /folder/edit:
+    patch:
+      consumes:
+      - application/json
+      description: Patch folder
+      operationId: folder.patch
+      parameters:
+      - description: folder.folderPatchRequest
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/folder.folderPatchRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/folder.folderPatchRequest'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responder.ErrorResponse'
+      summary: Patch folder
+      tags:
+      - folder
+  /reminder/add:
+    post:
+      consumes:
+      - application/json
+      description: Add reminder
+      operationId: reminder.post
+      parameters:
+      - description: reminder.reminderPostRequest
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/reminder.reminderPostRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/reminder.reminderPostRequest'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responder.ErrorResponse'
+      summary: Add reminder
+      tags:
+      - reminder
+  /reminder/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Delete reminder
+      operationId: reminder.delete
+      parameters:
+      - description: reminder.reminderDeleteRequest
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/reminder.reminderDeleteRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/reminder.reminderDeleteRequest'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responder.ErrorResponse'
+      summary: Delete reminder
+      tags:
+      - reminder
+  /reminder/edit:
+    patch:
+      consumes:
+      - application/json
+      description: Patch reminder
+      operationId: reminder.patch
+      parameters:
+      - description: reminder.reminderPatchRequest
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/reminder.reminderPatchRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/reminder.reminderPatchRequest'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/responder.ErrorResponse'
+      summary: Patch reminder
+      tags:
+      - reminder
+swagger: "2.0"

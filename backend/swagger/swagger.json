@@ -1,0 +1,518 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "The Swagger API documentation for Noty Flutter Project.",
+        "title": "Noty Swagger API",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.swagger.io/support",
+            "email": "support@swagger.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:3000",
+    "basePath": "/api",
+    "paths": {
+        "/account/login": {
+            "post": {
+                "description": "Login to account",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "account"
+                ],
+                "summary": "Login to account",
+                "operationId": "account.login.post",
+                "parameters": [
+                    {
+                        "description": "login.loginRequest",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/login.loginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/login.loginResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responder.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/account/register": {
+            "post": {
+                "description": "Register account",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "account"
+                ],
+                "summary": "Register account",
+                "operationId": "account.register.post",
+                "parameters": [
+                    {
+                        "description": "register.registerRequest",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/register.registerRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/register.registerResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responder.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/folder/add": {
+            "post": {
+                "description": "Add folder",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "folder"
+                ],
+                "summary": "Add folder",
+                "operationId": "folder.post",
+                "parameters": [
+                    {
+                        "description": "folder.folderPostRequest",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/folder.folderPostRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/folder.folderPostRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responder.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/folder/delete": {
+            "delete": {
+                "description": "Delete folder",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "folder"
+                ],
+                "summary": "Delete folder",
+                "operationId": "folder.delete",
+                "parameters": [
+                    {
+                        "description": "folder.folderDeleteRequest",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/folder.folderDeleteRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/folder.folderDeleteRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responder.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/folder/edit": {
+            "patch": {
+                "description": "Patch folder",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "folder"
+                ],
+                "summary": "Patch folder",
+                "operationId": "folder.patch",
+                "parameters": [
+                    {
+                        "description": "folder.folderPatchRequest",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/folder.folderPatchRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/folder.folderPatchRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responder.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/reminder/add": {
+            "post": {
+                "description": "Add reminder",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "reminder"
+                ],
+                "summary": "Add reminder",
+                "operationId": "reminder.post",
+                "parameters": [
+                    {
+                        "description": "reminder.reminderPostRequest",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/reminder.reminderPostRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/reminder.reminderPostRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responder.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/reminder/delete": {
+            "delete": {
+                "description": "Delete reminder",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "reminder"
+                ],
+                "summary": "Delete reminder",
+                "operationId": "reminder.delete",
+                "parameters": [
+                    {
+                        "description": "reminder.reminderDeleteRequest",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/reminder.reminderDeleteRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/reminder.reminderDeleteRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responder.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/reminder/edit": {
+            "patch": {
+                "description": "Patch reminder",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "reminder"
+                ],
+                "summary": "Patch reminder",
+                "operationId": "reminder.patch",
+                "parameters": [
+                    {
+                        "description": "reminder.reminderPatchRequest",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/reminder.reminderPatchRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/reminder.reminderPatchRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/responder.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "folder.folderDeleteRequest": {
+            "type": "object",
+            "required": [
+                "folder_id"
+            ],
+            "properties": {
+                "folder_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "folder.folderPatchRequest": {
+            "type": "object",
+            "required": [
+                "folder_id",
+                "new_name"
+            ],
+            "properties": {
+                "folder_id": {
+                    "type": "string"
+                },
+                "new_name": {
+                    "type": "string",
+                    "maxLength": 40
+                }
+            }
+        },
+        "folder.folderPostRequest": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "maxLength": 40
+                }
+            }
+        },
+        "login.loginRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "login.loginResponse": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "register.registerRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "firstname": {
+                    "type": "string"
+                },
+                "lastname": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "register.registerResponse": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "reminder.reminderDeleteRequest": {
+            "type": "object",
+            "required": [
+                "reminder_id"
+            ],
+            "properties": {
+                "reminder_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "reminder.reminderPatchRequest": {
+            "type": "object",
+            "required": [
+                "reminder_id",
+                "title"
+            ],
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "note_id": {
+                    "type": "string"
+                },
+                "remind_date": {
+                    "type": "string"
+                },
+                "remind_time": {
+                    "type": "string"
+                },
+                "reminder_id": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string",
+                    "maxLength": 255
+                }
+            }
+        },
+        "reminder.reminderPostRequest": {
+            "type": "object",
+            "required": [
+                "title"
+            ],
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "note_id": {
+                    "type": "string"
+                },
+                "remind_date": {
+                    "type": "string"
+                },
+                "remind_time": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string",
+                    "maxLength": 255
+                }
+            }
+        },
+        "responder.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "error": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        }
+    }
+}
