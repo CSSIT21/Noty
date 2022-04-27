@@ -7,6 +7,8 @@ import 'package:noty_client/utils/widget/divider_insert.dart';
 import 'package:noty_client/widgets/list/folder_list_item.dart';
 import 'package:noty_client/widgets/surface/curved_card.dart';
 import 'package:noty_client/widgets/typography/header_text.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:collection/collection.dart';
 
 class FolderSection extends StatelessWidget {
   final List<Folder> folders;
@@ -21,7 +23,7 @@ class FolderSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          child: const HeaderText(text: "Folders", size: Size.medium),
+          child: const HeaderText(text: "All Notes", size: Size.medium),
           margin: const EdgeInsets.only(bottom: 20),
         ),
         CurvedCard(
@@ -29,28 +31,41 @@ class FolderSection extends StatelessWidget {
           child: Column(
             children: dividerInsert(
                 folders
-                    .map(
-                      (folder) => GestureDetector(
+                    .mapIndexed(
+                      (index, folder) => GestureDetector(
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => FolderDetailScreen(
-                                folderName: folder.title,
-                                notes: notes,
-                              ),
+                                  folderName: folder.title, notes: notes),
                             ),
                           );
                         },
                         behavior: HitTestBehavior.translucent,
-                        child: FolderListItem(
-                            title: folder.title, count: folder.count),
+                        child: Slidable(
+                          key: ValueKey(index),
+                          endActionPane: ActionPane(
+                            motion: const StretchMotion(),
+                            children: [
+                              SlidableAction(
+                                onPressed: (BuildContext context) {},
+                                backgroundColor: Colors.red,
+                                foregroundColor: Colors.white,
+                                icon: Icons.delete_rounded,
+                              ),
+                            ],
+                          ),
+                          child: FolderListItem(
+                              title: folder.title, count: folder.count),
+                        ),
                       ),
                     )
                     .toList(),
                 const Divider(
                   color: Color(0xff434345),
                   indent: 50,
+                  height: 1,
                 )),
           ),
         ),

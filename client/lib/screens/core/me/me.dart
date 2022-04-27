@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:noty_client/models/folder.dart';
+import 'package:noty_client/models/notes.dart';
 import 'package:noty_client/screens/core/me/me_detail.dart';
 import 'package:noty_client/screens/core/me/me_overview.dart';
 import 'package:noty_client/screens/start/login.dart';
@@ -7,9 +9,14 @@ import 'package:noty_client/widgets/surface/curved_card.dart';
 import 'package:noty_client/widgets/typography/header_text.dart';
 
 class MeFragement extends StatefulWidget {
-  final int numNote;
-  final int numFolder;
-  const MeFragement({Key? key, required this.numFolder, required this.numNote})
+  final List<Folder> folders;
+  final List<Notes> notes;
+  final TabController tabController;
+  const MeFragement(
+      {Key? key,
+      required this.folders,
+      required this.notes,
+      required this.tabController})
       : super(key: key);
 
   @override
@@ -36,46 +43,65 @@ class _MeFragementState extends State<MeFragement> {
               margin: const EdgeInsets.only(bottom: 20),
               child: const HeaderText(text: "Yae Miko", size: Size.medium)),
           CurvedCard(
-            child: Column(
-              children: const [
-                MeDetail(title: "Name", content: "Yae Miko"),
-                MeDetail(title: "Email", content: "yae@miko.com"),
-                MeDetail(title: "User ID", content: "507f1f77bcf86cd799439011"),
-              ],
+            child: Container(
+              padding: const EdgeInsets.only(top: 8, bottom: 8),
+              child: Column(
+                children: const [
+                  MeDetail(title: "Name", content: "Yae Miko"),
+                  MeDetail(title: "Email", content: "yae@miko.com"),
+                  MeDetail(
+                      title: "User ID", content: "507f1f77bcf86cd799439011"),
+                ],
+              ),
             ),
             margin: 20,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              MeOverview(
-                icon: Icons.article_rounded,
-                title: "Notes",
-                count: widget.numNote,
+              GestureDetector(
+                onTap: () {
+                  // setState(() {
+                  //   widget.tabController.index = 0;
+                  // });
+                },
+                child: MeOverview(
+                  icon: Icons.article_rounded,
+                  title: "Notes",
+                  count: widget.notes.length,
+                ),
               ),
               MeOverview(
                 icon: Icons.folder_rounded,
                 title: "Folders",
-                count: widget.numFolder,
+                count: widget.folders.length,
               ),
             ],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              MeOverview(
-                icon: Icons.format_list_bulleted_rounded,
-                title: "Reminders",
-                count: 5,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  // setState(() {
+                  //   widget.tabController.index = 1;
+                  // });
+                },
+                child: const MeOverview(
+                  icon: Icons.format_list_bulleted_rounded,
+                  title: "Reminders",
+                  count: 5,
+                ),
               ),
-              MeOverview(
+              const MeOverview(
                 icon: Icons.sell_rounded,
                 title: "Tags",
                 count: 23,
               ),
             ],
           ),
-          SizedBox(
+          Container(
+            margin: const EdgeInsets.only(top: 4),
             width: double.infinity,
             height: 50,
             child: ElevatedButton(

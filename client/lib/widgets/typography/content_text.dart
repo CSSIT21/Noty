@@ -5,7 +5,7 @@ Map<Size, double> sizeMapper = {
   Size.tiny: 10,
   Size.small: 12,
   Size.medium: 14,
-  Size.large: 24,
+  Size.large: 16,
 };
 
 class ContentText extends StatelessWidget {

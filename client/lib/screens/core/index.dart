@@ -3,16 +3,16 @@ import 'package:flutter/material.dart' as material;
 import 'package:motion_tab_bar_v2/motion-tab-bar.dart' as motion_tab_bar;
 import 'package:noty_client/constants/theme.dart';
 import 'package:noty_client/models/folder.dart';
-import 'package:noty_client/models/note_detail.dart';
 import 'package:noty_client/models/notes.dart';
 import 'package:noty_client/screens/core/me/me.dart';
 import 'package:noty_client/screens/core/me/me_edit.dart';
 import 'package:noty_client/screens/core/note/note.dart';
 import 'package:noty_client/screens/core/reminder/reminder.dart';
 import 'package:noty_client/screens/core/tag/tag.dart';
+import 'package:noty_client/services/notes_sevice.dart';
 import 'package:noty_client/widgets/typography/appbar_text.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+
+import '../../services/notes_sevice.dart';
 
 class CoreScreen extends material.StatefulWidget {
   const CoreScreen({material.Key? key}) : super(key: key);
@@ -44,50 +44,11 @@ class _CoreScreenState extends material.State<CoreScreen>
   }
 
   Future<void> _readJson() async {
-    final response = await http.get(
-        Uri.parse('https://mock-noty.mixkoap.com/test-payload.json'),
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-          'Charset': 'utf-8',
-        });
-    final Map<String, dynamic> datas = await json.decode(response.body);
-
-    List<dynamic> foldersData = datas["folders"];
-    List<dynamic> notesData = datas["notes"];
-
-    List<Folder> tempFolders = foldersData.map((folder) {
-      return Folder(
-          folderId: folder["folder_id"],
-          title: folder["title"],
-          count: folder["count"]);
-    }).toList();
-
-    List<Notes> tempNotes = notesData.map((note) {
-      List<dynamic> tempNoteDetail = note["note_detail"];
-      List<NoteDetail> noteDetails = tempNoteDetail.map((noteDetail) {
-        List<dynamic> tempTags = noteDetail["tags"] ?? [];
-        List<String> tags = tempTags.map((tag) => tag.toString()).toList();
-        return NoteDetail(
-            type: noteDetail["type"],
-            detail: noteDetail["detail"] ?? "",
-            createdAt: noteDetail["created_at"] ?? "",
-            reminderId: noteDetail["reminder_id"] ?? "",
-            tags: tags);
-      }).toList();
-      return Notes(
-        id: note["id"],
-        userId: note["user_id"],
-        title: note["title"],
-        folderId: note["folder_id"],
-        createdAt: note["created_at"],
-        noteDetail: noteDetails,
-      );
-    }).toList();
-
+    var response = await GetNoteService.getData();
     if (mounted) {
       setState(() {
-        _folders = tempFolders;
-        _notes = tempNotes;
+        _folders = GetNoteService.getFolders(response);
+        _notes = GetNoteService.getNotes(response);
       });
     }
   }
@@ -136,6 +97,7 @@ class _CoreScreenState extends material.State<CoreScreen>
                       "Edit",
                       style: TextStyle(
                         fontSize: 16,
+                        fontWeight: FontWeight.normal,
                       ),
                     ),
                   )
@@ -193,7 +155,6 @@ class _CoreScreenState extends material.State<CoreScreen>
             physics: const material
                 .NeverScrollableScrollPhysics(), // Swipe navigation handling is not supported
             controller: _tabController,
-            // ignore: prefer_const_literals_to_create_immutables
             children: [
               NotesFragment(
                 folders: _folders,
@@ -204,8 +165,9 @@ class _CoreScreenState extends material.State<CoreScreen>
                 notes: _notes,
               ),
               MeFragement(
-                numFolder: _folders.length,
-                numNote: _notes.length,
+                folders: _folders,
+                notes: _notes,
+                tabController: _tabController,
               ),
             ],
           ),

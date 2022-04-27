@@ -32,63 +32,59 @@ class NoteListItem extends StatelessWidget {
       }
     }
 
-    return GestureDetector(
-      onTap: () {},
-      behavior: HitTestBehavior.translucent,
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(20, 3, 20, 3),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: screenWidth / 1.5,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(bottom: 2),
-                    child: Text(
-                      title,
-                      style: const TextStyle(fontWeight: FontWeight.w500),
-                      overflow: TextOverflow.ellipsis,
-                    ),
+    return Container(
+      padding: const EdgeInsets.fromLTRB(18, 10, 18, 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: screenWidth / 1.5,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(bottom: 2),
+                  child: Text(
+                    title,
+                    style: const TextStyle(fontWeight: FontWeight.w500),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  Container(
-                    margin: const EdgeInsets.only(bottom: 6),
-                    child: Text(
-                      date,
-                      style: const TextStyle(
-                          fontSize: 10, fontWeight: FontWeight.w300),
-                    ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(bottom: 6),
+                  child: Text(
+                    date,
+                    style: const TextStyle(
+                        fontSize: 10, fontWeight: FontWeight.w300),
                   ),
-                  Row(
-                    children: [
-                      reminder
-                          ? Container(
-                              child: const ReminderLabel(),
-                              margin: const EdgeInsets.only(right: 6),
-                            )
-                          : Container(),
-                      tag
-                          ? const TagLabel(
-                              textColor: Color(0xff828282),
-                              bgColor: Color(0xff252525),
-                              title: "Tag",
-                              iconFilled: true,
-                            )
-                          : Container(),
-                    ],
-                  ),
-                ],
-              ),
+                ),
+                Row(
+                  children: [
+                    reminder
+                        ? Container(
+                            child: const ReminderLabel(),
+                            margin: const EdgeInsets.only(right: 6),
+                          )
+                        : Container(),
+                    tag
+                        ? const TagLabel(
+                            textColor: Color(0xff828282),
+                            bgColor: Color(0xff252525),
+                            title: "Tag",
+                            iconFilled: true,
+                          )
+                        : Container(),
+                  ],
+                ),
+              ],
             ),
-            const Icon(
-              Icons.arrow_forward_ios_rounded,
-              size: 14,
-            ),
-          ],
-        ),
+          ),
+          const Icon(
+            Icons.arrow_forward_ios_rounded,
+            size: 14,
+          ),
+        ],
       ),
     );
   }

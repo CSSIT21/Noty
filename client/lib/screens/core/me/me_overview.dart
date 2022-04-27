@@ -19,7 +19,7 @@ class MeOverview extends StatelessWidget {
       width: screenWidth / 2 - 30,
       child: CurvedCard(
           child: Container(
-            padding: const EdgeInsets.fromLTRB(15, 8, 15, 8),
+            padding: const EdgeInsets.fromLTRB(15, 14, 15, 14),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,7 +41,7 @@ class MeOverview extends StatelessWidget {
               ],
             ),
           ),
-          margin: 20),
+          margin: 16),
     );
   }
 }

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:noty_client/constants/theme.dart';
 import 'package:noty_client/screens/core/index.dart';
-import 'package:noty_client/types/widget/placement.dart';
 import 'package:noty_client/widgets/leading_button.dart';
 import 'package:noty_client/widgets/textfield/textfield.dart';
 import 'package:noty_client/widgets/typography/appbar_text.dart';
-import 'package:noty_client/widgets/typography/header_text.dart';
 
 class RegisterFragment extends StatefulWidget {
   const RegisterFragment({Key? key}) : super(key: key);

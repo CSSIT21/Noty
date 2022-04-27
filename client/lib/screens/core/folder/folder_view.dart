@@ -41,6 +41,7 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
               "Edit",
               style: TextStyle(
                 fontSize: 16,
+                fontWeight: FontWeight.normal,
               ),
             ),
           )

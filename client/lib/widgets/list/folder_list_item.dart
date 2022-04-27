@@ -13,7 +13,7 @@ class FolderListItem extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
 
     return Container(
-      padding: const EdgeInsets.fromLTRB(15, 2, 15, 2),
+      padding: const EdgeInsets.fromLTRB(15, 8, 15, 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
