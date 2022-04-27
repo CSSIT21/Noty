@@ -12,7 +12,6 @@ class CurvedCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(bottom: margin),
-      // padding: const EdgeInsets.only(top: 8, bottom: 8),
       decoration: BoxDecoration(
         color: ThemeConstant.colorSecondaryDark,
         borderRadius: BorderRadius.circular(10),

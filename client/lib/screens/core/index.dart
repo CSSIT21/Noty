@@ -26,10 +26,10 @@ class _CoreScreenState extends material.State<CoreScreen>
   late material.TabController _tabController;
   final List<String> titleList = ["Notes", "Reminders", "Tags", "Me"];
   final List<material.IconData> iconList = [
-    material.Icons.article_rounded,
-    material.Icons.format_list_bulleted_rounded,
+    CupertinoIcons.pencil_outline,
+    CupertinoIcons.list_bullet,
     material.Icons.sell_rounded,
-    material.Icons.person_rounded
+    CupertinoIcons.person_fill,
   ];
   late String currentTitle;
   late TextEditingController _textController;
@@ -96,7 +96,7 @@ class _CoreScreenState extends material.State<CoreScreen>
                     child: const Text(
                       "Edit",
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 17,
                         fontWeight: FontWeight.normal,
                       ),
                     ),

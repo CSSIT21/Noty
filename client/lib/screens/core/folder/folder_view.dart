@@ -40,7 +40,7 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
             child: const Text(
               "Edit",
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 17,
                 fontWeight: FontWeight.normal,
               ),
             ),

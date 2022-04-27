@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:noty_client/models/folder.dart';
 import 'package:noty_client/models/notes.dart';
@@ -59,20 +60,13 @@ class _MeFragementState extends State<MeFragement> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              GestureDetector(
-                onTap: () {
-                  // setState(() {
-                  //   widget.tabController.index = 0;
-                  // });
-                },
-                child: MeOverview(
-                  icon: Icons.article_rounded,
-                  title: "Notes",
-                  count: widget.notes.length,
-                ),
+              MeOverview(
+                icon: CupertinoIcons.pencil_outline,
+                title: "Notes",
+                count: widget.notes.length,
               ),
               MeOverview(
-                icon: Icons.folder_rounded,
+                icon: CupertinoIcons.folder_fill,
                 title: "Folders",
                 count: widget.folders.length,
               ),
@@ -80,20 +74,13 @@ class _MeFragementState extends State<MeFragement> {
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  // setState(() {
-                  //   widget.tabController.index = 1;
-                  // });
-                },
-                child: const MeOverview(
-                  icon: Icons.format_list_bulleted_rounded,
-                  title: "Reminders",
-                  count: 5,
-                ),
+            children: const [
+              MeOverview(
+                icon: CupertinoIcons.list_bullet,
+                title: "Reminders",
+                count: 5,
               ),
-              const MeOverview(
+              MeOverview(
                 icon: Icons.sell_rounded,
                 title: "Tags",
                 count: 23,

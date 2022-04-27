@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:noty_client/constants/theme.dart';
 import 'package:noty_client/screens/core/index.dart';
@@ -95,7 +96,7 @@ class _LoginFragmentState extends State<LoginFragment> {
                     filled: true,
                     fillColor: ThemeConstant.textFieldBgColor,
                     prefixIcon: Icon(
-                      Icons.lock_rounded,
+                      CupertinoIcons.lock_fill,
                       color: ThemeConstant.colorPrimaryLight,
                       size: 20,
                     ),

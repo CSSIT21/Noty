@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:noty_client/constants/theme.dart';
 import 'package:noty_client/screens/core/note/dialog_new_folder.dart';
@@ -17,7 +18,7 @@ Widget menuPopup(BuildContext context) => PopupMenuButton(
                 ),
               ),
               Icon(
-                Icons.folder_rounded,
+                CupertinoIcons.folder_fill,
                 color: ThemeConstant.colorPrimaryLight,
               ),
             ],
@@ -36,7 +37,7 @@ Widget menuPopup(BuildContext context) => PopupMenuButton(
                 ),
               ),
               Icon(
-                Icons.edit_note_rounded,
+                CupertinoIcons.pencil_outline,
                 color: ThemeConstant.colorPrimaryLight,
                 size: 24,
               )

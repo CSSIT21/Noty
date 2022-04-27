@@ -23,7 +23,7 @@ class FolderSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          child: const HeaderText(text: "All Notes", size: Size.medium),
+          child: const HeaderText(text: "Folders", size: Size.medium),
           margin: const EdgeInsets.only(bottom: 20),
         ),
         CurvedCard(
