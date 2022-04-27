@@ -2,8 +2,12 @@ package reminder
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v4"
 	"github.com/kamva/mgm/v3"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"noty-backend/loaders/mongo/models"
+	"noty-backend/types/common"
 	"noty-backend/types/responder"
 	"noty-backend/utils/text"
 )
@@ -20,6 +24,10 @@ import (
 // @Failure 400 {object} responder.ErrorResponse
 // @Router /reminder/edit [patch]
 func ReminderPatchHandler(c *fiber.Ctx) error {
+	// * Parse user JWT token
+	token := c.Locals("user").(*jwt.Token)
+	claims := token.Claims.(*common.UserClaim)
+
 	// * Parse Body
 	var body reminderPatchRequest
 	if err := c.BodyParser(&body); err != nil {
@@ -34,9 +42,15 @@ func ReminderPatchHandler(c *fiber.Ctx) error {
 		return err
 	}
 
+	// * Parse folder id
+	reminderId, _ := primitive.ObjectIDFromHex(body.ReminderId)
+
 	// * Find the reminder
 	reminder := new(models.Reminder)
-	if err := mgm.Coll(reminder).FindByID(body.ReminderId, reminder); err != nil {
+	if err := mgm.Coll(reminder).First(bson.M{
+		"_id":     reminderId,
+		"user_id": claims.UserId,
+	}, reminder); err != nil {
 		return &responder.GenericError{
 			Message: "Unable to fetch reminder",
 			Err:     err,
