@@ -20,7 +20,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param payload body reminderDeleteRequest true "reminder.reminderDeleteRequest"
-// @Success 200 {object} reminderDeleteRequest
+// @Success 200 {object} responder.InfoResponse
 // @Failure 400 {object} responder.ErrorResponse
 // @Router /reminder/delete [delete]
 func ReminderDeleteHandler(c *fiber.Ctx) error {

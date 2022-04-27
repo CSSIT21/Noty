@@ -20,7 +20,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param payload body folderDeleteRequest true "folder.folderDeleteRequest"
-// @Success 200 {object} folderDeleteRequest
+// @Success 200 {object} responder.InfoResponse
 // @Failure 400 {object} responder.ErrorResponse
 // @Router /folder/delete [delete]
 func FolderDeleteHandler(c *fiber.Ctx) error {

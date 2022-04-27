@@ -11,6 +11,7 @@ require (
 	github.com/golang-jwt/jwt/v4 v4.4.1
 	github.com/kamva/mgm/v3 v3.4.1
 	github.com/sirupsen/logrus v1.8.1
+	github.com/swaggo/swag v1.8.1
 	go.mongodb.org/mongo-driver v1.7.0
 	golang.org/x/crypto v0.0.0-20220214200702-86341886e292
 	gopkg.in/yaml.v2 v2.4.0
@@ -38,7 +39,6 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/stretchr/testify v1.7.0 // indirect
 	github.com/swaggo/files v0.0.0-20210815190702-a29dd2bc99b2 // indirect
-	github.com/swaggo/swag v1.8.1 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.34.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect

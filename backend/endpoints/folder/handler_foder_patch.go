@@ -20,7 +20,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param payload body folderPatchRequest true "folder.folderPatchRequest"
-// @Success 200 {object} folderPatchRequest
+// @Success 200 {object} responder.InfoResponse
 // @Failure 400 {object} responder.ErrorResponse
 // @Router /folder/edit [patch]
 func FolderPatchHandler(c *fiber.Ctx) error {

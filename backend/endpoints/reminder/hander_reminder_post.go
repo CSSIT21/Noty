@@ -18,7 +18,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param payload body reminderPostRequest true "reminder.reminderPostRequest"
-// @Success 200 {object} reminderPostRequest
+// @Success 200 {object} responder.InfoResponse
 // @Failure 400 {object} responder.ErrorResponse
 // @Router /reminder/add [post]
 func ReminderPostHandler(c *fiber.Ctx) error {

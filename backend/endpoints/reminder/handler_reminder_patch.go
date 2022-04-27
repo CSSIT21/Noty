@@ -20,7 +20,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param payload body reminderPatchRequest true "reminder.reminderPatchRequest"
-// @Success 200 {object} reminderPatchRequest
+// @Success 200 {object} responder.InfoResponse
 // @Failure 400 {object} responder.ErrorResponse
 // @Router /reminder/edit [patch]
 func ReminderPatchHandler(c *fiber.Ctx) error {

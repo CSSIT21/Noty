@@ -19,7 +19,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param payload body changePasswordRequest true "edit_account.changePasswordRequest"
-// @Success 200 {object} changePasswordRequest
+// @Success 200 {object} responder.InfoResponse
 // @Failure 400 {object} responder.ErrorResponse
 // @Router /account/edit/password [patch]
 func ChangePasswordPatchHandler(c *fiber.Ctx) error {

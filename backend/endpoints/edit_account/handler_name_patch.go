@@ -17,7 +17,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param payload body editNameRequest true "edit_account.editNameRequest"
-// @Success 200 {object} editNameRequest
+// @Success 200 {object} responder.InfoResponse
 // @Failure 400 {object} responder.ErrorResponse
 // @Router /account/edit/name [patch]
 func EditNamePatchHandler(c *fiber.Ctx) error {
