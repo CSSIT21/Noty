@@ -2,8 +2,12 @@ package folder
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v4"
 	"github.com/kamva/mgm/v3"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"noty-backend/loaders/mongo/models"
+	"noty-backend/types/common"
 	"noty-backend/types/responder"
 	"noty-backend/utils/text"
 )
@@ -20,6 +24,10 @@ import (
 // @Failure 400 {object} responder.ErrorResponse
 // @Router /folder/delete [delete]
 func FolderDeleteHandler(c *fiber.Ctx) error {
+	// * Parse user JWT token
+	token := c.Locals("user").(*jwt.Token)
+	claims := token.Claims.(*common.UserClaim)
+
 	// * Parse Body
 	var body folderDeleteRequest
 	if err := c.BodyParser(&body); err != nil {
@@ -34,9 +42,15 @@ func FolderDeleteHandler(c *fiber.Ctx) error {
 		return err
 	}
 
+	// * Parse folder id
+	folderId, _ := primitive.ObjectIDFromHex(body.FolderId)
+
 	// * Find the folder
 	folder := new(models.Folder)
-	if err := mgm.Coll(folder).FindByID(body.FolderId, folder); err != nil {
+	if err := mgm.Coll(folder).First(bson.M{
+		"_id":     folderId,
+		"user_id": claims.UserId,
+	}, folder); err != nil {
 		return &responder.GenericError{
 			Message: "Unable to find the folder",
 			Err:     err,
