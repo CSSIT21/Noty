@@ -4,6 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	editAccount "noty-backend/endpoints/edit_account"
 	"noty-backend/endpoints/folder"
+	"noty-backend/endpoints/note"
 	"noty-backend/loaders/fiber/middlewares"
 
 	accountLogin "noty-backend/endpoints/account/login"
@@ -21,6 +22,7 @@ func Init(router fiber.Router) {
 	editAccountHandler := router.Group("account/edit", middlewares.Jwt)
 	editAccountHandler.Patch("name", editAccount.EditNamePatchHandler)
 	editAccountHandler.Patch("password", editAccount.ChangePasswordPatchHandler)
+
 	// * Reminder
 	reminderHandler := router.Group("reminder/", middlewares.Jwt)
 	reminderHandler.Post("add", reminder.ReminderPostHandler)
@@ -32,4 +34,8 @@ func Init(router fiber.Router) {
 	folderHandler.Post("add", folder.FolderPostHandler)
 	folderHandler.Patch("edit", folder.FolderPatchHandler)
 	folderHandler.Delete("delete", folder.FolderDeleteHandler)
+
+	// * Note
+	noteHandler := router.Group("note/", middlewares.Jwt)
+	noteHandler.Post("add", note.NotePostHandler)
 }
