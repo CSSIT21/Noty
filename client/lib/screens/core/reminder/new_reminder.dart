@@ -73,7 +73,7 @@ class _NewReminderState extends State<NewReminder> {
         ),
         actions: [
           TextButton(
-            onPressed: !isButtonDisabled
+            onPressed: isButtonDisabled
                 ? null
                 : () {
                     Navigator.pop(context);
@@ -178,6 +178,8 @@ class _NewReminderState extends State<NewReminder> {
                       isDateSelected
                           ? Text(
                               selectedDate.toString().substring(0, 16),
+                              style: TextStyle(
+                                  color: ThemeConstant.colorPrimaryLight),
                             )
                           : const Icon(
                               Icons.arrow_forward_ios_rounded,
