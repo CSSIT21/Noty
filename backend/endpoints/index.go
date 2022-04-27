@@ -20,6 +20,7 @@ func Init(router fiber.Router) {
 	// * Edit Account
 	editAccountHandler := router.Group("account/edit", middlewares.Jwt)
 	editAccountHandler.Patch("name", editAccount.EditNamePatchHandler)
+	editAccountHandler.Patch("password", editAccount.ChangePasswordPatchHandler)
 	// * Reminder
 	reminderHandler := router.Group("reminder/", middlewares.Jwt)
 	reminderHandler.Post("add", reminder.ReminderPostHandler)

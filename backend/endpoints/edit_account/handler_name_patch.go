@@ -11,12 +11,12 @@ import (
 
 // EditNamePatchHandler
 // @ID account.edit_information.patch
-// @Summary Patch account information
+// @Summary Change a name
 // @Description Patch account information
 // @Tags account
 // @Accept json
 // @Produce json
-// @Param payload body editNameRequest true "edit_information.editNameRequest"
+// @Param payload body editNameRequest true "edit_account.editNameRequest"
 // @Success 200 {object} editNameRequest
 // @Failure 400 {object} responder.ErrorResponse
 // @Router /account/edit/name [patch]
@@ -33,7 +33,7 @@ func EditNamePatchHandler(c *fiber.Ctx) error {
 			Err:     err,
 		}
 	}
-	
+
 	user := new(models.User)
 	// * Find user
 	if err := mgm.Coll(user).FindByID(*claims.UserId, user); err != nil {
