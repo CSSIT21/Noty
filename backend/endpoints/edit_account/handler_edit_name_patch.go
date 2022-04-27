@@ -33,9 +33,7 @@ func EditNamePatchHandler(c *fiber.Ctx) error {
 			Err:     err,
 		}
 	}
-	// * Parse folder id
-	//userId, _ := primitive.ObjectIDFromHex(*claims.UserId)
-
+	
 	user := new(models.User)
 	// * Find user
 	if err := mgm.Coll(user).FindByID(*claims.UserId, user); err != nil {
