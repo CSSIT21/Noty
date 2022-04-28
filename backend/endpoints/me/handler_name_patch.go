@@ -1,4 +1,4 @@
-package edit_account
+package me
 
 import (
 	"github.com/gofiber/fiber/v2"
@@ -7,38 +7,31 @@ import (
 	"noty-backend/loaders/mongo/models"
 	"noty-backend/types/common"
 	"noty-backend/types/responder"
-	"noty-backend/utils/crypto"
-	"noty-backend/utils/text"
 )
 
-// ChangePasswordPatchHandler
-// @ID account.change_password.patch
-// @Summary Change password
-// @Description Change password
-// @Tags account
+// MePatchNameHandler
+// @ID me.edit_information.patch
+// @Summary Change a name
+// @Description Patch account information
+// @Tags me
 // @Accept json
 // @Produce json
-// @Param payload body changePasswordRequest true "edit_account.changePasswordRequest"
+// @Param payload body mePatchNameRequest true "me.mePatchNameRequest"
 // @Success 200 {object} responder.InfoResponse
 // @Failure 400 {object} responder.ErrorResponse
-// @Router /account/edit/password [patch]
-func ChangePasswordPatchHandler(c *fiber.Ctx) error {
+// @Router /me/edit/name [patch]
+func MePatchNameHandler(c *fiber.Ctx) error {
 	// * Parse user JWT token
 	token := c.Locals("user").(*jwt.Token)
 	claims := token.Claims.(*common.UserClaim)
 
 	// * Parse body
-	var body changePasswordRequest
+	var body mePatchNameRequest
 	if err := c.BodyParser(&body); err != nil {
 		return &responder.GenericError{
 			Message: "Unable to parse body",
 			Err:     err,
 		}
-	}
-
-	// * Validate body
-	if err := text.Validate.Struct(body); err != nil {
-		return err
 	}
 
 	user := new(models.User)
@@ -48,30 +41,25 @@ func ChangePasswordPatchHandler(c *fiber.Ctx) error {
 			Message: "Unable to find the user",
 			Err:     err,
 		}
-	}
-
-	// * Check current password
-	if !crypto.ComparePassword(*user.Password, body.CurrentPassword) {
-		return &responder.GenericError{
-			Message: "Current password is incorrect",
+	} else {
+		if len(body.Firstname) > 1 {
+			user.Firstname = &body.Firstname
+		}
+		if len(body.Lastname) > 1 {
+			user.Lastname = &body.Lastname
 		}
 	}
-
-	// * Hash password
-	hashedPassword, _ := crypto.HashPassword(body.NewPassword)
-
-	user.Password = &hashedPassword
 
 	// * Update user
 	if err := mgm.Coll(user).Update(user); err != nil {
 		return &responder.GenericError{
-			Message: "Unable to change the password",
+			Message: "Unable to update the user",
 			Err:     err,
 		}
 	}
 
 	return c.JSON(&responder.InfoResponse{
 		Success: true,
-		Info:    "Update password successful",
+		Info:    "Update user information successful",
 	})
 }

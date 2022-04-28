@@ -2,7 +2,6 @@ package endpoints
 
 import (
 	"github.com/gofiber/fiber/v2"
-	editAccount "noty-backend/endpoints/edit_account"
 	"noty-backend/endpoints/folder"
 	"noty-backend/endpoints/me"
 	"noty-backend/endpoints/note"
@@ -21,8 +20,8 @@ func Init(router fiber.Router) {
 
 	// * Edit Account
 	editAccountHandler := router.Group("account/edit", middlewares.Jwt)
-	editAccountHandler.Patch("name", editAccount.EditNamePatchHandler)
-	editAccountHandler.Patch("password", editAccount.ChangePasswordPatchHandler)
+	editAccountHandler.Patch("name", me.MePatchNameHandler)
+	editAccountHandler.Patch("password", me.MePatchPasswordHandler)
 
 	// * Reminder
 	reminderHandler := router.Group("reminder/", middlewares.Jwt)
