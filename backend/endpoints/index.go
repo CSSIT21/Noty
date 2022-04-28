@@ -34,6 +34,7 @@ func Init(router fiber.Router) {
 	folderHandler.Post("add", folder.FolderPostHandler)
 	folderHandler.Patch("edit", folder.FolderPatchHandler)
 	folderHandler.Delete("delete", folder.FolderDeleteHandler)
+	folderHandler.Get("list", folder.FolderGetHandler)
 
 	// * Note
 	noteHandler := router.Group("note/", middlewares.Jwt)

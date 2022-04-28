@@ -12,3 +12,8 @@ type folderPatchRequest struct {
 type folderDeleteRequest struct {
 	FolderId string `json:"folder_id" validate:"required"`
 }
+
+type folderGetResponse struct {
+	FolderId string `json:"folder_id"`
+	Name     string `json:"name"`
+}
