@@ -4,6 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	editAccount "noty-backend/endpoints/edit_account"
 	"noty-backend/endpoints/folder"
+	"noty-backend/endpoints/me"
 	"noty-backend/endpoints/note"
 	"noty-backend/loaders/fiber/middlewares"
 
@@ -39,4 +40,8 @@ func Init(router fiber.Router) {
 	// * Note
 	noteHandler := router.Group("note/", middlewares.Jwt)
 	noteHandler.Post("add", note.NotePostHandler)
+
+	// * Me
+	meHandler := router.Group("me/", middlewares.Jwt)
+	meHandler.Get("info", me.MeGetHandler)
 }
