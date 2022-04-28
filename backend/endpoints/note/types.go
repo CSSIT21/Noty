@@ -18,7 +18,6 @@ type NoteText struct {
 }
 
 type ReminderContent struct {
-	Type        string    `json:"type"`
 	Title       string    `json:"title" validate:"required,max=255"`
 	Description string    `json:"description,omitempty"`
 	RemindDate  time.Time `json:"remind_date,omitempty"`

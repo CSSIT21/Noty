@@ -4,6 +4,9 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/kamva/mgm/v3"
+	"github.com/mitchellh/mapstructure"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"noty-backend/loaders/mongo/models"
 	"noty-backend/types/common"
 	"noty-backend/types/responder"
@@ -36,16 +39,22 @@ func NotePostHandler(c *fiber.Ctx) error {
 
 	var details []*models.NoteDetail
 
+	// * Store reminder_id after creating each reminder
+	var remindersId []string
+
 	// * Map note data into details array
 	for _, detail := range body.NoteDetails {
 		if detail.Type == "reminder" {
+			// * Create each reminder
+			reminderContent := new(ReminderContent)
+			_ = mapstructure.Decode(detail.Data, reminderContent)
 			noteId := ""
 			reminder := &models.Reminder{
 				UserId:      claims.UserId,
-				Title:       &detail.Data.(*ReminderContent).Title,
-				Description: &detail.Data.(*ReminderContent).Description,
-				RemindDate:  &detail.Data.(*ReminderContent).RemindDate,
-				RemindTime:  &detail.Data.(*ReminderContent).RemindTime,
+				Title:       &reminderContent.Title,
+				Description: &reminderContent.Description,
+				RemindDate:  &reminderContent.RemindDate,
+				RemindTime:  &reminderContent.RemindTime,
 				NoteId:      &noteId,
 			}
 			if err := mgm.Coll(reminder).Create(reminder); err != nil {
@@ -55,16 +64,22 @@ func NotePostHandler(c *fiber.Ctx) error {
 				}
 			} else {
 				reminderType := "reminder"
+				// * Append reminder id into note_details
 				details = append(details, &models.NoteDetail{
 					Type: &reminderType,
-					Data: reminder.ID,
+					Data: reminder.ID.Hex(),
 				})
+				// * Append reminder_id into remindersId array
+				remindersId = append(remindersId, reminder.ID.Hex())
 			}
 		} else {
+			// * Create each note and append into note_details
+			reminderData := new(NoteText)
+			_ = mapstructure.Decode(detail.Data, reminderData)
 			details = append(details, &models.NoteDetail{
 				Type: &detail.Type,
 				Data: &NoteText{
-					Detail: detail.Data.(*NoteText).Detail,
+					Detail: reminderData.Detail,
 				},
 			})
 		}
@@ -81,6 +96,32 @@ func NotePostHandler(c *fiber.Ctx) error {
 		return &responder.GenericError{
 			Message: "Unable to create note",
 			Err:     err,
+		}
+	}
+
+	// * Update note_id in each reminder
+	for _, id := range remindersId {
+		// * Parse reminder id
+		tempReminderId, _ := primitive.ObjectIDFromHex(id)
+		tempReminder := new(models.Reminder)
+		// * Find each reminder
+		if err := mgm.Coll(tempReminder).First(bson.M{
+			"_id":     tempReminderId,
+			"user_id": claims.UserId,
+		}, tempReminder); err != nil {
+			return &responder.GenericError{
+				Message: "Unable to find reminder id " + id,
+				Err:     err,
+			}
+		} else {
+			// * Update note_id in each reminder
+			*tempReminder.NoteId = note.ID.Hex()
+			if errUpdate := mgm.Coll(tempReminder).Update(tempReminder); errUpdate != nil {
+				return &responder.GenericError{
+					Message: "Unable to update note_id into reminder id " + id,
+					Err:     errUpdate,
+				}
+			}
 		}
 	}
 
