@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:noty_client/constants/theme.dart';
 import 'package:noty_client/screens/core/index.dart';
+import 'package:noty_client/services/account.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class LoginFragment extends StatefulWidget {
@@ -23,7 +24,12 @@ class _LoginFragmentState extends State<LoginFragment> {
   void _loginCall() async {
     Timer(const Duration(milliseconds: 2500), () {
       _loginBtnController.success();
-      _loginNavigate();
+      if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+        print("I sus type something");
+      } else {
+        AccountService.login(_emailController.text, _passwordController.text);
+      }
+      // _loginNavigate();
     });
   }
 

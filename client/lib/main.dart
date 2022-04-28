@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeConstant.theme,
       routes: RouteConstant.route(),
-      initialRoute: "/home",
+      initialRoute: "/",
     );
   }
 }
