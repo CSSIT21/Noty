@@ -39,6 +39,7 @@ func Init(router fiber.Router) {
 	// * Note
 	noteHandler := router.Group("note/", middlewares.Jwt)
 	noteHandler.Post("add", note.NotePostHandler)
+	noteHandler.Delete("delete", note.NoteDeleteHandler)
 
 	// * Me
 	meHandler := router.Group("me/", middlewares.Jwt)

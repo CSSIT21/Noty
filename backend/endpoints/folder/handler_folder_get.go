@@ -17,7 +17,7 @@ import (
 // @Tags folder
 // @Accept json
 // @Produce json
-// @Success 200 {object} folder.folderGetResponse
+// @Success 200 {object} responder.InfoResponse
 // @Failure 400 {object} responder.ErrorResponse
 // @Router /folder/list [get]
 func FolderGetHandler(c *fiber.Ctx) error {
