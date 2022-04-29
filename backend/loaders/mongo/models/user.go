@@ -9,4 +9,5 @@ type User struct {
 	Email            *string `json:"email" bson:"email"`
 	Password         *string `json:"password" bson:"password"`
 	PictureId        *string `json:"picture_id" bson:"picture_id"`
+	ResetToken       *string `json:"reset_token" bson:"reset_token"`
 }
