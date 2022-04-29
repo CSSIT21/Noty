@@ -3,18 +3,18 @@ package note
 import "time"
 
 type notePostRequest struct {
-	Title       string        `json:"title"`
+	Title       string        `json:"title" validate:"required"`
 	FolderId    string        `json:"folder_id"`
 	NoteDetails []*NoteDetail `json:"note_details"`
 }
 
 type NoteDetail struct {
 	Type string `json:"type"`
-	Data any    `json:"data"`
+	Data any    `json:"data" validate:"required"`
 }
 
 type NoteText struct {
-	Detail string `json:"detail"`
+	Detail string `json:"detail" validate:"required"`
 }
 
 type ReminderContent struct {
@@ -22,4 +22,8 @@ type ReminderContent struct {
 	Description string    `json:"description,omitempty"`
 	RemindDate  time.Time `json:"remind_date,omitempty"`
 	RemindTime  time.Time `json:"remind_time,omitempty"`
+}
+
+type noteDeleteRequest struct {
+	NoteId string `json:"note_id"`
 }

@@ -10,6 +10,7 @@ import (
 	"noty-backend/loaders/mongo/models"
 	"noty-backend/types/common"
 	"noty-backend/types/responder"
+	"noty-backend/utils/text"
 )
 
 // NotePostHandler
@@ -35,6 +36,11 @@ func NotePostHandler(c *fiber.Ctx) error {
 			Message: "Unable to parse body",
 			Err:     err,
 		}
+	}
+
+	// * Validate body
+	if err := text.Validate.Struct(body); err != nil {
+		return err
 	}
 
 	var details []*models.NoteDetail
@@ -89,6 +95,7 @@ func NotePostHandler(c *fiber.Ctx) error {
 		Title:    &body.Title,
 		FolderId: &body.FolderId,
 		Details:  details,
+		UserId:   claims.UserId,
 	}
 
 	// * Create note
