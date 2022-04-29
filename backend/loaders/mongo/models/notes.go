@@ -7,7 +7,8 @@ type Notes struct {
 	UserId           *string       `json:"user_id" bson:"user_id"`
 	Title            *string       `json:"title" bson:"title"`
 	FolderId         *string       `json:"folder_id" bson:"folder_id"`
-	Details          []*NoteDetail `json:"note_detail" bson:"note_detail"`
+	Tags             []string      `json:"tags" bson:"tags"`
+	Details          []*NoteDetail `json:"details" bson:"details"`
 }
 
 type NoteDetail struct {
@@ -16,8 +17,7 @@ type NoteDetail struct {
 }
 
 type NoteText struct {
-	Detail *string   `json:"detail" bson:"detail"`
-	Tag    *[]uint64 `json:"tag" bson:"tag"`
+	Detail *string `json:"detail" bson:"detail"`
 }
 
 type ReminderContent struct {

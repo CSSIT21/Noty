@@ -6,6 +6,7 @@ type notePostRequest struct {
 	Title       string        `json:"title" validate:"required"`
 	FolderId    string        `json:"folder_id"`
 	NoteDetails []*NoteDetail `json:"note_details"`
+	Tags        []string      `json:"tag"`
 }
 
 type NoteDetail struct {

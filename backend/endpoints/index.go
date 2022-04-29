@@ -5,6 +5,7 @@ import (
 	"noty-backend/endpoints/folder"
 	"noty-backend/endpoints/me"
 	"noty-backend/endpoints/note"
+	"noty-backend/endpoints/tag"
 	"noty-backend/loaders/fiber/middlewares"
 
 	accountLogin "noty-backend/endpoints/account/login"
@@ -44,4 +45,8 @@ func Init(router fiber.Router) {
 	// * Me
 	meHandler := router.Group("me/", middlewares.Jwt)
 	meHandler.Get("info", me.MeGetHandler)
+
+	// * Tag
+	tagHandler := router.Group("tag/", middlewares.Jwt)
+	tagHandler.Get("list", tag.TagGetHandler)
 }
