@@ -50,10 +50,11 @@ func RegisterHandler(c *fiber.Ctx) error {
 
 	// * Create User
 	user := &models.User{
-		Email:     &body.Email,
-		Password:  &hashedPassword,
-		Firstname: &body.Firstname,
-		Lastname:  &body.Lastname,
+		Email:      &body.Email,
+		Password:   &hashedPassword,
+		Firstname:  &body.Firstname,
+		Lastname:   &body.Lastname,
+		ResetToken: nil,
 	}
 	if err := mgm.Coll(user).Create(user); err != nil {
 		return &responder.GenericError{
