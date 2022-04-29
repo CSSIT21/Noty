@@ -3,10 +3,10 @@ import 'package:noty_client/constants/theme.dart';
 
 class TextFieldDark extends StatelessWidget {
   final TextEditingController controller;
-  final String labelText;
+  final String hintText;
 
   const TextFieldDark(
-      {Key? key, required this.controller, required this.labelText})
+      {Key? key, required this.controller, required this.hintText})
       : super(key: key);
 
   @override
@@ -17,8 +17,8 @@ class TextFieldDark extends StatelessWidget {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-          labelText: labelText,
-          labelStyle: TextStyle(color: ThemeConstant.textFieldTextColor),
+          hintText: hintText,
+          hintStyle: TextStyle(color: ThemeConstant.textFieldTextColor),
           filled: true,
           fillColor: ThemeConstant.textFieldBgColor),
     );

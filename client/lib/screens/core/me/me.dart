@@ -8,6 +8,7 @@ import 'package:noty_client/screens/start/login.dart';
 import 'package:noty_client/types/widget/placement.dart';
 import 'package:noty_client/widgets/surface/curved_card.dart';
 import 'package:noty_client/widgets/typography/header_text.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MeFragement extends StatefulWidget {
   final List<Folder> folders;
@@ -25,6 +26,13 @@ class MeFragement extends StatefulWidget {
 }
 
 class _MeFragementState extends State<MeFragement> {
+  late SharedPreferences prefs;
+
+  deleteUserData() async {
+    prefs = await SharedPreferences.getInstance();
+    prefs.remove('user');
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -97,6 +105,7 @@ class _MeFragementState extends State<MeFragement> {
                   primary: Colors.red,
                 ),
                 onPressed: () {
+                  deleteUserData();
                   Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
