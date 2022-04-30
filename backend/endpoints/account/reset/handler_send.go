@@ -19,18 +19,23 @@ import (
 // @Tags account
 // @Accept json
 // @Produce json
-// @Param payload body resetRequest true "reset.resetRequest"
+// @Param payload body sendRequest true "reset.sendRequest"
 // @Success 200 {object} responder.InfoResponse
 // @Failure 400 {object} responder.ErrorResponse
 // @Router /account/reset/send [post]
 func SendHandler(c *fiber.Ctx) error {
 	// * Parse body
-	var body resetRequest
+	var body sendRequest
 	if err := c.BodyParser(&body); err != nil {
 		return &responder.GenericError{
 			Message: "Unable to parse body",
 			Err:     err,
 		}
+	}
+
+	// * Validate body
+	if err := text.Validate.Struct(body); err != nil {
+		return err
 	}
 
 	// * Declare user record

@@ -13,11 +13,11 @@ func SendPasswordResetMail(name string, pin string, email string) *responder.Gen
 	var body bytes.Buffer
 
 	body.Write([]byte("Subject: Noty password reset" +
-		"\r\nFrom: \"Noty System\" <" + config.C.SmtpUser + ">" +
-		"\r\nTo: \"" + name + "\" <" + email + ">" +
-		"\r\nMessage-ID: <noty_" + *text.GenerateString(text.GenerateStringSet.UpperAlphaNum, 42) + "@mixkoap.com>" +
-		"\rn\nMIME-Version: 1.0" +
-		"\r\nContent-Type: text/html; charset='UTF-8'\r\n"))
+		"\nFrom: \"Noty System\" <" + config.C.SmtpUser + ">" +
+		"\nTo: \"" + name + "\" <" + email + ">" +
+		"\nMessage-ID: <noty_" + *text.GenerateString(text.GenerateStringSet.UpperAlphaNum, 42) + "@mixkoap.com>" +
+		"\nMIME-Version: 1.0" +
+		"\nContent-Type: text/html; charset='UTF-8'\n"))
 
 	if err := passwordResetTemplate.Execute(&body, map[string]any{
 		"name": name,
