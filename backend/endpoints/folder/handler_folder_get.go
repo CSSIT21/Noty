@@ -5,6 +5,7 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/kamva/mgm/v3"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"noty-backend/loaders/mongo/models"
 	"noty-backend/types/common"
 	"noty-backend/types/responder"
@@ -27,9 +28,12 @@ func FolderGetHandler(c *fiber.Ctx) error {
 
 	var folders []models.Folder
 
+	// * Parse string to object_id
+	userId, _ := primitive.ObjectIDFromHex(*claims.UserId)
+
 	// * Get all folders
 	if err := mgm.Coll(&models.Folder{}).SimpleFind(&folders, bson.M{
-		"user_id": claims.UserId,
+		"user_id": &userId,
 	}); err != nil {
 		return &responder.GenericError{
 			Message: "Unable to find folders",

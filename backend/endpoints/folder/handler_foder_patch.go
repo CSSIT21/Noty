@@ -42,14 +42,15 @@ func FolderPatchHandler(c *fiber.Ctx) error {
 		return err
 	}
 
-	// * Parse folder id
+	// * Parse string id to object id
 	folderId, _ := primitive.ObjectIDFromHex(body.FolderId)
+	userId, _ := primitive.ObjectIDFromHex(*claims.UserId)
 
 	// * Find the folder
 	folder := new(models.Folder)
 	if err := mgm.Coll(folder).First(bson.M{
 		"_id":     folderId,
-		"user_id": claims.UserId,
+		"user_id": &userId,
 	}, folder); err != nil {
 		return &responder.GenericError{
 			Message: "Unable to find the folder",

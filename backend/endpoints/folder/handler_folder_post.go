@@ -5,6 +5,7 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/kamva/mgm/v3"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	mongoDriver "go.mongodb.org/mongo-driver/mongo"
 	"noty-backend/loaders/mongo/models"
 	"noty-backend/types/common"
@@ -42,9 +43,12 @@ func FolderPostHandler(c *fiber.Ctx) error {
 		return err
 	}
 
+	// * Parse id to object_id
+	userId, _ := primitive.ObjectIDFromHex(*claims.UserId)
+
 	// * Create folder
 	folder := &models.Folder{
-		UserId: claims.UserId,
+		UserId: &userId,
 		Name:   &body.Name,
 	}
 
