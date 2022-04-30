@@ -27,4 +27,4 @@ mongodbname: noty
 # SMTP Connectivity
 smtpuser: noty@example.com
 smptppass: password
-smtphost: mail.example.com
+smtphost: mail.example.com:587

@@ -2,6 +2,7 @@ package endpoints
 
 import (
 	"github.com/gofiber/fiber/v2"
+
 	"noty-backend/endpoints/folder"
 	"noty-backend/endpoints/me"
 	"noty-backend/endpoints/note"
@@ -10,6 +11,7 @@ import (
 
 	accountLogin "noty-backend/endpoints/account/login"
 	accountRegister "noty-backend/endpoints/account/register"
+	accountReset "noty-backend/endpoints/account/reset"
 	"noty-backend/endpoints/reminder"
 )
 
@@ -18,6 +20,7 @@ func Init(router fiber.Router) {
 	account := router.Group("account/")
 	account.Post("login", accountLogin.LoginHandler)
 	account.Post("register", accountRegister.RegisterHandler)
+	account.Post("reset/send", accountReset.SendHandler)
 
 	// * Edit Account
 	editAccountHandler := router.Group("account/edit", middlewares.Jwt)
