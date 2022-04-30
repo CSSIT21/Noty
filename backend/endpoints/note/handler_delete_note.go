@@ -52,6 +52,8 @@ func NoteDeleteHandler(c *fiber.Ctx) error {
 		}
 	}
 
+	// TODO: Also delete reminders in note
+
 	return c.JSON(&responder.InfoResponse{
 		Success: true,
 		Info:    "Delete note successful",

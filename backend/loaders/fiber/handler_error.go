@@ -51,6 +51,23 @@ func errorHandler(ctx *fiber.Ctx, err error) error {
 		})
 	}
 
+	// Case of validator.ValidationErrors
+	if e, ok := err.(validator.ValidationErrors); ok {
+		var lists []string
+		for _, err := range e {
+			lists = append(lists, err.Field()+" ("+err.Tag()+")")
+		}
+
+		message := strings.Join(lists[:], ", ")
+
+		return ctx.Status(fiber.StatusBadRequest).JSON(responder.ErrorResponse{
+			Success: false,
+			Code:    "VALIDATION_FAILED",
+			Message: "Validation failed on field " + message,
+			Error:   e.Error(),
+		})
+	}
+
 	return ctx.Status(fiber.StatusInternalServerError).JSON(
 		responder.ErrorResponse{
 			Success: false,

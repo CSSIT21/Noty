@@ -28,6 +28,9 @@ func MeGetHandler(c *fiber.Ctx) error {
 	token := c.Locals("user").(*jwt.Token)
 	claims := token.Claims.(*common.UserClaim)
 
+	// * Parse string to object_id
+	userId, _ := primitive.ObjectIDFromHex(*claims.UserId)
+
 	// * Get user information
 	user := new(models.User)
 	if err := mgm.Coll(user).FindByID(*claims.UserId, user); err != nil {
@@ -37,21 +40,25 @@ func MeGetHandler(c *fiber.Ctx) error {
 		}
 	}
 
-	// * Parse string to object_id
-	userId, _ := primitive.ObjectIDFromHex(*claims.UserId)
+	var pictureId string
+	if user.PictureId != nil {
+		pictureId = user.PictureId.Hex()
+	} else {
+		pictureId = ""
+	}
 
 	data := &meGetResponse{
 		UserId:    user.ID.Hex(),
 		Firstname: *user.Firstname,
 		Lastname:  *user.Lastname,
 		Email:     *user.Email,
-		PictureId: *user.PictureId,
+		PictureId: pictureId,
 	}
 
 	// * Get all notes
-	notes := new([]models.Notes)
-	if err := mgm.Coll(&models.Notes{}).SimpleFind(notes, bson.M{
-		"user_id": &userId,
+	var notes []models.Notes
+	if err := mgm.Coll(&models.Notes{}).SimpleFind(&notes, bson.M{
+		"user_id": userId,
 	}); err == mongoDriver.ErrNoDocuments {
 		data.Notes = 0
 	} else if err != nil {
@@ -60,12 +67,12 @@ func MeGetHandler(c *fiber.Ctx) error {
 			Err:     err,
 		}
 	} else {
-		data.Notes = uint64(len(*notes))
+		data.Notes = uint64(len(notes))
 	}
 
 	// * Get all tags
 	var tags []string
-	for _, tag := range *notes {
+	for _, tag := range notes {
 		tags = append(tags, tag.Tags...)
 	}
 	// * Remove duplicate tag

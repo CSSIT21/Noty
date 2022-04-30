@@ -48,23 +48,14 @@ func ReminderDeleteHandler(c *fiber.Ctx) error {
 	// * Parse folder id
 	reminderId, _ := primitive.ObjectIDFromHex(body.ReminderId)
 
-	// * Find the reminder
-	reminder := new(models.Reminder)
-	if err := mgm.Coll(reminder).First(bson.M{
+	// * Delete reminder
+	if err := mgm.Coll(&models.Reminder{}).FindOneAndDelete(mgm.Ctx(), bson.M{
 		"_id":     reminderId,
 		"user_id": userId,
-	}, reminder); err != nil {
+	}); err.Err() != nil {
 		return &responder.GenericError{
 			Message: "Unable to find the reminder",
-			Err:     err,
-		}
-	}
-
-	// * Delete reminder
-	if err := mgm.Coll(reminder).Delete(reminder); err != nil {
-		return &responder.GenericError{
-			Message: "Unable to delete the reminder",
-			Err:     err,
+			Err:     err.Err(),
 		}
 	}
 

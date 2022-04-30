@@ -46,30 +46,21 @@ func FolderPatchHandler(c *fiber.Ctx) error {
 	folderId, _ := primitive.ObjectIDFromHex(body.FolderId)
 	userId, _ := primitive.ObjectIDFromHex(*claims.UserId)
 
-	// * Find the folder
-	folder := new(models.Folder)
-	if err := mgm.Coll(folder).First(bson.M{
+	// * Update folder name
+	if err := mgm.Coll(&models.Folder{}).FindOneAndUpdate(mgm.Ctx(), bson.M{
 		"_id":     folderId,
 		"user_id": &userId,
-	}, folder); err != nil {
+	}, bson.M{
+		"name": body.NewName,
+	}); err.Err() != nil {
 		return &responder.GenericError{
 			Message: "Unable to find the folder",
-			Err:     err,
-		}
-	} else {
-		folder.Name = &body.NewName
-	}
-
-	// * Update folder name
-	if err := mgm.Coll(folder).Update(folder); err != nil {
-		return &responder.GenericError{
-			Message: "Unable to change the name of folder",
-			Err:     err,
+			Err:     err.Err(),
 		}
 	}
 
 	return c.JSON(&responder.InfoResponse{
 		Success: true,
-		Info:    "Change the name of folder successful",
+		Info:    "Change the name of folder successfully",
 	})
 }

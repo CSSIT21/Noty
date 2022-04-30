@@ -7,7 +7,7 @@ import (
 
 type Notes struct {
 	mgm.DefaultModel `bson:",inline"`
-	UserId           *string             `json:"user_id" bson:"user_id"`
+	UserId           *primitive.ObjectID `json:"user_id" bson:"user_id"`
 	Title            *string             `json:"title" bson:"title"`
 	FolderId         *primitive.ObjectID `json:"folder_id" bson:"folder_id"`
 	Tags             []string            `json:"tags" bson:"tags"`

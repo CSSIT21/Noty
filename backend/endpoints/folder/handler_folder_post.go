@@ -54,7 +54,7 @@ func FolderPostHandler(c *fiber.Ctx) error {
 
 	// * Check Duplicate folder
 	if err := mgm.Coll(folder).First(bson.M{
-		"user_id": claims.UserId,
+		"user_id": userId,
 		"name":    body.Name,
 	}, folder); err != mongoDriver.ErrNoDocuments {
 		return &responder.GenericError{
@@ -72,6 +72,6 @@ func FolderPostHandler(c *fiber.Ctx) error {
 
 	return c.JSON(&responder.InfoResponse{
 		Success: true,
-		Info:    "Add folder successful",
+		Info:    "Add folder successfully",
 	})
 }

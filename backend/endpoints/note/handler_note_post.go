@@ -98,7 +98,7 @@ func NotePostHandler(c *fiber.Ctx) error {
 		Title:    &body.Title,
 		FolderId: &folderId,
 		Details:  details,
-		UserId:   claims.UserId,
+		UserId:   &userId,
 	}
 
 	// * Create note
@@ -125,7 +125,7 @@ func NotePostHandler(c *fiber.Ctx) error {
 			}
 		} else {
 			// * Update note_id in each reminder
-			*tempReminder.NoteId = note.ID
+			tempReminder.NoteId = &note.ID
 			if errUpdate := mgm.Coll(tempReminder).Update(tempReminder); errUpdate != nil {
 				return &responder.GenericError{
 					Message: "Unable to update note_id into reminder id " + id,

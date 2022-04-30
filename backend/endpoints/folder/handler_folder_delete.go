@@ -45,24 +45,15 @@ func FolderDeleteHandler(c *fiber.Ctx) error {
 	// * Parse string id to object id
 	folderId, _ := primitive.ObjectIDFromHex(body.FolderId)
 	userId, _ := primitive.ObjectIDFromHex(*claims.UserId)
-
-	// * Find the folder
-	folder := new(models.Folder)
-	if err := mgm.Coll(folder).First(bson.M{
+	
+	// * Delete the folder
+	if err := mgm.Coll(&models.Folder{}).FindOneAndDelete(mgm.Ctx(), bson.M{
 		"_id":     folderId,
 		"user_id": &userId,
-	}, folder); err != nil {
+	}); err.Err() != nil {
 		return &responder.GenericError{
 			Message: "Unable to find the folder",
-			Err:     err,
-		}
-	}
-
-	// * Delete the folder
-	if err := mgm.Coll(folder).Delete(folder); err != nil {
-		return &responder.GenericError{
-			Message: "Unable to delete the folder",
-			Err:     err,
+			Err:     err.Err(),
 		}
 	}
 

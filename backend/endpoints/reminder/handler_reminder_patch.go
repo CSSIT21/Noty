@@ -61,7 +61,12 @@ func ReminderPatchHandler(c *fiber.Ctx) error {
 	} else {
 		reminder.Title = &body.Title
 		reminder.Description = &body.Description
+	}
+
+	if !body.RemindDate.IsZero() {
 		reminder.RemindDate = &body.RemindDate
+	}
+	if !body.RemindTime.IsZero() {
 		reminder.RemindTime = &body.RemindTime
 	}
 
