@@ -26,6 +26,7 @@ class _LoginFragmentState extends State<LoginFragment> {
 
   getSharedPreferences() async {
     prefs = await SharedPreferences.getInstance();
+    // ignore: unused_local_variable
     String? userData = prefs.getString('user');
   }
 

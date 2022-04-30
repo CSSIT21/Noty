@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:noty_client/constants/theme.dart';
 import 'package:noty_client/screens/core/note/dialog_new_folder.dart';
+import 'package:noty_client/screens/core/note/note_view.dart';
 
 Widget menuPopup(BuildContext context) => PopupMenuButton(
       itemBuilder: (context) => [
@@ -48,6 +49,18 @@ Widget menuPopup(BuildContext context) => PopupMenuButton(
       onSelected: (selected) {
         if (selected == 1) {
           showNewFolderDialog(context);
+        }
+        if (selected == 2) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const NoteDetailScreen(
+                noteName: "",
+                previousScreen: "All Notes",
+                noteDetail: [],
+              ), //     ),
+            ),
+          );
         }
       },
       color: const Color(0xff232323),

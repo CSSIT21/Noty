@@ -38,9 +38,8 @@ class _NotesFragmentState extends State<NotesFragment> {
             ),
           ),
         ),
-        Positioned(
-          bottom: 0,
-          right: 0,
+        Align(
+          alignment: Alignment.bottomRight,
           child: SizedBox(
             width: 75,
             height: 75,

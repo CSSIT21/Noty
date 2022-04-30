@@ -37,6 +37,9 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
         actions: [
           TextButton(
             onPressed: () => showEditFolderDialog(context),
+            style: ElevatedButton.styleFrom(
+              splashFactory: NoSplash.splashFactory,
+            ),
             child: const Text(
               "Edit",
               style: TextStyle(

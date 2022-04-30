@@ -19,28 +19,30 @@ class ThemeConstant {
 
   // Theme data
   static material.ThemeData theme = material.ThemeData(
-      primarySwatch: materialColorSwatch,
-      primaryColor: colorPrimaryLight,
-      scaffoldBackgroundColor: colorPrimaryDark,
-      textTheme: material.Typography().white,
-      fontFamily: "SF-Pro-Display",
-      primaryTextTheme: material.Typography().white,
-      elevatedButtonTheme: material.ElevatedButtonThemeData(
-        style: material.ButtonStyle(
-          foregroundColor: material.MaterialStateProperty.all<material.Color>(
-              textColorPrimary),
-          shape: material.MaterialStateProperty.all<
-              material.RoundedRectangleBorder>(
-            material.RoundedRectangleBorder(
-              borderRadius: material.BorderRadius.circular(10.0),
-            ),
+    primarySwatch: materialColorSwatch,
+    primaryColor: colorPrimaryLight,
+    scaffoldBackgroundColor: colorPrimaryDark,
+    textTheme: material.Typography().white,
+    fontFamily: "SF-Pro-Display",
+    primaryTextTheme: material.Typography().white,
+    elevatedButtonTheme: material.ElevatedButtonThemeData(
+      style: material.ButtonStyle(
+        foregroundColor: material.MaterialStateProperty.all<material.Color>(
+            textColorPrimary),
+        shape:
+            material.MaterialStateProperty.all<material.RoundedRectangleBorder>(
+          material.RoundedRectangleBorder(
+            borderRadius: material.BorderRadius.circular(10.0),
           ),
         ),
       ),
-      iconTheme: material.IconThemeData(color: colorPrimaryLight),
-      appBarTheme: material.AppBarTheme(
-          systemOverlayStyle: SystemUiOverlayStyle.light,
-          foregroundColor: textColorPrimary,
-          backgroundColor: appBarColor),
-      unselectedWidgetColor: colorPrimaryLight);
+    ),
+    iconTheme: material.IconThemeData(color: colorPrimaryLight),
+    appBarTheme: material.AppBarTheme(
+        systemOverlayStyle: SystemUiOverlayStyle.light,
+        foregroundColor: textColorPrimary,
+        backgroundColor: appBarColor),
+    unselectedWidgetColor: colorPrimaryLight,
+    splashColor: material.Colors.transparent,
+  );
 }

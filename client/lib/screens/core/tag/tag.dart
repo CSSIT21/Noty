@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:noty_client/constants/theme.dart';
 import 'package:noty_client/models/notes.dart';
+import 'package:noty_client/screens/core/note/note_view.dart';
 import 'package:noty_client/types/widget/placement.dart';
 import 'package:noty_client/utils/widget/divider_insert.dart';
 import 'package:noty_client/widgets/list/note_list_item.dart';
@@ -64,7 +65,8 @@ class _TagFragmentState extends State<TagFragment> {
             child: const HeaderText(text: "All Tags", size: Size.medium),
           ),
           CurvedCard(
-            child: SizedBox(
+            child: Container(
+              padding: const EdgeInsets.only(bottom: 5, top: 5),
               width: double.infinity,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,10 +79,25 @@ class _TagFragmentState extends State<TagFragment> {
                     children: dividerInsert(
                         widget.notes
                             .map(
-                              (note) => NoteListItem(
-                                title: note.title,
-                                date: note.createdAt,
-                                noteDetails: note.noteDetail,
+                              (note) => GestureDetector(
+                                onTap: (() {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => NoteDetailScreen(
+                                        noteName: note.title,
+                                        previousScreen: "Tags",
+                                        noteDetail: note.noteDetail,
+                                      ), //     ),
+                                    ),
+                                  );
+                                }),
+                                behavior: HitTestBehavior.translucent,
+                                child: NoteListItem(
+                                  title: note.title,
+                                  date: note.createdAt,
+                                  noteDetails: note.noteDetail,
+                                ),
                               ),
                             )
                             .toList(),
