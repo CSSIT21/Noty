@@ -21,6 +21,7 @@ func Init(router fiber.Router) {
 	account.Post("login", accountLogin.LoginHandler)
 	account.Post("register", accountRegister.RegisterHandler)
 	account.Post("reset/send", accountReset.SendHandler)
+	account.Post("reset/verify", accountReset.VerifyHandler)
 
 	// * Edit Account
 	editAccountHandler := router.Group("account/edit", middlewares.Jwt)

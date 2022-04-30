@@ -10,6 +10,7 @@ require (
 	github.com/gofiber/jwt/v3 v3.2.11
 	github.com/golang-jwt/jwt/v4 v4.4.1
 	github.com/kamva/mgm/v3 v3.4.1
+	github.com/mitchellh/mapstructure v1.5.0
 	github.com/sirupsen/logrus v1.8.1
 	github.com/swaggo/swag v1.8.1
 	go.mongodb.org/mongo-driver v1.9.0
@@ -33,7 +34,6 @@ require (
 	github.com/klauspost/compress v1.15.2 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
-	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/stretchr/testify v1.7.1 // indirect
