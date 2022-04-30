@@ -4,9 +4,12 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/kamva/mgm/v3"
+	"go.mongodb.org/mongo-driver/bson"
+	mongoDriver "go.mongodb.org/mongo-driver/mongo"
 	"noty-backend/loaders/mongo/models"
 	"noty-backend/types/common"
 	"noty-backend/types/responder"
+	"noty-backend/utils/text"
 )
 
 // MeGetHandler
@@ -24,9 +27,8 @@ func MeGetHandler(c *fiber.Ctx) error {
 	token := c.Locals("user").(*jwt.Token)
 	claims := token.Claims.(*common.UserClaim)
 
-	user := new(models.User)
-
 	// * Get user information
+	user := new(models.User)
 	if err := mgm.Coll(user).FindByID(*claims.UserId, user); err != nil {
 		return &responder.GenericError{
 			Message: "Unable to fetch user information",
@@ -34,14 +36,70 @@ func MeGetHandler(c *fiber.Ctx) error {
 		}
 	}
 
+	data := &meGetResponse{
+		UserId:    user.ID.Hex(),
+		Firstname: *user.Firstname,
+		Lastname:  *user.Lastname,
+		Email:     *user.Email,
+		PictureId: *user.PictureId,
+	}
+
+	// * Get all notes
+	notes := new([]models.Notes)
+	if err := mgm.Coll(&models.Notes{}).SimpleFind(notes, bson.M{
+		"user_id": claims.UserId,
+	}); err == mongoDriver.ErrNoDocuments {
+		data.Notes = 0
+	} else if err != nil {
+		return &responder.GenericError{
+			Message: "Unable to fetch notes",
+			Err:     err,
+		}
+	} else {
+		data.Notes = uint64(len(*notes))
+	}
+
+	// * Get all tags
+	var tags []string
+	for _, tag := range *notes {
+		tags = append(tags, tag.Tags...)
+	}
+	// * Remove duplicate tag
+	tags = text.RemoveDuplicate(tags)
+	data.Tags = uint64(len(tags))
+
+	// * Get all reminders
+	reminders := new([]models.Reminder)
+	if err := mgm.Coll(&models.Reminder{}).SimpleFind(reminders, bson.M{
+		"user_id": claims.UserId,
+	}); err == mongoDriver.ErrNoDocuments {
+		data.Reminders = 0
+	} else if err != nil {
+		return &responder.GenericError{
+			Message: "Unable to fetch reminders",
+			Err:     err,
+		}
+	} else {
+		data.Reminders = uint64(len(*reminders))
+	}
+
+	// * Get all folders
+	folders := new([]models.Folder)
+	if err := mgm.Coll(&models.Folder{}).SimpleFind(folders, bson.M{
+		"user_id": claims.UserId,
+	}); err == mongoDriver.ErrNoDocuments {
+		data.Folders = 0
+	} else if err != nil {
+		return &responder.GenericError{
+			Message: "Unable to fetch folders",
+			Err:     err,
+		}
+	} else {
+		data.Folders = uint64(len(*folders))
+	}
+
 	return c.JSON(&responder.InfoResponse{
 		Success: true,
-		Data: &meGetResponse{
-			UserId:    user.ID.Hex(),
-			Firstname: *user.Firstname,
-			Lastname:  *user.Lastname,
-			Email:     *user.Email,
-			PictureId: *user.PictureId,
-		},
+		Data:    data,
 	})
 }

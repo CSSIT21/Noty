@@ -6,6 +6,10 @@ type meGetResponse struct {
 	Email     string `json:"email"`
 	PictureId string `json:"picture_id"`
 	UserId    string `json:"user_id"`
+	Notes     uint64 `json:"notes"`
+	Folders   uint64 `json:"folders"`
+	Tags      uint64 `json:"tags"`
+	Reminders uint64 `json:"reminders"`
 }
 
 type mePatchNameRequest struct {
