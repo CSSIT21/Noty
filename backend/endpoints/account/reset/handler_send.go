@@ -40,6 +40,7 @@ func SendHandler(c *fiber.Ctx) error {
 
 	// * Declare user record
 	user := new(models.User)
+
 	// * Generate verification pin
 	pin := text.GenerateString(text.GenerateStringSet.Num, 6)
 
@@ -66,6 +67,7 @@ func SendHandler(c *fiber.Ctx) error {
 		}
 	}
 
+	// * Send verification email
 	if err := mail.SendPasswordResetMail(*user.Firstname+" "+*user.Lastname, *pin, *user.Email); err != nil {
 		return &responder.GenericError{
 			Message: "Unable to send email, please try again later",
