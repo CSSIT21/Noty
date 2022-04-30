@@ -5,6 +5,7 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/kamva/mgm/v3"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	mongoDriver "go.mongodb.org/mongo-driver/mongo"
 	"noty-backend/loaders/mongo/models"
 	"noty-backend/types/common"
@@ -36,6 +37,9 @@ func MeGetHandler(c *fiber.Ctx) error {
 		}
 	}
 
+	// * Parse string to object_id
+	userId, _ := primitive.ObjectIDFromHex(*claims.UserId)
+
 	data := &meGetResponse{
 		UserId:    user.ID.Hex(),
 		Firstname: *user.Firstname,
@@ -47,7 +51,7 @@ func MeGetHandler(c *fiber.Ctx) error {
 	// * Get all notes
 	notes := new([]models.Notes)
 	if err := mgm.Coll(&models.Notes{}).SimpleFind(notes, bson.M{
-		"user_id": claims.UserId,
+		"user_id": &userId,
 	}); err == mongoDriver.ErrNoDocuments {
 		data.Notes = 0
 	} else if err != nil {
@@ -71,7 +75,7 @@ func MeGetHandler(c *fiber.Ctx) error {
 	// * Get all reminders
 	reminders := new([]models.Reminder)
 	if err := mgm.Coll(&models.Reminder{}).SimpleFind(reminders, bson.M{
-		"user_id": claims.UserId,
+		"user_id": &userId,
 	}); err == mongoDriver.ErrNoDocuments {
 		data.Reminders = 0
 	} else if err != nil {
@@ -86,7 +90,7 @@ func MeGetHandler(c *fiber.Ctx) error {
 	// * Get all folders
 	folders := new([]models.Folder)
 	if err := mgm.Coll(&models.Folder{}).SimpleFind(folders, bson.M{
-		"user_id": claims.UserId,
+		"user_id": &userId,
 	}); err == mongoDriver.ErrNoDocuments {
 		data.Folders = 0
 	} else if err != nil {

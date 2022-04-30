@@ -43,6 +43,10 @@ func NotePostHandler(c *fiber.Ctx) error {
 		return err
 	}
 
+	// * Parse string to object_id
+	userId, _ := primitive.ObjectIDFromHex(*claims.UserId)
+	folderId, _ := primitive.ObjectIDFromHex(body.FolderId)
+
 	var details []*models.NoteDetail
 
 	// * Store reminder_id after creating each reminder
@@ -54,14 +58,13 @@ func NotePostHandler(c *fiber.Ctx) error {
 			// * Create each reminder
 			reminderContent := new(ReminderContent)
 			_ = mapstructure.Decode(detail.Data, reminderContent)
-			noteId := ""
 			reminder := &models.Reminder{
-				UserId:      claims.UserId,
+				UserId:      &userId,
 				Title:       &reminderContent.Title,
 				Description: &reminderContent.Description,
 				RemindDate:  &reminderContent.RemindDate,
 				RemindTime:  &reminderContent.RemindTime,
-				NoteId:      &noteId,
+				NoteId:      nil,
 			}
 			if err := mgm.Coll(reminder).Create(reminder); err != nil {
 				return &responder.GenericError{
@@ -93,7 +96,7 @@ func NotePostHandler(c *fiber.Ctx) error {
 
 	note := &models.Notes{
 		Title:    &body.Title,
-		FolderId: &body.FolderId,
+		FolderId: &folderId,
 		Details:  details,
 		UserId:   claims.UserId,
 	}
@@ -114,7 +117,7 @@ func NotePostHandler(c *fiber.Ctx) error {
 		// * Find each reminder
 		if err := mgm.Coll(tempReminder).First(bson.M{
 			"_id":     tempReminderId,
-			"user_id": claims.UserId,
+			"user_id": &userId,
 		}, tempReminder); err != nil {
 			return &responder.GenericError{
 				Message: "Unable to find reminder id " + id,
@@ -122,7 +125,7 @@ func NotePostHandler(c *fiber.Ctx) error {
 			}
 		} else {
 			// * Update note_id in each reminder
-			*tempReminder.NoteId = note.ID.Hex()
+			*tempReminder.NoteId = note.ID
 			if errUpdate := mgm.Coll(tempReminder).Update(tempReminder); errUpdate != nil {
 				return &responder.GenericError{
 					Message: "Unable to update note_id into reminder id " + id,

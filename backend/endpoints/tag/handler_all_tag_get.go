@@ -5,6 +5,7 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/kamva/mgm/v3"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"noty-backend/loaders/mongo/models"
 	"noty-backend/types/common"
 	"noty-backend/types/responder"
@@ -26,10 +27,13 @@ func TagGetHandler(c *fiber.Ctx) error {
 	token := c.Locals("user").(*jwt.Token)
 	claims := token.Claims.(*common.UserClaim)
 
+	// * Parse string to object_id
+	userId, _ := primitive.ObjectIDFromHex(*claims.UserId)
+
 	// * Fetch all notes
 	var notes []models.Notes
 	if err := mgm.Coll(new(models.Notes)).SimpleFind(&notes, bson.M{
-		"user_id": claims.UserId,
+		"user_id": &userId,
 	}); err != nil {
 		return &responder.GenericError{
 			Message: "Unable to fetch tags",

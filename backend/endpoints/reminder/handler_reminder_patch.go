@@ -28,6 +28,9 @@ func ReminderPatchHandler(c *fiber.Ctx) error {
 	token := c.Locals("user").(*jwt.Token)
 	claims := token.Claims.(*common.UserClaim)
 
+	// * Parse string to object_id
+	userId, _ := primitive.ObjectIDFromHex(*claims.UserId)
+
 	// * Parse Body
 	var body reminderPatchRequest
 	if err := c.BodyParser(&body); err != nil {
@@ -49,7 +52,7 @@ func ReminderPatchHandler(c *fiber.Ctx) error {
 	reminder := new(models.Reminder)
 	if err := mgm.Coll(reminder).First(bson.M{
 		"_id":     reminderId,
-		"user_id": claims.UserId,
+		"user_id": userId,
 	}, reminder); err != nil {
 		return &responder.GenericError{
 			Message: "Unable to fetch reminder",

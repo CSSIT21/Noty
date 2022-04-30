@@ -27,6 +27,9 @@ func NoteFolderPatchHandler(c *fiber.Ctx) error {
 	token := c.Locals("user").(*jwt.Token)
 	claims := token.Claims.(*common.UserClaim)
 
+	// * Parse string to object_id
+	userId, _ := primitive.ObjectIDFromHex(*claims.UserId)
+
 	// * Parse Body
 	var body noteFolderPatchRequest
 	if err := c.BodyParser(&body); err != nil {
@@ -48,7 +51,7 @@ func NoteFolderPatchHandler(c *fiber.Ctx) error {
 	// * Add folder_id into note
 	if err := mgm.Coll(&models.Notes{}).FindOneAndUpdate(mgm.Ctx(), bson.M{
 		"_id":     noteId,
-		"user_id": claims.UserId,
+		"user_id": userId,
 	}, bson.M{
 		"folder_id": body.FolderId,
 	}); err != nil {

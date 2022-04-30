@@ -1,14 +1,17 @@
 package models
 
-import "github.com/kamva/mgm/v3"
+import (
+	"github.com/kamva/mgm/v3"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
 
 type Notes struct {
 	mgm.DefaultModel `bson:",inline"`
-	UserId           *string       `json:"user_id" bson:"user_id"`
-	Title            *string       `json:"title" bson:"title"`
-	FolderId         *string       `json:"folder_id" bson:"folder_id"`
-	Tags             []string      `json:"tags" bson:"tags"`
-	Details          []*NoteDetail `json:"details" bson:"details"`
+	UserId           *string             `json:"user_id" bson:"user_id"`
+	Title            *string             `json:"title" bson:"title"`
+	FolderId         *primitive.ObjectID `json:"folder_id" bson:"folder_id"`
+	Tags             []string            `json:"tags" bson:"tags"`
+	Details          []*NoteDetail       `json:"details" bson:"details"`
 }
 
 type NoteDetail struct {
@@ -21,5 +24,5 @@ type NoteText struct {
 }
 
 type ReminderContent struct {
-	ReminderId *string `json:"reminder_id" bson:"reminder_id"`
+	ReminderId *primitive.ObjectID `json:"reminder_id" bson:"reminder_id"`
 }

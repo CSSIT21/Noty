@@ -4,6 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/kamva/mgm/v3"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"noty-backend/loaders/mongo/models"
 	"noty-backend/types/common"
 	"noty-backend/types/responder"
@@ -35,22 +36,20 @@ func ReminderPostHandler(c *fiber.Ctx) error {
 		}
 	}
 
+	// * Parse string to object_id
+	userId, _ := primitive.ObjectIDFromHex(*claims.UserId)
+
 	// * Validate body
 	if err := text.Validate.Struct(body); err != nil {
 		return err
 	}
 
-	var noteId string
-	if len(body.NoteId) > 0 {
-		noteId = body.NoteId
-	}
-
 	// * Create reminder
 	reminder := &models.Reminder{
-		UserId:      claims.UserId,
+		UserId:      &userId,
 		Title:       &body.Title,
 		Description: &body.Description,
-		NoteId:      &noteId,
+		NoteId:      nil,
 		RemindDate:  &body.RemindDate,
 		RemindTime:  &body.RemindTime,
 	}

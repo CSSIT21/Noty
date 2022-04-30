@@ -36,14 +36,15 @@ func NoteDeleteHandler(c *fiber.Ctx) error {
 		}
 	}
 
-	// * Parse id
-	noteId, _ := primitive.ObjectIDFromHex(body.NoteId)
+	// * Parse string to object_id
+	noteId, _ := primitive.ObjectIDFromHex(body.NoteId) // * Parse string to object_id
+	userId, _ := primitive.ObjectIDFromHex(*claims.UserId)
 
 	// * Delete the note
 	var note *models.Notes
 	if err := mgm.Coll(note).FindOneAndDelete(mgm.Ctx(), bson.M{
 		"_id":     noteId,
-		"user_id": claims.UserId,
+		"user_id": userId,
 	}); err.Err() != nil {
 		return &responder.GenericError{
 			Message: "Unable to find a note",
