@@ -28,3 +28,8 @@ type ReminderContent struct {
 type noteDeleteRequest struct {
 	NoteId string `json:"note_id"`
 }
+
+type noteFolderPatchRequest struct {
+	FolderId string `json:"folder_id"`
+	NoteId   string `json:"note_id"`
+}
