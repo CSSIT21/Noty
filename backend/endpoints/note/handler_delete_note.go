@@ -40,19 +40,41 @@ func NoteDeleteHandler(c *fiber.Ctx) error {
 	noteId, _ := primitive.ObjectIDFromHex(body.NoteId) // * Parse string to object_id
 	userId, _ := primitive.ObjectIDFromHex(*claims.UserId)
 
+	note := new(models.Notes)
+
+	// * Find the note
+	if err := mgm.Coll(note).First(bson.M{
+		"_id":     noteId,
+		"user_id": userId,
+	}, note); err != nil {
+		return &responder.GenericError{
+			Message: "Unable to find the note",
+			Err:     err,
+		}
+	}
+
+	// * Delete reminders in the note
+	reminder := new(models.Reminder)
+	if _, err := mgm.Coll(reminder).DeleteMany(mgm.Ctx(), bson.M{
+		"note_id": noteId,
+		"user_id": userId,
+	}); err != nil {
+		return &responder.GenericError{
+			Message: "Unable to delete reminders",
+			Err:     err,
+		}
+	}
+
 	// * Delete the note
-	var note *models.Notes
 	if err := mgm.Coll(note).FindOneAndDelete(mgm.Ctx(), bson.M{
 		"_id":     noteId,
 		"user_id": userId,
 	}); err.Err() != nil {
 		return &responder.GenericError{
-			Message: "Unable to find a note",
+			Message: "Unable to delete the note",
 			Err:     err.Err(),
 		}
 	}
-
-	// TODO: Also delete reminders in note
 
 	return c.JSON(&responder.InfoResponse{
 		Success: true,

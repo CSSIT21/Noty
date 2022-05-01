@@ -33,3 +33,7 @@ type noteFolderPatchRequest struct {
 	FolderId string `json:"folder_id"`
 	NoteId   string `json:"note_id"`
 }
+
+type noteDeleteReminderData struct {
+	Data string `json:"reminder_id"`
+}
