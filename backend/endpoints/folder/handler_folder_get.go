@@ -18,7 +18,7 @@ import (
 // @Tags folder
 // @Accept json
 // @Produce json
-// @Success 200 {object} responder.InfoResponse
+// @Success 200 {object} folder.folderGetResponse
 // @Failure 400 {object} responder.ErrorResponse
 // @Router /folder/list [get]
 func FolderGetHandler(c *fiber.Ctx) error {
@@ -33,7 +33,7 @@ func FolderGetHandler(c *fiber.Ctx) error {
 
 	// * Get all folders
 	if err := mgm.Coll(&models.Folder{}).SimpleFind(&folders, bson.M{
-		"user_id": &userId,
+		"user_id": userId,
 	}); err != nil {
 		return &responder.GenericError{
 			Message: "Unable to find folders",
