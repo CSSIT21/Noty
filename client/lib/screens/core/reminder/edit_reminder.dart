@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:noty_client/constants/theme.dart';
 import 'package:noty_client/widgets/typography/appbar_text.dart';
-import 'package:flutter/services.dart';
 
 class EditReminder extends StatefulWidget {
   const EditReminder({Key? key}) : super(key: key);
@@ -44,9 +43,6 @@ class _EditReminderState extends State<EditReminder> {
 
   @override
   Widget build(BuildContext context) {
-    var screenPadding = MediaQuery.of(context).padding;
-    double height = MediaQuery.of(context).size.height;
-    double screenHeight = height - screenPadding.top - screenPadding.bottom;
     return Scaffold(
       appBar: AppBar(
         title: const AppBarText(text: "Mixko's reminder"),
@@ -83,6 +79,9 @@ class _EditReminderState extends State<EditReminder> {
                 color: ThemeConstant.colorPrimaryLight,
               ),
             ),
+            style: ElevatedButton.styleFrom(
+              splashFactory: NoSplash.splashFactory,
+            ),
           )
         ],
       ),
@@ -91,7 +90,6 @@ class _EditReminderState extends State<EditReminder> {
         controller: ModalScrollController.of(context),
         child: Container(
           color: ThemeConstant.colorPrimaryDark,
-          height: screenHeight,
           child: Column(
             children: [
               Column(
@@ -110,9 +108,6 @@ class _EditReminderState extends State<EditReminder> {
                             margin: const EdgeInsets.only(bottom: 4),
                             child: TextField(
                               controller: _titleController,
-                              inputFormatters: [
-                                LengthLimitingTextInputFormatter(40),
-                              ],
                               decoration: InputDecoration.collapsed(
                                 hintText: 'Title',
                                 hintStyle: TextStyle(
@@ -128,6 +123,7 @@ class _EditReminderState extends State<EditReminder> {
                             child: TextField(
                               controller: _detailsController,
                               keyboardType: TextInputType.multiline,
+                              textInputAction: TextInputAction.done,
                               maxLines: 4,
                               decoration: InputDecoration.collapsed(
                                 hintText: 'Details',

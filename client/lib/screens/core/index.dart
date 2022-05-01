@@ -4,11 +4,13 @@ import 'package:motion_tab_bar_v2/motion-tab-bar.dart' as motion_tab_bar;
 import 'package:noty_client/constants/theme.dart';
 import 'package:noty_client/models/folder.dart';
 import 'package:noty_client/models/notes.dart';
+import 'package:noty_client/models/response/folder/folder_move_list.dart';
 import 'package:noty_client/screens/core/me/me.dart';
 import 'package:noty_client/screens/core/me/me_edit.dart';
 import 'package:noty_client/screens/core/note/note.dart';
 import 'package:noty_client/screens/core/reminder/reminder.dart';
 import 'package:noty_client/screens/core/tag/tag.dart';
+import 'package:noty_client/services/folder_service.dart';
 import 'package:noty_client/services/notes_sevice.dart';
 import 'package:noty_client/widgets/typography/appbar_text.dart';
 
@@ -93,6 +95,9 @@ class _CoreScreenState extends material.State<CoreScreen>
                         ),
                       );
                     },
+                    style: material.ElevatedButton.styleFrom(
+                      splashFactory: material.NoSplash.splashFactory,
+                    ),
                     child: const Text(
                       "Edit",
                       style: TextStyle(

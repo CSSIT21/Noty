@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:noty_client/constants/theme.dart';
 import 'package:noty_client/models/notes.dart';
+import 'package:noty_client/screens/core/note/note_view.dart';
 import 'package:noty_client/types/widget/placement.dart';
 import 'package:noty_client/utils/widget/divider_insert.dart';
 import 'package:noty_client/widgets/list/note_list_item.dart';
@@ -29,12 +32,16 @@ class NoteSection extends StatelessWidget {
                     .mapIndexed(
                       (index, note) => GestureDetector(
                         onTap: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) => FolderDetailScreen(),//     ),
-                          //   ),
-                          // );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => NoteDetailScreen(
+                                noteName: note.title,
+                                previousScreen: "All Notes",
+                                noteDetail: note.noteDetail,
+                              ), //     ),
+                            ),
+                          );
                         },
                         behavior: HitTestBehavior.translucent,
                         child: Slidable(
@@ -42,6 +49,13 @@ class NoteSection extends StatelessWidget {
                           endActionPane: ActionPane(
                             motion: const StretchMotion(),
                             children: [
+                              SlidableAction(
+                                onPressed: (BuildContext context) {},
+                                backgroundColor:
+                                    ThemeConstant.colorPrimaryLight,
+                                foregroundColor: Colors.white,
+                                icon: CupertinoIcons.folder_fill,
+                              ),
                               SlidableAction(
                                 onPressed: (BuildContext context) {},
                                 backgroundColor: Colors.red,

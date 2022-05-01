@@ -1,16 +1,12 @@
 class NoteDetail {
-  String type;
-  String detail;
-  String createdAt;
-  String reminderId;
-  List<String> tags;
+  String? type;
+  String? detail;
+  String? createdAt;
+  String? reminderId;
+  List<String>? tags;
 
   NoteDetail(
-      {required this.type,
-      required this.detail,
-      required this.createdAt,
-      required this.reminderId,
-      required this.tags});
+      {this.type, this.detail, this.createdAt, this.reminderId, this.tags});
 
   factory NoteDetail.fromJson(Map<String, dynamic> json) {
     return NoteDetail(
@@ -27,7 +23,7 @@ class NoteDetail {
       "detail": detail,
       "created_at": createdAt,
       "reminder_id": reminderId,
-      "tags": List<dynamic>.from(tags.map((x) => x))
+      "tags": List<dynamic>.from(tags!.map((x) => x))
     };
   }
 }

@@ -21,7 +21,7 @@ class NoteListItem extends StatelessWidget {
     var tag = false;
     var reminder = false;
     for (var i = 0; i < noteDetails.length; i++) {
-      if (noteDetails[i].tags.isNotEmpty) {
+      if (noteDetails[i].tags!.isNotEmpty) {
         tag = true;
       }
       break;

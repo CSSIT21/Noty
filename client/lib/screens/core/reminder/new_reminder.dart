@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:noty_client/constants/theme.dart';
 import 'package:noty_client/widgets/typography/appbar_text.dart';
-import 'package:flutter/services.dart';
 
 class NewReminder extends StatefulWidget {
   const NewReminder({Key? key}) : super(key: key);
@@ -45,9 +44,6 @@ class _NewReminderState extends State<NewReminder> {
 
   @override
   Widget build(BuildContext context) {
-    var screenPadding = MediaQuery.of(context).padding;
-    double height = MediaQuery.of(context).size.height;
-    double screenHeight = height - screenPadding.top - screenPadding.bottom;
     return Scaffold(
       appBar: AppBar(
         title: const AppBarText(text: 'New Reminder'),
@@ -78,6 +74,9 @@ class _NewReminderState extends State<NewReminder> {
                 : () {
                     Navigator.pop(context);
                   },
+            style: ElevatedButton.styleFrom(
+              splashFactory: NoSplash.splashFactory,
+            ),
             child: Text(
               "Add",
               style: !isButtonDisabled
@@ -99,7 +98,6 @@ class _NewReminderState extends State<NewReminder> {
         controller: ModalScrollController.of(context),
         child: Container(
           color: ThemeConstant.colorPrimaryDark,
-          height: screenHeight,
           child: Column(
             children: [
               Column(
@@ -118,9 +116,6 @@ class _NewReminderState extends State<NewReminder> {
                             margin: const EdgeInsets.only(bottom: 4),
                             child: TextField(
                               controller: _titleController,
-                              inputFormatters: [
-                                LengthLimitingTextInputFormatter(40),
-                              ],
                               decoration: InputDecoration.collapsed(
                                 hintText: 'Title',
                                 hintStyle: TextStyle(
@@ -136,6 +131,7 @@ class _NewReminderState extends State<NewReminder> {
                             child: TextField(
                               controller: _detailsController,
                               keyboardType: TextInputType.multiline,
+                              textInputAction: TextInputAction.done,
                               maxLines: 4,
                               decoration: InputDecoration.collapsed(
                                 hintText: 'Details',

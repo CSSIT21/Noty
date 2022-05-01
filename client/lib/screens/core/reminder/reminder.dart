@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:noty_client/screens/core/note/note_view.dart';
 import 'package:noty_client/screens/core/reminder/edit_reminder.dart';
 import 'package:noty_client/screens/core/reminder/new_reminder.dart';
 import 'package:noty_client/types/widget/placement.dart';
@@ -41,6 +42,7 @@ class _ReminderFragmentState extends State<ReminderFragment> {
                         builder: (context) => const EditReminder(),
                         expand: true,
                       ),
+                      behavior: HitTestBehavior.translucent,
                       child: Container(
                         margin: const EdgeInsets.only(bottom: 2),
                         child: Row(
@@ -91,72 +93,91 @@ class _ReminderFragmentState extends State<ReminderFragment> {
               ),
             ),
             CurvedCard(
-              child: Container(
-                padding: const EdgeInsets.fromLTRB(8, 15, 8, 15),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.fromLTRB(10, 0, 10, 4),
-                          child: ContentText(
-                              text: "IEEE Spectrum", size: Size.large),
-                        ),
+              child: GestureDetector(
+                onTap: (() {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const NoteDetailScreen(
+                        noteName: "IEEE Spectrum",
+                        previousScreen: "Reminders",
+                        noteDetail: [],
+                      ), //     ),
+                    ),
+                  );
+                }),
+                behavior: HitTestBehavior.translucent,
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(8, 15, 8, 15),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.fromLTRB(10, 0, 10, 4),
+                            child: ContentText(
+                                text: "IEEE Spectrum", size: Size.large),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.only(right: 4, bottom: 4),
+                            child: const Icon(
+                              Icons.arrow_forward_ios_rounded,
+                              size: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Divider(
+                        color: Color(0xff434345),
+                        indent: 10,
+                        endIndent: 5,
+                      ),
+                      for (var i = 0; i < 4; i++)
                         Container(
-                          padding: const EdgeInsets.only(right: 4, bottom: 4),
-                          child: const Icon(
-                            Icons.arrow_forward_ios_rounded,
-                            size: 14,
+                          margin: const EdgeInsets.only(bottom: 2),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Transform.scale(
+                                    scale: 1.2,
+                                    child: Checkbox(
+                                      checkColor: Colors.black,
+                                      value: isChecked,
+                                      shape: const CircleBorder(),
+                                      onChanged: (bool? value) {
+                                        setState(() {
+                                          isChecked = value!;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        margin:
+                                            const EdgeInsets.only(bottom: 4),
+                                        child:
+                                            const Text("Summarize the topic"),
+                                      ),
+                                      const ContentText(
+                                          text: "Monday, 20:00",
+                                          size: Size.tiny),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
-                    const Divider(
-                      color: Color(0xff434345),
-                      indent: 10,
-                      endIndent: 5,
-                    ),
-                    for (var i = 0; i < 4; i++)
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 2),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Transform.scale(
-                                  scale: 1.2,
-                                  child: Checkbox(
-                                    checkColor: Colors.black,
-                                    value: isChecked,
-                                    shape: const CircleBorder(),
-                                    onChanged: (bool? value) {
-                                      setState(() {
-                                        isChecked = value!;
-                                      });
-                                    },
-                                  ),
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      margin: const EdgeInsets.only(bottom: 4),
-                                      child: const Text("Summarize the topic"),
-                                    ),
-                                    const ContentText(
-                                        text: "Monday, 20:00", size: Size.tiny),
-                                  ],
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               margin: 20,

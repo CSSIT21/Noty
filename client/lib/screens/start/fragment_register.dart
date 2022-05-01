@@ -290,19 +290,6 @@ class _RegisterFragmentState extends State<RegisterFragment> {
                         SizedBox(
                           width: double.infinity,
                           height: 50,
-                          // child: ElevatedButton(
-                          //   child: const Text("Sign Up"),
-                          //   onPressed: () {
-                          //     setState(() {
-                          //       isSubmit = true;
-                          //     });
-                          //     if (_formKey.currentState!.validate()) {
-                          //       _formKey.currentState!.save();
-                          //       isSubmit = false;
-                          //       _registerCall();
-                          //     }
-                          //   },
-                          // ),
                           child: RoundedLoadingButton(
                             child: const Text(
                               'Sign Up',
