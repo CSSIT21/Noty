@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:noty_client/constants/theme.dart';
-import 'package:noty_client/models/notes.dart';
 import 'package:noty_client/screens/core/note/note_view.dart';
+import 'package:noty_client/services/providers/providers.dart';
 import 'package:noty_client/types/widget/placement.dart';
 import 'package:noty_client/utils/widget/divider_insert.dart';
 import 'package:noty_client/widgets/list/note_list_item.dart';
@@ -10,11 +10,16 @@ import 'package:noty_client/widgets/surface/curved_card.dart';
 import 'package:noty_client/widgets/typography/header_text.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:collection/collection.dart';
+import 'package:provider/provider.dart';
 
-class NoteSection extends StatelessWidget {
-  final List<Notes> notes;
-  const NoteSection({Key? key, required this.notes}) : super(key: key);
+class NoteSection extends StatefulWidget {
+  const NoteSection({Key? key}) : super(key: key);
 
+  @override
+  State<NoteSection> createState() => _NoteSectionState();
+}
+
+class _NoteSectionState extends State<NoteSection> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -28,7 +33,9 @@ class NoteSection extends StatelessWidget {
           margin: 25,
           child: Column(
             children: dividerInsert(
-                notes
+                context
+                    .watch<NotesProvider>()
+                    .notes
                     .mapIndexed(
                       (index, note) => GestureDetector(
                         onTap: () {
@@ -38,7 +45,7 @@ class NoteSection extends StatelessWidget {
                               builder: (context) => NoteDetailScreen(
                                 noteName: note.title,
                                 previousScreen: "All Notes",
-                                noteDetail: note.noteDetail,
+                                noteIndex: index,
                               ), //     ),
                             ),
                           );

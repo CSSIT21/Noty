@@ -38,16 +38,16 @@ class _WelcomeScreenState extends material.State<WelcomeScreen> {
                       padding:
                           const material.EdgeInsets.fromLTRB(50, 40, 50, 30),
                       child: material.Text(
-                        "Place to make you PAIN",
+                        "Place to make you remember",
                         textAlign: material.TextAlign.center,
                         style: material.TextStyle(
                             fontSize: 34,
-                            fontWeight: material.FontWeight.w800,
+                            fontWeight: material.FontWeight.w700,
                             color: ThemeConstant.colorPrimaryLight),
                       ),
                     ),
                     const ContentText(
-                        text: "Easy and convenience place to note?",
+                        text: "Easy and convenience place to note",
                         size: Size.medium),
                   ],
                 ),

@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:noty_client/constants/theme.dart';
-import 'package:noty_client/models/notes.dart';
 import 'package:noty_client/screens/core/note/note_view.dart';
+import 'package:noty_client/services/providers/providers.dart';
 import 'package:noty_client/types/widget/placement.dart';
 import 'package:noty_client/utils/widget/divider_insert.dart';
 import 'package:noty_client/widgets/list/note_list_item.dart';
 import 'package:noty_client/widgets/surface/curved_card.dart';
 import 'package:noty_client/widgets/tag/tag_label.dart';
 import 'package:noty_client/widgets/typography/header_text.dart';
+import 'package:provider/provider.dart';
+import 'package:collection/collection.dart';
 
 class TagFragment extends StatefulWidget {
-  final List<Notes> notes;
-
-  const TagFragment({Key? key, required this.notes}) : super(key: key);
+  const TagFragment({Key? key}) : super(key: key);
 
   @override
   State<TagFragment> createState() => _TagFragmentState();
@@ -21,6 +21,10 @@ class TagFragment extends StatefulWidget {
 class _TagFragmentState extends State<TagFragment> {
   Color tagBgColor = const Color(0xff252525);
   Color tagTextColor = const Color(0xff828282);
+  void addNoteDetail(int noteIndex, String type) {
+    context.read<NotesProvider>().addNoteDetail(noteIndex, type);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -77,9 +81,11 @@ class _TagFragmentState extends State<TagFragment> {
                   ),
                   Column(
                     children: dividerInsert(
-                        widget.notes
-                            .map(
-                              (note) => GestureDetector(
+                        context
+                            .watch<NotesProvider>()
+                            .notes
+                            .mapIndexed(
+                              (index, note) => GestureDetector(
                                 onTap: (() {
                                   Navigator.push(
                                     context,
@@ -87,7 +93,7 @@ class _TagFragmentState extends State<TagFragment> {
                                       builder: (context) => NoteDetailScreen(
                                         noteName: note.title,
                                         previousScreen: "Tags",
-                                        noteDetail: note.noteDetail,
+                                        noteIndex: index,
                                       ), //     ),
                                     ),
                                   );
@@ -123,19 +129,22 @@ class _TagFragmentState extends State<TagFragment> {
                   ),
                   Column(
                     children: dividerInsert(
-                        widget.notes
-                            .map(
-                              (note) => NoteListItem(
-                                title: note.title,
-                                date: note.createdAt,
-                                noteDetails: note.noteDetail,
-                              ),
-                            )
-                            .toList(),
-                        const Divider(
-                          color: Color(0xff434345),
-                          indent: 25,
-                        )),
+                      context
+                          .watch<NotesProvider>()
+                          .notes
+                          .map(
+                            (note) => NoteListItem(
+                              title: note.title,
+                              date: note.createdAt,
+                              noteDetails: note.noteDetail,
+                            ),
+                          )
+                          .toList(),
+                      const Divider(
+                        color: Color(0xff434345),
+                        indent: 25,
+                      ),
+                    ),
                   ),
                 ],
               ),

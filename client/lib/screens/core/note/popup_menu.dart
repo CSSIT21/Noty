@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:noty_client/constants/theme.dart';
 import 'package:noty_client/screens/core/note/dialog_new_folder.dart';
-import 'package:noty_client/screens/core/note/note_view.dart';
+import 'package:noty_client/screens/core/note/new_note_screen.dart';
 
 Widget menuPopup(BuildContext context) => PopupMenuButton(
       itemBuilder: (context) => [
@@ -54,10 +54,9 @@ Widget menuPopup(BuildContext context) => PopupMenuButton(
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const NoteDetailScreen(
+              builder: (context) => const NewNoteScreen(
                 noteName: "",
                 previousScreen: "All Notes",
-                noteDetail: [],
               ), //     ),
             ),
           );
