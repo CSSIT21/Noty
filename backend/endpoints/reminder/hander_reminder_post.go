@@ -38,6 +38,7 @@ func ReminderPostHandler(c *fiber.Ctx) error {
 
 	// * Parse string to object_id
 	userId, _ := primitive.ObjectIDFromHex(*claims.UserId)
+	noteId, _ := primitive.ObjectIDFromHex(body.NoteId)
 
 	// * Validate body
 	if err := text.Validate.Struct(body); err != nil {
@@ -49,7 +50,7 @@ func ReminderPostHandler(c *fiber.Ctx) error {
 		UserId:      &userId,
 		Title:       &body.Title,
 		Description: &body.Description,
-		NoteId:      nil,
+		NoteId:      &noteId,
 		RemindDate:  &body.RemindDate,
 		RemindTime:  &body.RemindTime,
 	}
@@ -64,5 +65,8 @@ func ReminderPostHandler(c *fiber.Ctx) error {
 	return c.JSON(&responder.InfoResponse{
 		Success: true,
 		Info:    "Add reminder successful",
+		Data: &reminderPostResponse{
+			ReminderId: reminder.ID.Hex(),
+		},
 	})
 }

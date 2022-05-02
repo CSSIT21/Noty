@@ -10,6 +10,10 @@ type reminderPostRequest struct {
 	RemindTime  time.Time `json:"remind_time,omitempty"`
 }
 
+type reminderPostResponse struct {
+	ReminderId string `json:"reminder_id" validate:"required"`
+}
+
 type reminderPatchRequest struct {
 	ReminderId  string    `json:"reminder_id" validate:"required"`
 	Title       string    `json:"title" validate:"required,max=255"`

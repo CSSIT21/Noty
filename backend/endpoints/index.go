@@ -23,11 +23,6 @@ func Init(router fiber.Router) {
 	account.Post("reset/send", accountReset.SendHandler)
 	account.Post("reset/verify", accountReset.VerifyHandler)
 
-	// * Edit Account
-	editAccountHandler := router.Group("account/edit", middlewares.Jwt)
-	editAccountHandler.Patch("name", me.MePatchNameHandler)
-	editAccountHandler.Patch("password", me.MePatchPasswordHandler)
-
 	// * Reminder
 	reminderHandler := router.Group("reminder/", middlewares.Jwt)
 	reminderHandler.Post("add", reminder.ReminderPostHandler)
@@ -44,11 +39,15 @@ func Init(router fiber.Router) {
 	// * Note
 	noteHandler := router.Group("note/", middlewares.Jwt)
 	noteHandler.Post("add", note.NotePostHandler)
+	noteHandler.Patch("edit", note.NotePatchHandler)
 	noteHandler.Delete("delete", note.NoteDeleteHandler)
 	noteHandler.Patch("move", note.NoteFolderPatchHandler)
+
 	// * Me
 	meHandler := router.Group("me/", middlewares.Jwt)
 	meHandler.Get("info", me.MeGetHandler)
+	meHandler.Patch("edit/name", me.MePatchNameHandler)
+	meHandler.Patch("edit/password", me.MePatchPasswordHandler)
 
 	// * Tag
 	tagHandler := router.Group("tag/", middlewares.Jwt)

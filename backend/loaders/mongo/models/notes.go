@@ -20,7 +20,7 @@ type NoteDetail struct {
 }
 
 type NoteText struct {
-	Detail *string `json:"detail" bson:"detail"`
+	Content *string `json:"content" bson:"content"`
 }
 
 type ReminderContent struct {

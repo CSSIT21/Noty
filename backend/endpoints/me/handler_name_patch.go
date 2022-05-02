@@ -7,6 +7,7 @@ import (
 	"noty-backend/loaders/mongo/models"
 	"noty-backend/types/common"
 	"noty-backend/types/responder"
+	"noty-backend/utils/logger"
 )
 
 // MePatchNameHandler
@@ -33,6 +34,8 @@ func MePatchNameHandler(c *fiber.Ctx) error {
 			Err:     err,
 		}
 	}
+
+	logger.Dump(body)
 
 	user := new(models.User)
 	// * Find user
