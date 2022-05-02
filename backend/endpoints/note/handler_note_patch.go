@@ -7,6 +7,7 @@ import (
 	"github.com/mitchellh/mapstructure"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+
 	"noty-backend/loaders/mongo/models"
 	"noty-backend/types/common"
 	"noty-backend/types/responder"
@@ -57,6 +58,7 @@ func NotePatchHandler(c *fiber.Ctx) error {
 			reminderType := "reminder"
 			reminderContent := new(ReminderContent)
 			_ = mapstructure.Decode(detail.Data, reminderContent)
+
 			// TODO: Decode reminder content
 			tempReminderId, _ := primitive.ObjectIDFromHex(detail.Data.(map[string]any)["reminder_id"].(string))
 			noteDetails = append(noteDetails, &models.NoteDetail{

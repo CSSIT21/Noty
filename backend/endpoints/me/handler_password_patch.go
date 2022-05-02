@@ -4,10 +4,12 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/kamva/mgm/v3"
+
 	"noty-backend/loaders/mongo/models"
 	"noty-backend/types/common"
 	"noty-backend/types/responder"
 	"noty-backend/utils/crypto"
+	"noty-backend/utils/mail"
 	"noty-backend/utils/text"
 )
 
@@ -66,6 +68,14 @@ func MePatchPasswordHandler(c *fiber.Ctx) error {
 	if err := mgm.Coll(user).Update(user); err != nil {
 		return &responder.GenericError{
 			Message: "Unable to change the password",
+			Err:     err,
+		}
+	}
+
+	// * Send notify email
+	if err := mail.SendPasswordChangedMail(*user.Firstname+" "+*user.Lastname, *user.Email); err != nil {
+		return &responder.GenericError{
+			Message: "Unable to sent notify email",
 			Err:     err,
 		}
 	}
