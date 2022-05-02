@@ -77,6 +77,7 @@ func NotePatchHandler(c *fiber.Ctx) error {
 		}
 	}
 
+	// * Update note
 	if err := mgm.Coll(&models.Notes{}).FindOneAndUpdate(mgm.Ctx(), bson.M{
 		"_id":     noteId,
 		"user_id": userId,
@@ -91,92 +92,6 @@ func NotePatchHandler(c *fiber.Ctx) error {
 			Err:     err.Err(),
 		}
 	}
-
-	// * Store reminder_id after creating each reminder
-	//var remindersId []string
-
-	// * Map note data into details array
-	//for _, detail := range body.NoteDetails {
-	//	if detail.Type == "reminder" {
-	//		// * Create each reminder
-	//		reminderContent := new(ReminderContent)
-	//		_ = mapstructure.Decode(detail.Data, reminderContent)
-	//		reminder := &models.Reminder{
-	//			UserId:      &userId,
-	//			Title:       &reminderContent.Title,
-	//			Description: &reminderContent.Description,
-	//			RemindDate:  &reminderContent.RemindDate,
-	//			RemindTime:  &reminderContent.RemindTime,
-	//			NoteId:      &noteId,
-	//		}
-	//		if err := mgm.Coll(reminder).Create(reminder); err != nil {
-	//			return &responder.GenericError{
-	//				Message: "Unable to create reminder",
-	//				Err:     err,
-	//			}
-	//		} else {
-	//			reminderType := "reminder"
-	//			// * Append reminder id into note_details
-	//			details = append(details, &models.NoteDetail{
-	//				Type: &reminderType,
-	//				Data: reminder.ID.Hex(),
-	//			})
-	//			// * Append reminder_id into remindersId array
-	//			remindersId = append(remindersId, reminder.ID.Hex())
-	//		}
-	//	} else {
-	//		// * Create each note and append into note_details
-	//		reminderData := new(NoteText)
-	//		_ = mapstructure.Decode(detail.Data, reminderData)
-	//		details = append(details, &models.NoteDetail{
-	//			Type: &detail.Type,
-	//			Data: &NoteText{
-	//				Detail: reminderData.Detail,
-	//			},
-	//		})
-	//	}
-	//}
-
-	//note := &models.Notes{
-	//	Title:    &body.Title,
-	//	FolderId: &folderId,
-	//	Details:  details,
-	//	UserId:   &userId,
-	//}
-	//
-	//// * Create note
-	//if err := mgm.Coll(note).Create(note); err != nil {
-	//	return &responder.GenericError{
-	//		Message: "Unable to create note",
-	//		Err:     err,
-	//	}
-	//}
-	//
-	//// * Update note_id in each reminder
-	//for _, id := range remindersId {
-	//	// * Parse reminder id
-	//	tempReminderId, _ := primitive.ObjectIDFromHex(id)
-	//	tempReminder := new(models.Reminder)
-	//	// * Find each reminder
-	//	if err := mgm.Coll(tempReminder).First(bson.M{
-	//		"_id":     tempReminderId,
-	//		"user_id": &userId,
-	//	}, tempReminder); err != nil {
-	//		return &responder.GenericError{
-	//			Message: "Unable to find reminder id " + id,
-	//			Err:     err,
-	//		}
-	//	} else {
-	//		// * Update note_id in each reminder
-	//		tempReminder.NoteId = &note.ID
-	//		if errUpdate := mgm.Coll(tempReminder).Update(tempReminder); errUpdate != nil {
-	//			return &responder.GenericError{
-	//				Message: "Unable to update note_id into reminder id " + id,
-	//				Err:     errUpdate,
-	//			}
-	//		}
-	//	}
-	//}
 
 	return c.JSON(&responder.InfoResponse{
 		Success: true,
