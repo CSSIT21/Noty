@@ -1,5 +1,7 @@
 package note
 
+import "time"
+
 type notePostRequest struct {
 	Title    string `json:"title"`
 	FolderId string `json:"folder_id"`
@@ -39,7 +41,20 @@ type noteFolderPatchRequest struct {
 }
 
 type noteGetResponse struct {
+	Folders []*noteGetFoldersResponse `json:"folders"`
+	Notes   []*noteGetNotesResponse   `json:"notes"`
+}
+
+type noteGetFoldersResponse struct {
 	FolderId  string `json:"folder_id" bson:"folder_id"`
 	Name      string `json:"name" bson:"name"`
 	NoteCount uint64 `json:"note_count" bson:"note_count"`
+}
+
+type noteGetNotesResponse struct {
+	NoteId      string    `json:"note_id"`
+	Title       string    `json:"title"`
+	CreatedAt   time.Time `json:"created_at"`
+	Tag         []string  `json:"tag"`
+	HasReminder bool      `json:"has_reminder"`
 }
