@@ -37,3 +37,9 @@ type noteFolderPatchRequest struct {
 	FolderId string `json:"folder_id"`
 	NoteId   string `json:"note_id"`
 }
+
+type noteGetResponse struct {
+	FolderId  string `json:"folder_id" bson:"folder_id"`
+	Name      string `json:"name" bson:"name"`
+	NoteCount uint64 `json:"note_count" bson:"note_count"`
+}
