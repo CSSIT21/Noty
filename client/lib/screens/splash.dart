@@ -22,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
       body: AnimatedSplashScreen(
         splash: 'assets/images/logo.png',
         nextScreen: const WelcomeScreen(),
-        splashIconSize: 200,
+        splashIconSize: 150,
         pageTransitionType: PageTransitionType.fade,
         duration: 1500,
         backgroundColor: ThemeConstant.colorPrimaryDark,

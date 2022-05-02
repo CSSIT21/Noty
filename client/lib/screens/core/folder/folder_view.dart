@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:noty_client/models/notes.dart';
 import 'package:noty_client/screens/core/folder/dialog_edit_folder.dart';
+import 'package:noty_client/services/providers/providers.dart';
 import 'package:noty_client/types/widget/placement.dart';
 import 'package:noty_client/utils/widget/divider_insert.dart';
 import 'package:noty_client/widgets/leading_button.dart';
@@ -8,12 +8,11 @@ import 'package:noty_client/widgets/list/note_list_item.dart';
 import 'package:noty_client/widgets/surface/curved_card.dart';
 import 'package:noty_client/widgets/typography/appbar_text.dart';
 import 'package:noty_client/widgets/typography/header_text.dart';
+import 'package:provider/provider.dart';
 
 class FolderDetailScreen extends StatefulWidget {
   final String folderName;
-  final List<Notes> notes;
-  const FolderDetailScreen(
-      {Key? key, required this.folderName, required this.notes})
+  const FolderDetailScreen({Key? key, required this.folderName})
       : super(key: key);
 
   @override
@@ -65,7 +64,9 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
                 margin: 25,
                 child: Column(
                   children: dividerInsert(
-                    widget.notes
+                    context
+                        .watch<NotesProvider>()
+                        .notes
                         .map(
                           (note) => NoteListItem(
                             title: note.title,

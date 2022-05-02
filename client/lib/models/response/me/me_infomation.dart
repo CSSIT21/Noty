@@ -1,15 +1,15 @@
-class MeInformationResponse {
+class MeData {
   String email;
   String firstname;
   String lastname;
   String pictureId;
   String userId;
-  String notes;
-  String folders;
-  String reminders;
-  String tags;
+  int notes;
+  int folders;
+  int reminders;
+  int tags;
 
-  MeInformationResponse(
+  MeData(
       {required this.email,
       required this.firstname,
       required this.lastname,
@@ -20,8 +20,8 @@ class MeInformationResponse {
       required this.reminders,
       required this.tags});
 
-  factory MeInformationResponse.fromJson(Map<String, dynamic> json) {
-    return MeInformationResponse(
+  factory MeData.fromJson(Map<String, dynamic> json) {
+    return MeData(
         email: json["email"],
         firstname: json["firstname"],
         lastname: json["lastname"],
@@ -31,5 +31,20 @@ class MeInformationResponse {
         folders: json["folders"],
         reminders: json["reminders"],
         tags: json["tags"]);
+  }
+}
+
+class MeResponse {
+  bool success;
+  String code;
+  MeData data;
+
+  MeResponse({required this.success, required this.code, required this.data});
+
+  factory MeResponse.fromJson(Map<String, dynamic> json) {
+    return MeResponse(
+        success: json['success'],
+        code: json['code'],
+        data: MeData.fromJson(json['data']));
   }
 }

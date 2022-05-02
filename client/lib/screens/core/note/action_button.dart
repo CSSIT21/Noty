@@ -6,8 +6,12 @@ import 'package:noty_client/models/note_detail.dart';
 import 'package:noty_client/screens/core/reminder/new_reminder.dart';
 
 class NewNoteAction extends StatefulWidget {
-  final List<NoteDetail> noteDetails;
-  const NewNoteAction({Key? key, required this.noteDetails}) : super(key: key);
+  final int noteIndex;
+  final Function addNoteDetail;
+
+  const NewNoteAction(
+      {Key? key, required this.noteIndex, required this.addNoteDetail})
+      : super(key: key);
 
   @override
   State<NewNoteAction> createState() => _NewNoteActionState();
@@ -18,7 +22,6 @@ class _NewNoteActionState extends State<NewNoteAction> {
 
   @override
   void initState() {
-    noteDetails = widget.noteDetails;
     super.initState();
   }
 
@@ -109,13 +112,13 @@ class _NewNoteActionState extends State<NewNoteAction> {
       ],
       onSelected: (selected) {
         if (selected == 1) {
-          widget.noteDetails.add(NoteDetail(type: 'h1'));
+          widget.addNoteDetail(widget.noteIndex, "h1");
         }
         if (selected == 2) {
-          widget.noteDetails.add(NoteDetail(type: 'h2'));
+          widget.addNoteDetail(widget.noteIndex, "h2");
         }
         if (selected == 3) {
-          widget.noteDetails.add(NoteDetail(type: 'note'));
+          widget.addNoteDetail(widget.noteIndex, "note");
         }
         if (selected == 4) {
           showBarModalBottomSheet(
@@ -123,7 +126,7 @@ class _NewNoteActionState extends State<NewNoteAction> {
             builder: (context) => const NewReminder(),
             expand: true,
           );
-          widget.noteDetails.add(NoteDetail(type: 'reminder', reminderId: "1"));
+          widget.addNoteDetail(widget.noteIndex, "reminder");
         }
       },
       color: const Color(0xff232323),

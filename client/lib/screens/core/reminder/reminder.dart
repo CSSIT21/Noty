@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:noty_client/screens/core/note/note_view.dart';
 import 'package:noty_client/screens/core/reminder/edit_reminder.dart';
 import 'package:noty_client/screens/core/reminder/new_reminder.dart';
 import 'package:noty_client/types/widget/placement.dart';
@@ -95,16 +94,17 @@ class _ReminderFragmentState extends State<ReminderFragment> {
             CurvedCard(
               child: GestureDetector(
                 onTap: (() {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const NoteDetailScreen(
-                        noteName: "IEEE Spectrum",
-                        previousScreen: "Reminders",
-                        noteDetail: [],
-                      ), //     ),
-                    ),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => const NoteDetailScreen(
+                  //       noteName: "IEEE Spectrum",
+                  //       previousScreen: "Reminders",
+                  //       noteDetail: [],
+                  //       noteIndex: 0,
+                  //     ), //     ),
+                  //   ),
+                  // );
                 }),
                 behavior: HitTestBehavior.translucent,
                 child: Container(
