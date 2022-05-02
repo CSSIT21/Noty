@@ -1,10 +1,10 @@
 class Folder {
-  String folderId;
+  String? folderId;
   String title;
   int count;
 
   Folder({
-    required this.folderId,
+    this.folderId,
     required this.title,
     required this.count,
   });

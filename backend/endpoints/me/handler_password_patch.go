@@ -9,6 +9,7 @@ import (
 	"noty-backend/types/common"
 	"noty-backend/types/responder"
 	"noty-backend/utils/crypto"
+	"noty-backend/utils/logger"
 	"noty-backend/utils/mail"
 	"noty-backend/utils/text"
 )
@@ -74,10 +75,8 @@ func MePatchPasswordHandler(c *fiber.Ctx) error {
 
 	// * Send notify email
 	if err := mail.SendPasswordChangedMail(*user.Firstname+" "+*user.Lastname, *user.Email); err != nil {
-		return &responder.GenericError{
-			Message: "Unable to sent notify email",
-			Err:     err,
-		}
+		logger.Dump(err)
+		return err
 	}
 
 	return c.JSON(&responder.InfoResponse{

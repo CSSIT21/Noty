@@ -102,7 +102,7 @@ class _TagFragmentState extends State<TagFragment> {
                                 child: NoteListItem(
                                   title: note.title,
                                   date: note.createdAt,
-                                  noteDetails: note.noteDetail,
+                                  noteIndex: index,
                                 ),
                               ),
                             )
@@ -132,11 +132,11 @@ class _TagFragmentState extends State<TagFragment> {
                       context
                           .watch<NotesProvider>()
                           .notes
-                          .map(
-                            (note) => NoteListItem(
+                          .mapIndexed(
+                            (index, note) => NoteListItem(
                               title: note.title,
                               date: note.createdAt,
-                              noteDetails: note.noteDetail,
+                              noteIndex: index,
                             ),
                           )
                           .toList(),

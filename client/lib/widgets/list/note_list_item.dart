@@ -1,25 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:noty_client/models/note_detail.dart';
+import 'package:noty_client/services/providers/providers.dart';
 import 'package:noty_client/widgets/reminder/reminder_label.dart';
 import 'package:noty_client/widgets/tag/tag_label.dart';
+import 'package:provider/provider.dart';
 
-class NoteListItem extends StatelessWidget {
+class NoteListItem extends StatefulWidget {
   final String title;
   final String date;
-  final List<NoteDetail> noteDetails;
+  final int noteIndex;
 
   const NoteListItem({
     Key? key,
     required this.title,
     required this.date,
-    required this.noteDetails,
+    required this.noteIndex,
   }) : super(key: key);
 
   @override
+  State<NoteListItem> createState() => _NoteListItemState();
+}
+
+class _NoteListItemState extends State<NoteListItem> {
+  var tag = false;
+  var reminder = false;
+
+  @override
   Widget build(BuildContext context) {
+    List<NoteDetail> noteDetails =
+        context.watch<NotesProvider>().notes[widget.noteIndex].noteDetail;
     double screenWidth = MediaQuery.of(context).size.width;
-    var tag = false;
-    var reminder = false;
+
     for (var i = 0; i < noteDetails.length; i++) {
       if (noteDetails[i].tags!.isNotEmpty) {
         tag = true;
@@ -46,7 +57,7 @@ class NoteListItem extends StatelessWidget {
                 Container(
                   margin: const EdgeInsets.only(bottom: 2),
                   child: Text(
-                    title,
+                    widget.title,
                     style: const TextStyle(fontWeight: FontWeight.w500),
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -54,7 +65,7 @@ class NoteListItem extends StatelessWidget {
                 Container(
                   margin: const EdgeInsets.only(bottom: 6),
                   child: Text(
-                    date,
+                    widget.date,
                     style: const TextStyle(
                         fontSize: 10, fontWeight: FontWeight.w300),
                   ),

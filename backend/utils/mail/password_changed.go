@@ -6,6 +6,7 @@ import (
 
 	"noty-backend/types/responder"
 	"noty-backend/utils/config"
+	"noty-backend/utils/logger"
 	"noty-backend/utils/text"
 )
 
@@ -34,6 +35,7 @@ func SendPasswordChangedMail(name string, email string) *responder.GenericError 
 		[]string{email},
 		body.Bytes(),
 	); err != nil {
+		logger.Dump(err)
 		return &responder.GenericError{
 			Message: "Unable to send email address",
 			Err:     err,

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:noty_client/constants/theme.dart';
@@ -48,8 +49,10 @@ class _RegisterFragmentState extends State<RegisterFragment> {
   }
 
   void _loginNavigate() {
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const CoreScreen()));
+    Timer(const Duration(milliseconds: 1500), () {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => const CoreScreen()));
+    });
   }
 
   @override

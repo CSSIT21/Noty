@@ -22,6 +22,26 @@ class NotesProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notes[index].noteDetail.add(NoteDetail(type: type));
     notifyListeners();
   }
+
+  void deleteNoteDetail(int noteIndex, int noteDetailIndex) {
+    notes[noteIndex].noteDetail.removeAt(noteDetailIndex);
+    notifyListeners();
+  }
+
+  void addFolder(String title) {
+    folders.add(Folder(title: title, count: 0));
+    notifyListeners();
+  }
+
+  void deleteFolder(int index) {
+    folders.removeAt(index);
+    notifyListeners();
+  }
+
+  void editFolderName(int index, String title) {
+    folders[index].title = title;
+    notifyListeners();
+  }
 }
 
 class ProfileProvider with ChangeNotifier, DiagnosticableTreeMixin {

@@ -74,7 +74,7 @@ class _NoteSectionState extends State<NoteSection> {
                           child: NoteListItem(
                             title: note.title,
                             date: note.createdAt,
-                            noteDetails: note.noteDetail,
+                            noteIndex: index,
                           ),
                         ),
                       ),

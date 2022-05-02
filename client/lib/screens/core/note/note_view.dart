@@ -37,11 +37,20 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    FocusScopeNode currentFocus = FocusScope.of(context);
+
     List<NoteDetail> noteDetails =
         context.watch<NotesProvider>().notes[widget.noteIndex].noteDetail;
 
     void addNoteDetail(int noteIndex, String type) {
       context.read<NotesProvider>().addNoteDetail(noteIndex, type);
+      setState(() {});
+    }
+
+    void deleteNoteDetail(int noteDetailIndex) {
+      context
+          .read<NotesProvider>()
+          .deleteNoteDetail(widget.noteIndex, noteDetailIndex);
       setState(() {});
     }
 
@@ -60,7 +69,6 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
           MediaQuery.of(context).viewInsets.bottom > 0
               ? TextButton(
                   onPressed: () {
-                    FocusScopeNode currentFocus = FocusScope.of(context);
                     if (!currentFocus.hasPrimaryFocus) {
                       currentFocus.unfocus();
                     }
@@ -82,14 +90,13 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
       body: Stack(
         children: [
           SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 50),
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
             child: SizedBox(
               width: double.infinity,
               child: Column(
                 children: [
                   TextFormField(
-                    initialValue:
-                        widget.noteName.isNotEmpty ? widget.noteName : null,
+                    initialValue: widget.noteName,
                     keyboardType: TextInputType.multiline,
                     textInputAction: TextInputAction.done,
                     maxLines: null,
@@ -120,7 +127,6 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                     children: [
                       for (var i = 0; i < noteDetails.length; i++)
                         Container(
-                          margin: const EdgeInsets.only(bottom: 6, top: 6),
                           child: noteDetails[i].type != "reminder"
                               ? TextFormField(
                                   initialValue: noteDetails[i].detail,
@@ -138,7 +144,10 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                                             ? FontWeight.w500
                                             : FontWeight.normal,
                                   ),
-                                  decoration: InputDecoration.collapsed(
+                                  decoration: InputDecoration(
+                                    contentPadding:
+                                        const EdgeInsets.fromLTRB(0, 4, 0, 4),
+                                    border: InputBorder.none,
                                     hintText: noteDetails[i].type == "h1"
                                         ? "Heading 1"
                                         : noteDetails[i].type == "h2"
@@ -157,6 +166,19 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                                               ? FontWeight.w500
                                               : FontWeight.normal,
                                     ),
+                                    suffix: currentFocus.hasFocus &&
+                                            noteDetails[i].detail == ""
+                                        ? IconButton(
+                                            onPressed: () =>
+                                                deleteNoteDetail(i),
+                                            icon: const Icon(
+                                              Icons.clear,
+                                              size: 20,
+                                            ),
+                                            padding: const EdgeInsets.all(0),
+                                            splashColor: Colors.transparent,
+                                          )
+                                        : null,
                                   ),
                                   onChanged: (text) => setState(() {
                                     noteDetails[i].detail = text;
@@ -170,7 +192,8 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                                   ),
                                   behavior: HitTestBehavior.translucent,
                                   child: Container(
-                                    margin: const EdgeInsets.only(top: 0),
+                                    margin: const EdgeInsets.only(
+                                        top: 4, bottom: 4),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,

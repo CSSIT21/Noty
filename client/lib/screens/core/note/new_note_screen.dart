@@ -38,7 +38,7 @@ class _NewNoteScreenState extends State<NewNoteScreen> {
       appBar: AppBar(
         title: const SizedBox(
           width: 120,
-          child: AppBarText(text: "New Note"),
+          child: AppBarText(text: "Untitled Note"),
         ),
         centerTitle: true,
         leadingWidth: 100,

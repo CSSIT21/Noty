@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:noty_client/constants/theme.dart';
+import 'package:noty_client/services/providers/providers.dart';
+import 'package:provider/provider.dart';
 
 TextEditingController _folderController = TextEditingController(text: '');
 
@@ -46,8 +48,23 @@ showNewFolderDialog(BuildContext context) {
                 style: TextStyle(fontSize: 16),
               ),
               onPressed: () {
-                // Do something destructive.
-                Navigator.pop(context);
+                if (_folderController.text.isEmpty) {
+                  var error = SnackBar(
+                    behavior: SnackBarBehavior.floating,
+                    margin: const EdgeInsets.only(left: 15, right: 15),
+                    content: const Text("Folder name cannot be empty"),
+                    action: SnackBarAction(
+                      label: 'OK',
+                      onPressed: () {},
+                    ),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(error);
+                } else {
+                  context
+                      .read<NotesProvider>()
+                      .addFolder(_folderController.text);
+                  Navigator.pop(context);
+                }
               },
             )
           ],

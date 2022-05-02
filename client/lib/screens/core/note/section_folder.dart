@@ -36,7 +36,7 @@ class FolderSection extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  FolderDetailScreen(folderName: folder.title),
+                                  FolderDetailScreen(folderIndex: index),
                             ),
                           );
                         },
@@ -47,7 +47,11 @@ class FolderSection extends StatelessWidget {
                             motion: const StretchMotion(),
                             children: [
                               SlidableAction(
-                                onPressed: (BuildContext context) {},
+                                onPressed: (BuildContext context) {
+                                  context
+                                      .read<NotesProvider>()
+                                      .deleteFolder(index);
+                                },
                                 backgroundColor: Colors.red,
                                 foregroundColor: Colors.white,
                                 icon: Icons.delete_rounded,
