@@ -18,7 +18,7 @@ import (
 // @Tags reminder
 // @Accept json
 // @Produce json
-// @Success 200 {object} reminder.reminderGetResponse
+// @Success 200 {object} responder.InfoResponse
 // @Failure 400 {object} responder.ErrorResponse
 // @Router /reminder/info [get]
 func ReminderGetHandler(c *fiber.Ctx) error {

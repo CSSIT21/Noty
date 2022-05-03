@@ -58,3 +58,7 @@ type noteGetNotesResponse struct {
 	Tag         []string  `json:"tag"`
 	HasReminder bool      `json:"has_reminder"`
 }
+
+type noteGetByIdRequest struct {
+	NoteId string `json:"note_id"`
+}
