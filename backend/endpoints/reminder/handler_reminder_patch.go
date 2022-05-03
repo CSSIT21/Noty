@@ -66,10 +66,7 @@ func ReminderPatchHandler(c *fiber.Ctx) error {
 	if !body.RemindDate.IsZero() {
 		reminder.RemindDate = &body.RemindDate
 	}
-	if !body.RemindTime.IsZero() {
-		reminder.RemindTime = &body.RemindTime
-	}
-
+	
 	// * Update the reminder
 	if err := mgm.Coll(reminder).Update(reminder); err != nil {
 		return &responder.GenericError{

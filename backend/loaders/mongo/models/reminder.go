@@ -14,5 +14,4 @@ type Reminder struct {
 	NoteId           *primitive.ObjectID `json:"note_id" bson:"note_id"`
 	Description      *string             `json:"description" bson:"description"`
 	RemindDate       *time.Time          `json:"remind_date" bson:"remind_date"`
-	RemindTime       *time.Time          `json:"remind_time" bson:"remind_time"`
 }

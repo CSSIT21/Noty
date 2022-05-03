@@ -11,7 +11,6 @@ type reminderPostRequest struct {
 	NoteId      string    `json:"note_id"`
 	Description string    `json:"description,omitempty"`
 	RemindDate  time.Time `json:"remind_date,omitempty"`
-	RemindTime  time.Time `json:"remind_time,omitempty"`
 }
 
 type reminderPostResponse struct {
@@ -24,7 +23,6 @@ type reminderPatchRequest struct {
 	NoteId      string    `json:"note_id"`
 	Description string    `json:"description,omitempty"`
 	RemindDate  time.Time `json:"remind_date,omitempty"`
-	RemindTime  time.Time `json:"remind_time,omitempty"`
 }
 
 type reminderDeleteRequest struct {
@@ -41,7 +39,6 @@ type independentReminders struct {
 	Title       string    `json:"title"`
 	Description string    `json:"description"`
 	RemindDate  time.Time `json:"remind_date"`
-	RemindTime  time.Time `json:"remind_time"`
 }
 
 type noteAllGetDecode struct {

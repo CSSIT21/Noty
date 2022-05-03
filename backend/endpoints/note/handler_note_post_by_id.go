@@ -58,7 +58,7 @@ func NotePostByIdHandler(c *fiber.Ctx) error {
 		Title:     *note.Title,
 		FolderId:  note.FolderId.Hex(),
 		UpdatedAt: note.UpdatedAt,
-		Tag:       note.Tags,
+		Tags:      note.Tags,
 	}
 
 	var noteDetails []*noteGetTypeDetailData

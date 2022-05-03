@@ -70,12 +70,12 @@ type noteGetByFolderId struct {
 }
 
 type noteGetByIdDetailResponse struct {
-	NoteId    string    `json:"note_id"`
-	UpdatedAt time.Time `json:"updated_at"`
-	Title     string    `json:"title"`
-	FolderId  string    `json:"folder_id"`
-	Tag       []string  `json:"tag"`
-	Data      []*noteGetTypeDetailData
+	NoteId    string                   `json:"note_id"`
+	UpdatedAt time.Time                `json:"updated_at"`
+	Title     string                   `json:"title"`
+	FolderId  string                   `json:"folder_id"`
+	Tags      []string                 `json:"tags"`
+	Data      []*noteGetTypeDetailData `json:"data"`
 }
 
 type noteGetTypeDetailData struct {

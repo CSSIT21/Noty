@@ -52,7 +52,6 @@ func ReminderPostHandler(c *fiber.Ctx) error {
 		Description: &body.Description,
 		NoteId:      &noteId,
 		RemindDate:  &body.RemindDate,
-		RemindTime:  &body.RemindTime,
 	}
 
 	if err := mgm.Coll(reminder).Create(reminder); err != nil {
