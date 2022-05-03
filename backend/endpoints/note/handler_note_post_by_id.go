@@ -53,10 +53,17 @@ func NotePostByIdHandler(c *fiber.Ctx) error {
 		}
 	}
 
+	var folderId string
+	if note.FolderId == nil {
+		folderId = ""
+	} else {
+		folderId = note.FolderId.Hex()
+	}
+
 	tempNote := &noteGetByIdDetailResponse{
 		NoteId:    note.ID.Hex(),
 		Title:     *note.Title,
-		FolderId:  note.FolderId.Hex(),
+		FolderId:  folderId,
 		UpdatedAt: note.UpdatedAt,
 		Tags:      note.Tags,
 	}
