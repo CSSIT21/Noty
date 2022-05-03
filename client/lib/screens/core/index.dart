@@ -2,7 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:motion_tab_bar_v2/motion-tab-bar.dart' as motion_tab_bar;
 import 'package:noty_client/constants/theme.dart';
+import 'package:noty_client/models/response/error/error_response.dart';
+import 'package:noty_client/models/response/folder/note_list.dart';
 import 'package:noty_client/models/response/me/me_infomation.dart';
+import 'package:noty_client/models/response/notes/notes_response.dart';
 import 'package:noty_client/screens/core/me/me.dart';
 import 'package:noty_client/screens/core/me/me_edit.dart';
 import 'package:noty_client/screens/core/note/note.dart';
@@ -44,16 +47,38 @@ class _CoreScreenState extends material.State<CoreScreen>
   }
 
   Future<void> _readJson() async {
-    var response = await GetNoteService.getData();
-    MeResponse meResponse = await ProfileService.getProfile();
+    var meResponse = await ProfileService.getProfile();
+    var notesDataResponse = await NoteService.getData();
+    var notelistfolder =
+        await NoteService.getNoteListFolder("626d8d9d41e7c73a9af2d73e");
+
     if (mounted) {
-      context
-          .read<NotesProvider>()
-          .setFoldersData(GetNoteService.getFolders(response));
-      context
-          .read<NotesProvider>()
-          .setNotesData(GetNoteService.getNotes(response));
-      context.read<ProfileProvider>().setMeData(meResponse.data);
+      if (notesDataResponse is NotesResponse) {
+        // print(notesDataResponse.data.folders[0].name);
+        context
+            .read<NotesProvider>()
+            .setFoldersData(notesDataResponse.data.folders);
+        context
+            .read<NotesProvider>()
+            .setNotesData(notesDataResponse.data.notes);
+      }
+      if (notelistfolder is NoteListFolderResponse) {
+        // print(notelistfolder.data[0].title);
+      }
+      if (meResponse is ErrorResponse) {
+        var error = material.SnackBar(
+          behavior: material.SnackBarBehavior.floating,
+          margin: const EdgeInsets.only(bottom: 40, left: 15, right: 15),
+          content: Text(meResponse.message),
+          action: material.SnackBarAction(
+            label: 'OK',
+            onPressed: () {},
+          ),
+        );
+        material.ScaffoldMessenger.of(context).showSnackBar(error);
+      } else if (meResponse is MeResponse) {
+        context.read<ProfileProvider>().setMeData(meResponse.data);
+      }
     }
   }
 

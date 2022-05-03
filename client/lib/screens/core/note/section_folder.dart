@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:noty_client/models/response/folder/note_list.dart';
 import 'package:noty_client/screens/core/folder/folder_view.dart';
+import 'package:noty_client/services/notes_sevice.dart';
 import 'package:noty_client/services/providers/providers.dart';
 import 'package:noty_client/types/widget/placement.dart';
 import 'package:noty_client/utils/widget/divider_insert.dart';
@@ -10,8 +12,20 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:collection/collection.dart';
 import 'package:provider/provider.dart';
 
-class FolderSection extends StatelessWidget {
+class FolderSection extends StatefulWidget {
   const FolderSection({Key? key}) : super(key: key);
+
+  @override
+  State<FolderSection> createState() => _FolderSectionState();
+}
+
+class _FolderSectionState extends State<FolderSection> {
+  Future<void> _readJson(String folderId) async {
+    var folderNoteList = await NoteService.getNoteListFolder(folderId);
+    if (folderNoteList is NoteListFolderResponse) {
+      context.read<NotesProvider>().setFolderNoteList(folderNoteList.data);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,11 +46,12 @@ class FolderSection extends StatelessWidget {
                     .mapIndexed(
                       (index, folder) => GestureDetector(
                         onTap: () {
+                          _readJson(folder.folderId);
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  FolderDetailScreen(folderIndex: index),
+                                  FolderDetailScreen(folderId: folder.folderId),
                             ),
                           );
                         },
@@ -48,9 +63,9 @@ class FolderSection extends StatelessWidget {
                             children: [
                               SlidableAction(
                                 onPressed: (BuildContext context) {
-                                  context
-                                      .read<NotesProvider>()
-                                      .deleteFolder(index);
+                                  // context
+                                  //     .read<NotesProvider>()
+                                  //     .deleteFolder(index);
                                 },
                                 backgroundColor: Colors.red,
                                 foregroundColor: Colors.white,
@@ -59,7 +74,7 @@ class FolderSection extends StatelessWidget {
                             ],
                           ),
                           child: FolderListItem(
-                              title: folder.title, count: folder.count),
+                              title: folder.name, count: folder.noteCount),
                         ),
                       ),
                     )

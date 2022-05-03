@@ -25,14 +25,3 @@ class FolderMoveListResponse {
         success: json["success"], code: json["code"], data: json["data"]);
   }
 }
-/*
-{
-  success: true,
-  code: "",
-  data: [
-    {
-      folderId: ""
-      name: ""
-    }
-  ]
-}*/

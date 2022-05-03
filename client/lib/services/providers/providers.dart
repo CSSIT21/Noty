@@ -1,47 +1,60 @@
 import 'package:flutter/foundation.dart';
-import 'package:noty_client/models/folder.dart';
-import 'package:noty_client/models/note_detail.dart';
-import 'package:noty_client/models/notes.dart';
 import 'package:noty_client/models/response/me/me_infomation.dart';
+import 'package:noty_client/models/response/notes/folder_data.dart';
+import 'package:noty_client/models/response/notes/note_data.dart';
+import 'package:noty_client/models/response/notes/note_detail_data.dart';
 
 class NotesProvider with ChangeNotifier, DiagnosticableTreeMixin {
-  List<Folder> folders = [];
-  List<Notes> notes = [];
+  List<FolderData> folders = [];
+  List<NoteData> notes = [];
+  NoteDetailData noteDetails =
+      NoteDetailData(id: "", updatedAt: "", title: "", details: []);
+  List<NoteData> folderNoteList = [];
 
-  void setFoldersData(List<Folder> foldersData) {
-    folders = foldersData;
+  void setFoldersData(List<FolderData> data) {
+    folders = data;
     notifyListeners();
   }
 
-  void setNotesData(List<Notes> notesData) {
-    notes = notesData;
+  void setNotesData(List<NoteData> data) {
+    notes = data;
     notifyListeners();
   }
 
-  void addNoteDetail(int index, String type) {
-    notes[index].noteDetail.add(NoteDetail(type: type));
+  void setNoteDetails(NoteDetailData data) {
+    noteDetails = data;
     notifyListeners();
   }
 
-  void deleteNoteDetail(int noteIndex, int noteDetailIndex) {
-    notes[noteIndex].noteDetail.removeAt(noteDetailIndex);
+  void setFolderNoteList(List<NoteData> data) {
+    folderNoteList = data;
     notifyListeners();
   }
 
-  void addFolder(String title) {
-    folders.add(Folder(title: title, count: 0));
-    notifyListeners();
-  }
+  // void addNoteDetail(int index, String type) {
+  //   notes[index].noteDetail.add(NoteDetail(type: type));
+  //   notifyListeners();
+  // }
 
-  void deleteFolder(int index) {
-    folders.removeAt(index);
-    notifyListeners();
-  }
+  // void deleteNoteDetail(int noteIndex, int noteDetailIndex) {
+  //   notes[noteIndex].noteDetail.removeAt(noteDetailIndex);
+  //   notifyListeners();
+  // }
 
-  void editFolderName(int index, String title) {
-    folders[index].title = title;
-    notifyListeners();
-  }
+  // void addFolder(String title) {
+  //   folders.add(Folder(title: title, count: 0));
+  //   notifyListeners();
+  // }
+
+  // void deleteFolder(int index) {
+  //   folders.removeAt(index);
+  //   notifyListeners();
+  // }
+
+  // void editFolderName(int index, String title) {
+  //   folders[index].title = title;
+  //   notifyListeners();
+  // }
 }
 
 class ProfileProvider with ChangeNotifier, DiagnosticableTreeMixin {

@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:noty_client/constants/theme.dart';
-import 'package:noty_client/models/note_detail.dart';
 import 'package:noty_client/screens/core/reminder/new_reminder.dart';
 
 class NewNoteAction extends StatefulWidget {
-  final int noteIndex;
-  final Function addNoteDetail;
+  final String noteId;
+  // final Function addNoteDetail;
 
   const NewNoteAction(
-      {Key? key, required this.noteIndex, required this.addNoteDetail})
+      {Key? key, required this.noteId /*, required this.addNoteDetail*/})
       : super(key: key);
 
   @override
@@ -18,8 +17,6 @@ class NewNoteAction extends StatefulWidget {
 }
 
 class _NewNoteActionState extends State<NewNoteAction> {
-  late List<NoteDetail> noteDetails;
-
   @override
   void initState() {
     super.initState();
@@ -112,13 +109,13 @@ class _NewNoteActionState extends State<NewNoteAction> {
       ],
       onSelected: (selected) {
         if (selected == 1) {
-          widget.addNoteDetail(widget.noteIndex, "h1");
+          // widget.addNoteDetail(widget.noteIndex, "h1");
         }
         if (selected == 2) {
-          widget.addNoteDetail(widget.noteIndex, "h2");
+          // widget.addNoteDetail(widget.noteIndex, "h2");
         }
         if (selected == 3) {
-          widget.addNoteDetail(widget.noteIndex, "note");
+          // widget.addNoteDetail(widget.noteIndex, "note");
         }
         if (selected == 4) {
           showBarModalBottomSheet(
@@ -126,7 +123,7 @@ class _NewNoteActionState extends State<NewNoteAction> {
             builder: (context) => const NewReminder(),
             expand: true,
           );
-          widget.addNoteDetail(widget.noteIndex, "reminder");
+          // widget.addNoteDetail(widget.noteIndex, "reminder");
         }
       },
       color: const Color(0xff232323),

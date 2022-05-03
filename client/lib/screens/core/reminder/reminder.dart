@@ -95,16 +95,15 @@ class _ReminderFragmentState extends State<ReminderFragment> {
             CurvedCard(
               child: GestureDetector(
                 onTap: (() {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const NoteDetailScreen(
-                        noteName: "IEEE Spectrum",
-                        previousScreen: "Reminders",
-                        noteIndex: 0,
-                      ), //     ),
-                    ),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => const NoteDetailScreen(
+                  //       previousScreen: "Reminders",
+                  //       noteId: 0,
+                  //     ), //     ),
+                  //   ),
+                  // );
                 }),
                 behavior: HitTestBehavior.translucent,
                 child: Container(

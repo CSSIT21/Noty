@@ -21,9 +21,9 @@ class TagFragment extends StatefulWidget {
 class _TagFragmentState extends State<TagFragment> {
   Color tagBgColor = const Color(0xff252525);
   Color tagTextColor = const Color(0xff828282);
-  void addNoteDetail(int noteIndex, String type) {
-    context.read<NotesProvider>().addNoteDetail(noteIndex, type);
-  }
+  // void addNoteDetail(int noteIndex, String type) {
+  //   context.read<NotesProvider>().addNoteDetail(noteIndex, type);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -81,62 +81,15 @@ class _TagFragmentState extends State<TagFragment> {
                   ),
                   Column(
                     children: dividerInsert(
-                        context
-                            .watch<NotesProvider>()
-                            .notes
-                            .mapIndexed(
-                              (index, note) => GestureDetector(
-                                onTap: (() {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => NoteDetailScreen(
-                                        noteName: note.title,
-                                        previousScreen: "Tags",
-                                        noteIndex: index,
-                                      ), //     ),
-                                    ),
-                                  );
-                                }),
-                                behavior: HitTestBehavior.translucent,
-                                child: NoteListItem(
-                                  title: note.title,
-                                  date: note.createdAt,
-                                  noteIndex: index,
-                                ),
-                              ),
-                            )
-                            .toList(),
-                        const Divider(
-                          color: Color(0xff434345),
-                          indent: 25,
-                        )),
-                  ),
-                ],
-              ),
-            ),
-            margin: 20,
-          ),
-          CurvedCard(
-            child: SizedBox(
-              width: double.infinity,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                    child: const Text("# 3D-Printer"),
-                  ),
-                  Column(
-                    children: dividerInsert(
                       context
                           .watch<NotesProvider>()
                           .notes
                           .mapIndexed(
                             (index, note) => NoteListItem(
                               title: note.title,
-                              date: note.createdAt,
-                              noteIndex: index,
+                              date: note.updatedAt,
+                              noteId: note.noteId,
+                              previousScreen: "Tags",
                             ),
                           )
                           .toList(),
@@ -150,7 +103,7 @@ class _TagFragmentState extends State<TagFragment> {
               ),
             ),
             margin: 20,
-          )
+          ),
         ],
       ),
     );

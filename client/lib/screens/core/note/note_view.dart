@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:noty_client/models/note_detail.dart';
+import 'package:noty_client/models/response/notes/note_detail_data.dart';
+import 'package:noty_client/models/response/notes/note_detail_details.dart';
 import 'package:noty_client/screens/core/note/action_button.dart';
 import 'package:noty_client/screens/core/reminder/edit_reminder.dart';
 import 'package:noty_client/services/providers/providers.dart';
@@ -11,16 +12,16 @@ import 'package:noty_client/widgets/typography/content_text.dart';
 import 'package:provider/provider.dart';
 
 class NoteDetailScreen extends StatefulWidget {
-  final String noteName;
   final String previousScreen;
-  final int noteIndex;
+  final String noteId;
+  final String noteTitle;
 
-  const NoteDetailScreen({
-    Key? key,
-    required this.noteName,
-    required this.previousScreen,
-    required this.noteIndex,
-  }) : super(key: key);
+  const NoteDetailScreen(
+      {Key? key,
+      required this.previousScreen,
+      required this.noteId,
+      required this.noteTitle})
+      : super(key: key);
 
   @override
   State<NoteDetailScreen> createState() => _NoteDetailScreenState();
@@ -28,7 +29,6 @@ class NoteDetailScreen extends StatefulWidget {
 
 class _NoteDetailScreenState extends State<NoteDetailScreen> {
   bool isChecked = false;
-  String noteTitle = '';
 
   @override
   void initState() {
@@ -39,26 +39,28 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
   Widget build(BuildContext context) {
     FocusScopeNode currentFocus = FocusScope.of(context);
 
-    List<NoteDetail> noteDetails =
-        context.watch<NotesProvider>().notes[widget.noteIndex].noteDetail;
+    NoteDetailData noteDetail = context.watch<NotesProvider>().noteDetails;
+    List<NoteDetailDataDetails> noteDetails =
+        context.watch<NotesProvider>().noteDetails.details;
 
-    void addNoteDetail(int noteIndex, String type) {
-      context.read<NotesProvider>().addNoteDetail(noteIndex, type);
-      setState(() {});
-    }
+    // void addNoteDetail(int noteIndex, String type) {
+    //   // context.read<NotesProvider>().addNoteDetail(noteIndex, type);
+    //   setState(() {});
+    // }
 
-    void deleteNoteDetail(int noteDetailIndex) {
-      context
-          .read<NotesProvider>()
-          .deleteNoteDetail(widget.noteIndex, noteDetailIndex);
-      setState(() {});
-    }
+    // void deleteNoteDetail(int noteDetailIndex) {
+    //   context
+    //       .read<NotesProvider>()
+    //       .deleteNoteDetail(widget.noteIndex, noteDetailIndex);
+    //   setState(() {});
+    // }
 
     return Scaffold(
       appBar: AppBar(
         title: SizedBox(
           width: 120,
-          child: AppBarText(text: widget.noteName),
+          child: AppBarText(
+              text: context.watch<NotesProvider>().noteDetails.title),
         ),
         centerTitle: true,
         leadingWidth: 100,
@@ -96,7 +98,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
               child: Column(
                 children: [
                   TextFormField(
-                    initialValue: widget.noteName,
+                    initialValue: widget.noteTitle,
                     keyboardType: TextInputType.multiline,
                     textInputAction: TextInputAction.done,
                     maxLines: null,
@@ -113,7 +115,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                       ),
                     ),
                     onChanged: (text) => setState(() {
-                      noteTitle = text;
+                      noteDetail.title = text;
                     }),
                   ),
                   Container(
@@ -129,7 +131,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                         Container(
                           child: noteDetails[i].type != "reminder"
                               ? TextFormField(
-                                  initialValue: noteDetails[i].detail,
+                                  initialValue: noteDetails[i].data!.content,
                                   keyboardType: TextInputType.multiline,
                                   maxLines: null,
                                   style: TextStyle(
@@ -167,10 +169,10 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                                               : FontWeight.normal,
                                     ),
                                     suffix: currentFocus.hasFocus &&
-                                            noteDetails[i].detail == ""
+                                            noteDetails[i].data!.content == ""
                                         ? IconButton(
-                                            onPressed: () =>
-                                                deleteNoteDetail(i),
+                                            onPressed: () {},
+                                            // deleteNoteDetail(i),
                                             icon: const Icon(
                                               Icons.clear,
                                               size: 20,
@@ -181,7 +183,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                                         : null,
                                   ),
                                   onChanged: (text) => setState(() {
-                                    noteDetails[i].detail = text;
+                                    noteDetails[i].data!.content = text;
                                   }),
                                 )
                               : GestureDetector(
@@ -262,8 +264,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
               child: MediaQuery.of(context).viewInsets.bottom > 0
                   ? null
                   : NewNoteAction(
-                      noteIndex: widget.noteIndex,
-                      addNoteDetail: addNoteDetail,
+                      noteId: widget.noteId,
                     ),
             ),
           )

@@ -45,7 +45,7 @@ func FolderDeleteHandler(c *fiber.Ctx) error {
 	// * Parse string id to object id
 	folderId, _ := primitive.ObjectIDFromHex(body.FolderId)
 	userId, _ := primitive.ObjectIDFromHex(*claims.UserId)
-	
+
 	// * Delete the folder
 	if err := mgm.Coll(&models.Folder{}).FindOneAndDelete(mgm.Ctx(), bson.M{
 		"_id":     folderId,

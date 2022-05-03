@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:noty_client/models/folder.dart';
+import 'package:noty_client/models/response/notes/folder_data.dart';
 import 'package:noty_client/screens/core/folder/dialog_edit_folder.dart';
 import 'package:noty_client/screens/core/note/new_note_screen.dart';
-import 'package:noty_client/screens/core/note/note_view.dart';
 import 'package:noty_client/services/providers/providers.dart';
 import 'package:noty_client/types/widget/placement.dart';
 import 'package:noty_client/utils/widget/divider_insert.dart';
@@ -16,8 +15,8 @@ import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
 
 class FolderDetailScreen extends StatefulWidget {
-  final int folderIndex;
-  const FolderDetailScreen({Key? key, required this.folderIndex})
+  final String folderId;
+  const FolderDetailScreen({Key? key, required this.folderId})
       : super(key: key);
 
   @override
@@ -27,12 +26,15 @@ class FolderDetailScreen extends StatefulWidget {
 class _FolderDetailScreenState extends State<FolderDetailScreen> {
   @override
   Widget build(BuildContext context) {
-    Folder folder = context.watch<NotesProvider>().folders[widget.folderIndex];
+    FolderData folder = context
+        .watch<NotesProvider>()
+        .folders
+        .singleWhere((folder) => folder.folderId == widget.folderId);
     return Scaffold(
       appBar: AppBar(
         title: SizedBox(
           width: 120,
-          child: AppBarText(text: folder.title),
+          child: AppBarText(text: folder.name),
         ),
         centerTitle: true,
         leadingWidth: 100,
@@ -42,7 +44,7 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
         actions: [
           TextButton(
             onPressed: () =>
-                showEditFolderDialog(context, folder.title, widget.folderIndex),
+                showEditFolderDialog(context, folder.name, folder.folderId),
             style: ElevatedButton.styleFrom(
               splashFactory: NoSplash.splashFactory,
             ),
@@ -60,52 +62,41 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
         child: Container(
           width: double.infinity,
           padding: const EdgeInsets.fromLTRB(20, 20, 20, 50),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                child: const HeaderText(text: "All Notes", size: Size.medium),
-                margin: const EdgeInsets.only(bottom: 20),
-              ),
-              CurvedCard(
-                margin: 25,
-                child: Column(
-                  children: dividerInsert(
-                    context
-                        .watch<NotesProvider>()
-                        .notes
-                        .mapIndexed(
-                          (index, note) => GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => NoteDetailScreen(
-                                    noteName: note.title,
-                                    previousScreen: folder.title,
-                                    noteIndex: index,
-                                  ), //     ),
-                                ),
-                              );
-                            },
-                            behavior: HitTestBehavior.translucent,
-                            child: NoteListItem(
-                              title: note.title,
-                              date: note.createdAt,
-                              noteIndex: index,
-                            ),
-                          ),
-                        )
-                        .toList(),
-                    const Divider(
-                      color: Color(0xff434345),
-                      indent: 25,
+          child: context.watch<NotesProvider>().folderNoteList.isEmpty
+              ? const Center(child: Text("No notes"))
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      child: const HeaderText(
+                          text: "All Notes", size: Size.medium),
+                      margin: const EdgeInsets.only(bottom: 20),
                     ),
-                  ),
+                    CurvedCard(
+                      margin: 25,
+                      child: Column(
+                        children: dividerInsert(
+                          context
+                              .watch<NotesProvider>()
+                              .folderNoteList
+                              .mapIndexed(
+                                (index, note) => NoteListItem(
+                                  title: note.title,
+                                  date: note.updatedAt,
+                                  noteId: note.noteId,
+                                  previousScreen: folder.name,
+                                ),
+                              )
+                              .toList(),
+                          const Divider(
+                            color: Color(0xff434345),
+                            indent: 25,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -115,7 +106,7 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
             MaterialPageRoute(
               builder: (context) => NewNoteScreen(
                 noteName: "Untitled Note",
-                previousScreen: folder.title,
+                previousScreen: folder.name,
               ), //     ),
             ),
           );

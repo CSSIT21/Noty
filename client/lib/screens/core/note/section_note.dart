@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:noty_client/constants/theme.dart';
-import 'package:noty_client/screens/core/note/note_view.dart';
+import 'package:noty_client/models/response/notes/note_detail_data.dart';
+import 'package:noty_client/screens/core/folder/folder_move_dialog.dart';
+import 'package:noty_client/services/notes_sevice.dart';
 import 'package:noty_client/services/providers/providers.dart';
 import 'package:noty_client/types/widget/placement.dart';
 import 'package:noty_client/utils/widget/divider_insert.dart';
@@ -33,58 +36,55 @@ class _NoteSectionState extends State<NoteSection> {
           margin: 25,
           child: Column(
             children: dividerInsert(
-                context
-                    .watch<NotesProvider>()
-                    .notes
-                    .mapIndexed(
-                      (index, note) => GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => NoteDetailScreen(
-                                noteName: note.title,
-                                previousScreen: "All Notes",
-                                noteIndex: index,
-                              ), //     ),
-                            ),
-                          );
-                        },
-                        behavior: HitTestBehavior.translucent,
-                        child: Slidable(
-                          key: ValueKey(index),
-                          endActionPane: ActionPane(
-                            motion: const StretchMotion(),
-                            children: [
-                              SlidableAction(
-                                onPressed: (BuildContext context) {},
-                                backgroundColor:
-                                    ThemeConstant.colorPrimaryLight,
-                                foregroundColor: Colors.white,
-                                icon: CupertinoIcons.folder_fill,
-                              ),
-                              SlidableAction(
-                                onPressed: (BuildContext context) {},
-                                backgroundColor: Colors.red,
-                                foregroundColor: Colors.white,
-                                icon: Icons.delete_rounded,
-                              ),
-                            ],
+              context
+                  .watch<NotesProvider>()
+                  .notes
+                  .mapIndexed(
+                    (index, note) => Slidable(
+                      key: ValueKey(index),
+                      endActionPane: ActionPane(
+                        motion: const StretchMotion(),
+                        children: [
+                          SlidableAction(
+                            onPressed: (BuildContext context) async {
+                              var folderId =
+                                  await NoteService.getNoteDetail(note.noteId);
+                              if (folderId is NoteDetailResponse) {
+                                showBarModalBottomSheet(
+                                  context: context,
+                                  builder: (context) => FolderMoveDialog(
+                                      folderId: folderId.data.folderId),
+                                  expand: true,
+                                );
+                              }
+                            },
+                            backgroundColor: ThemeConstant.colorPrimaryLight,
+                            foregroundColor: Colors.white,
+                            icon: CupertinoIcons.folder_fill,
                           ),
-                          child: NoteListItem(
-                            title: note.title,
-                            date: note.createdAt,
-                            noteIndex: index,
+                          SlidableAction(
+                            onPressed: (BuildContext context) {},
+                            backgroundColor: Colors.red,
+                            foregroundColor: Colors.white,
+                            icon: Icons.delete_rounded,
                           ),
-                        ),
+                        ],
                       ),
-                    )
-                    .toList(),
-                const Divider(
-                  color: Color(0xff434345),
-                  indent: 20,
-                  height: 1,
-                )),
+                      child: NoteListItem(
+                        title: note.title,
+                        date: note.updatedAt,
+                        noteId: note.noteId,
+                        previousScreen: "All Notes",
+                      ),
+                    ),
+                  )
+                  .toList(),
+              const Divider(
+                color: Color(0xff434345),
+                indent: 20,
+                height: 1,
+              ),
+            ),
           ),
         ),
       ],
