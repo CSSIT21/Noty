@@ -11,8 +11,8 @@ import (
 	"noty-backend/types/responder"
 )
 
-// NoteGetByIdHandler
-// @ID note.by.id.get
+// NotePostByIdHandler
+// @ID note.by.id.post
 // @Summary Get note by id
 // @Description Get note by id
 // @Tags note
@@ -21,8 +21,8 @@ import (
 // @Param payload body noteGetByIdRequest true "note.noteGetByIdRequest"
 // @Success 200 {object} responder.InfoResponse
 // @Failure 400 {object} responder.ErrorResponse
-// @Router /note/info/id [get]
-func NoteGetByIdHandler(c *fiber.Ctx) error {
+// @Router /note/info/id [post]
+func NotePostByIdHandler(c *fiber.Ctx) error {
 	// * Parse user JWT token
 	token := c.Locals("user").(*jwt.Token)
 	claims := token.Claims.(*common.UserClaim)

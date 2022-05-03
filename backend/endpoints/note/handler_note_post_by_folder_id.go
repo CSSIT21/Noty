@@ -11,8 +11,8 @@ import (
 	"noty-backend/types/responder"
 )
 
-// NoteGetByFolderIdHandler
-// @ID note.by.folder_id.get
+// NotePostByFolderIdHandler
+// @ID note.by.folder_id.post
 // @Summary Get notes in folder
 // @Description Get notes in folder
 // @Tags note
@@ -20,8 +20,8 @@ import (
 // @Produce json
 // @Param payload body noteGetByFolderId true "note.noteGetByFolderId"
 // @Failure 400 {object} noteGetNotesResponse
-// @Router /note/info/folder [get]
-func NoteGetByFolderId(c *fiber.Ctx) error {
+// @Router /note/info/folder [post]
+func NotePostByFolderId(c *fiber.Ctx) error {
 	// * Parse user JWT token
 	token := c.Locals("user").(*jwt.Token)
 	claims := token.Claims.(*common.UserClaim)
