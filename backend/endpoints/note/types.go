@@ -3,7 +3,6 @@ package note
 import "time"
 
 type notePostRequest struct {
-	Title    string `json:"title"`
 	FolderId string `json:"folder_id"`
 }
 

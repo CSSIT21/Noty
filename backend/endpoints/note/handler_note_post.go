@@ -48,7 +48,8 @@ func NotePostHandler(c *fiber.Ctx) error {
 	}
 
 	note := new(models.Notes)
-	note.Title = &body.Title
+	var title string = "Untitled"
+	note.Title = &title
 	note.UserId = &userId
 	note.FolderId = folderId
 
