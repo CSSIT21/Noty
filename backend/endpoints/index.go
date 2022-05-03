@@ -41,6 +41,7 @@ func Init(router fiber.Router) {
 	noteHandler := router.Group("note/", middlewares.Jwt)
 	noteHandler.Get("info", note.NoteGetHandler)
 	noteHandler.Get("info/id", note.NoteGetByIdHandler)
+	noteHandler.Get("info/folder", note.NoteGetByFolderId)
 	noteHandler.Post("add", note.NotePostHandler)
 	noteHandler.Patch("edit", note.NotePatchHandler)
 	noteHandler.Delete("delete", note.NoteDeleteHandler)

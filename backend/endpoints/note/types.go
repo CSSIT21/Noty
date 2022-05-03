@@ -62,3 +62,7 @@ type noteGetNotesResponse struct {
 type noteGetByIdRequest struct {
 	NoteId string `json:"note_id"`
 }
+
+type noteGetByFolderId struct {
+	FolderId string `json:"folder_id"`
+}
