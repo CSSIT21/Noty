@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:noty_client/models/folder.dart';
 import 'package:noty_client/screens/core/folder/dialog_edit_folder.dart';
+import 'package:noty_client/screens/core/note/new_note_screen.dart';
 import 'package:noty_client/screens/core/note/note_view.dart';
 import 'package:noty_client/services/providers/providers.dart';
 import 'package:noty_client/types/widget/placement.dart';
@@ -108,7 +109,17 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => NewNoteScreen(
+                noteName: "Untitled Note",
+                previousScreen: folder.title,
+              ), //     ),
+            ),
+          );
+        },
         child: const Icon(CupertinoIcons.pencil_outline),
       ),
     );

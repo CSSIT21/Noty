@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:noty_client/models/note_detail.dart';
+import 'package:noty_client/screens/core/note/action_button.dart';
 import 'package:noty_client/screens/core/reminder/edit_reminder.dart';
 import 'package:noty_client/types/widget/placement.dart';
 import 'package:noty_client/widgets/leading_button.dart';
@@ -31,14 +32,19 @@ class _NewNoteScreenState extends State<NewNoteScreen> {
     // ),
   ];
 
+  void addNoteDetail(int noteIndex, String type) {
+    // context.read<NotesProvider>().addNoteDetail(noteIndex, type);
+    setState(() {});
+  }
+
   String noteTitle = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const SizedBox(
+        title: SizedBox(
           width: 120,
-          child: AppBarText(text: "Untitled Note"),
+          child: AppBarText(text: widget.noteName),
         ),
         centerTitle: true,
         leadingWidth: 100,
@@ -227,7 +233,12 @@ class _NewNoteScreenState extends State<NewNoteScreen> {
               margin: const EdgeInsets.only(bottom: 30, right: 15),
               width: 75,
               height: 75,
-              child: MediaQuery.of(context).viewInsets.bottom > 0 ? null : null,
+              child: MediaQuery.of(context).viewInsets.bottom > 0
+                  ? null
+                  : NewNoteAction(
+                      noteIndex: 0,
+                      addNoteDetail: addNoteDetail,
+                    ),
             ),
           )
         ],
@@ -235,7 +246,7 @@ class _NewNoteScreenState extends State<NewNoteScreen> {
     );
   }
 
-  void newNoteMethod(String type) {
-    noteDetail.add(NoteDetail(type: type));
-  }
+  // void newNoteMethod(String type) {
+  //   noteDetail.add(NoteDetail(type: type));
+  // }
 }
