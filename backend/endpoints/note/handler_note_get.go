@@ -109,7 +109,7 @@ func NoteGetHandler(c *fiber.Ctx) error {
 				NoteId:    tempNote.ID.Hex(),
 				Title:     *tempNote.Title,
 				CreatedAt: tempNote.CreatedAt,
-				Tag:       tempNote.Tags,
+				Tags:      tempNote.Tags,
 			}
 			for _, detail := range tempNote.Details {
 				if *detail.Type == "reminder" {
