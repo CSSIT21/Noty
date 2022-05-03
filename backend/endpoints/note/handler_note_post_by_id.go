@@ -4,11 +4,13 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/kamva/mgm/v3"
+	"github.com/mitchellh/mapstructure"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"noty-backend/loaders/mongo/models"
 	"noty-backend/types/common"
 	"noty-backend/types/responder"
+	"noty-backend/utils/logger"
 )
 
 // NotePostByIdHandler
@@ -52,8 +54,51 @@ func NotePostByIdHandler(c *fiber.Ctx) error {
 		}
 	}
 
+	tempNote := &noteGetByIdDetailResponse{
+		NoteId:    note.ID.Hex(),
+		Title:     *note.Title,
+		FolderId:  note.FolderId.Hex(),
+		UpdatedAt: note.UpdatedAt,
+		Tag:       note.Tags,
+	}
+
+	var noteDetails []*noteGetTypeDetailData
+	for _, detail := range note.Details {
+		if *detail.Type == "reminder" {
+			tempReminder := new(noteGetReminderId)
+			tempDetails := detail.Data.(primitive.D).Map()
+			bsonBytes, _ := bson.Marshal(tempDetails)
+			bson.Unmarshal(bsonBytes, &tempReminder)
+			logger.Dump(tempReminder)
+			tempNoteGetDetailData := &noteGetDetailData{
+				Content: tempReminder.ReminderId.Hex(),
+			}
+			tempDetail := &noteGetTypeDetailData{
+				Type: *detail.Type,
+				Data: tempNoteGetDetailData,
+			}
+			noteDetails = append(noteDetails, tempDetail)
+		} else {
+			tempReminder := new(noteGetContent)
+			tempDetails := detail.Data.(primitive.D).Map()
+			bsonBytes, _ := bson.Marshal(tempDetails)
+			bson.Unmarshal(bsonBytes, &tempReminder)
+			_ = mapstructure.Decode(detail.Data, tempReminder)
+			tempNoteGetDetailData := &noteGetDetailData{
+				Content: tempReminder.Content,
+			}
+			tempDetail := &noteGetTypeDetailData{
+				Type: *detail.Type,
+				Data: tempNoteGetDetailData,
+			}
+			noteDetails = append(noteDetails, tempDetail)
+		}
+	}
+
+	tempNote.Data = noteDetails
+
 	return c.JSON(&responder.InfoResponse{
 		Success: true,
-		Data:    note,
+		Data:    tempNote,
 	})
 }

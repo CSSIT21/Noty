@@ -1,6 +1,9 @@
 package note
 
-import "time"
+import (
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"time"
+)
 
 type notePostRequest struct {
 	FolderId string `json:"folder_id"`
@@ -64,4 +67,30 @@ type noteGetByIdRequest struct {
 
 type noteGetByFolderId struct {
 	FolderId string `json:"folder_id"`
+}
+
+type noteGetByIdDetailResponse struct {
+	NoteId    string    `json:"note_id"`
+	UpdatedAt time.Time `json:"updated_at"`
+	Title     string    `json:"title"`
+	FolderId  string    `json:"folder_id"`
+	Tag       []string  `json:"tag"`
+	Data      []*noteGetTypeDetailData
+}
+
+type noteGetTypeDetailData struct {
+	Type string             `json:"type"`
+	Data *noteGetDetailData `json:"data"`
+}
+
+type noteGetDetailData struct {
+	Content string `json:"content"`
+}
+
+type noteGetReminderId struct {
+	ReminderId *primitive.ObjectID `json:"reminder_id" bson:"reminder_id"`
+}
+
+type noteGetContent struct {
+	Content string `json:"content" bson:"content"`
 }
