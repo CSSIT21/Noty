@@ -61,7 +61,7 @@ func NoteGetByFolderId(c *fiber.Ctx) error {
 			tempNoteResponse := &noteGetNotesResponse{
 				NoteId:    tempNote.ID.Hex(),
 				Title:     *tempNote.Title,
-				Tag:       tempNote.Tags,
+				Tags:      tempNote.Tags,
 				CreatedAt: tempNote.CreatedAt,
 			}
 			for _, check := range tempNote.Details {
