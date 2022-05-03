@@ -25,6 +25,7 @@ func Init(router fiber.Router) {
 
 	// * Reminder
 	reminderHandler := router.Group("reminder/", middlewares.Jwt)
+	reminderHandler.Get("info", reminder.ReminderGetHandler)
 	reminderHandler.Post("add", reminder.ReminderPostHandler)
 	reminderHandler.Patch("edit", reminder.ReminderPatchHandler)
 	reminderHandler.Delete("delete", reminder.ReminderDeleteHandler)
