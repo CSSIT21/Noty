@@ -57,7 +57,7 @@ type noteGetNotesResponse struct {
 	NoteId      string    `json:"note_id"`
 	Title       string    `json:"title"`
 	UpdatedAt   time.Time `json:"updated_at"`
-	Tags        []string  `json:"tag"`
+	Tags        []string  `json:"tags"`
 	HasReminder bool      `json:"has_reminder"`
 }
 
