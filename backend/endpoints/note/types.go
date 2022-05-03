@@ -54,7 +54,7 @@ type noteGetFoldersResponse struct {
 type noteGetNotesResponse struct {
 	NoteId      string    `json:"note_id"`
 	Title       string    `json:"title"`
-	CreatedAt   time.Time `json:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at"`
 	Tags        []string  `json:"tag"`
 	HasReminder bool      `json:"has_reminder"`
 }

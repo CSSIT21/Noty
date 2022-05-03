@@ -108,7 +108,7 @@ func NoteGetHandler(c *fiber.Ctx) error {
 			tempNoteResponse := &noteGetNotesResponse{
 				NoteId:    tempNote.ID.Hex(),
 				Title:     *tempNote.Title,
-				CreatedAt: tempNote.CreatedAt,
+				UpdatedAt: tempNote.UpdatedAt,
 				Tags:      tempNote.Tags,
 			}
 			for _, detail := range tempNote.Details {

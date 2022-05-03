@@ -62,7 +62,7 @@ func NoteGetByFolderId(c *fiber.Ctx) error {
 				NoteId:    tempNote.ID.Hex(),
 				Title:     *tempNote.Title,
 				Tags:      tempNote.Tags,
-				CreatedAt: tempNote.CreatedAt,
+				UpdatedAt: tempNote.UpdatedAt,
 			}
 			for _, check := range tempNote.Details {
 				if *check.Type == "reminder" {
