@@ -67,6 +67,20 @@ func NotePatchHandler(c *fiber.Ctx) error {
 					ReminderId: &tempReminderId,
 				},
 			})
+
+			// * Update note_id in reminder
+			if err := mgm.Coll(&models.Reminder{}).FindOneAndUpdate(mgm.Ctx(), bson.M{
+				"_id":     tempReminderId,
+				"user_id": userId,
+			}, bson.M{"$set": bson.M{
+				"note_id": noteId,
+			}}); err.Err() != nil {
+				return &responder.GenericError{
+					Message: "Unable to update note_id in the reminder",
+					Err:     err.Err(),
+				}
+			}
+
 		} else {
 			noteContent := new(models.NoteText)
 			_ = mapstructure.Decode(detail.Data, noteContent)
