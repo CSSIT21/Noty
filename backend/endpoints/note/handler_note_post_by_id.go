@@ -10,7 +10,6 @@ import (
 	"noty-backend/loaders/mongo/models"
 	"noty-backend/types/common"
 	"noty-backend/types/responder"
-	"noty-backend/utils/logger"
 )
 
 // NotePostByIdHandler
@@ -69,7 +68,6 @@ func NotePostByIdHandler(c *fiber.Ctx) error {
 			tempDetails := detail.Data.(primitive.D).Map()
 			bsonBytes, _ := bson.Marshal(tempDetails)
 			bson.Unmarshal(bsonBytes, &tempReminder)
-			logger.Dump(tempReminder)
 			tempNoteGetDetailData := &noteGetDetailData{
 				Content: tempReminder.ReminderId.Hex(),
 			}

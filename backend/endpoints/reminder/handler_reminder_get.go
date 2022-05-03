@@ -33,11 +33,7 @@ func ReminderGetHandler(c *fiber.Ctx) error {
 	var independentRemindersResponse []*independentReminders
 	if result, err := mgm.Coll(&models.Reminder{}).Find(mgm.Ctx(), bson.M{
 		"user_id": userId,
-		"note_id": bson.M{
-			"$not": bson.M{
-				"$eq": primitive.ObjectID{},
-			},
-		},
+		"note_id": primitive.ObjectID{},
 	}); err != nil {
 		return &responder.GenericError{
 			Message: "Unable to fetch reminders",
@@ -75,6 +71,10 @@ func ReminderGetHandler(c *fiber.Ctx) error {
 			"localField":   "_id",
 			"foreignField": "note_id",
 			"as":           "reminders",
+		},
+	}, bson.M{
+		"$match": bson.M{
+			"reminders.0": bson.M{"$exists": true},
 		},
 	},
 	}); err != nil {
