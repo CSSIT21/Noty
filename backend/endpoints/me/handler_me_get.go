@@ -41,12 +41,17 @@ func MeGetHandler(c *fiber.Ctx) error {
 		}
 	}
 
+	var avatarUrl string = ""
+	if user.AvatarUrl != nil {
+		avatarUrl = *user.AvatarUrl
+	}
+
 	data := &meGetResponse{
 		UserId:    user.ID.Hex(),
 		Firstname: *user.Firstname,
 		Lastname:  *user.Lastname,
 		Email:     *user.Email,
-		AvatarUrl: *user.AvatarUrl,
+		AvatarUrl: avatarUrl,
 	}
 
 	// * Get all notes

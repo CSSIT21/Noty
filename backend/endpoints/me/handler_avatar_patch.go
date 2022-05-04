@@ -19,7 +19,7 @@ import (
 )
 
 // MeAvatarPostHandler
-// @ID account.avatar.patch
+// @ID me.avatar.patch
 // @Summary Update avatar image
 // @Description Update avatar image
 // @Tags me
