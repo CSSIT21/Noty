@@ -27,9 +27,6 @@ func NoteFolderPatchHandler(c *fiber.Ctx) error {
 	token := c.Locals("user").(*jwt.Token)
 	claims := token.Claims.(*common.UserClaim)
 
-	// * Parse string to object_id
-	userId, _ := primitive.ObjectIDFromHex(*claims.UserId)
-
 	// * Parse Body
 	var body noteFolderPatchRequest
 	if err := c.BodyParser(&body); err != nil {
@@ -38,6 +35,10 @@ func NoteFolderPatchHandler(c *fiber.Ctx) error {
 			Err:     err,
 		}
 	}
+
+	// * Parse string to object_id
+	userId, _ := primitive.ObjectIDFromHex(*claims.UserId)
+	folderId, _ := primitive.ObjectIDFromHex(body.FolderId)
 
 	var noteId *primitive.ObjectID
 
@@ -53,7 +54,7 @@ func NoteFolderPatchHandler(c *fiber.Ctx) error {
 		"_id":     noteId,
 		"user_id": userId,
 	}, bson.M{"$set": bson.M{
-		"folder_id": body.FolderId,
+		"folder_id": folderId,
 	}}); err != nil {
 		return &responder.GenericError{
 			Message: "Unable to update note",
