@@ -50,15 +50,15 @@ func NoteFolderPatchHandler(c *fiber.Ctx) error {
 	}
 
 	// * Add folder_id into note
-	if err := mgm.Coll(&models.Notes{}).FindOneAndUpdate(mgm.Ctx(), bson.M{
+	if result := mgm.Coll(&models.Notes{}).FindOneAndUpdate(mgm.Ctx(), bson.M{
 		"_id":     noteId,
 		"user_id": userId,
 	}, bson.M{"$set": bson.M{
 		"folder_id": folderId,
-	}}); err != nil {
+	}}); result.Err() != nil {
 		return &responder.GenericError{
 			Message: "Unable to update note",
-			Err:     err.Err(),
+			Err:     result.Err(),
 		}
 	}
 
