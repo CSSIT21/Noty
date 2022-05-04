@@ -9,6 +9,7 @@ import (
 	"noty-backend/types/common"
 	"noty-backend/types/responder"
 	"noty-backend/utils/text"
+	"time"
 )
 
 // ReminderPostHandler
@@ -45,13 +46,19 @@ func ReminderPostHandler(c *fiber.Ctx) error {
 		return err
 	}
 
+	var remindDate = new(time.Time)
+	if len(body.RemindDate) != 0 {
+		convertedDate, _ := text.ConvertDate(body.RemindDate)
+		remindDate = convertedDate
+	}
+
 	// * Create reminder
 	reminder := &models.Reminder{
 		UserId:      &userId,
 		Title:       &body.Title,
 		Description: &body.Description,
 		NoteId:      &noteId,
-		RemindDate:  &body.RemindDate,
+		RemindDate:  remindDate,
 	}
 
 	if err := mgm.Coll(reminder).Create(reminder); err != nil {

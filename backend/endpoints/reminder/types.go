@@ -7,10 +7,10 @@ import (
 )
 
 type reminderPostRequest struct {
-	Title       string    `json:"title" validate:"required,max=255"`
-	NoteId      string    `json:"note_id"`
-	Description string    `json:"description,omitempty"`
-	RemindDate  time.Time `json:"remind_date,omitempty"`
+	Title       string `json:"title" validate:"required,max=255"`
+	NoteId      string `json:"note_id"`
+	Description string `json:"description,omitempty"`
+	RemindDate  string `json:"remind_date,omitempty"`
 }
 
 type reminderPostResponse struct {
@@ -18,11 +18,11 @@ type reminderPostResponse struct {
 }
 
 type reminderPatchRequest struct {
-	ReminderId  string    `json:"reminder_id" validate:"required"`
-	Title       string    `json:"title" validate:"required,max=255"`
-	NoteId      string    `json:"note_id"`
-	Description string    `json:"description,omitempty"`
-	RemindDate  time.Time `json:"remind_date,omitempty"`
+	ReminderId  string `json:"reminder_id" validate:"required"`
+	Title       string `json:"title" validate:"required,max=255"`
+	NoteId      string `json:"note_id"`
+	Description string `json:"description,omitempty"`
+	RemindDate  string `json:"remind_date,omitempty"`
 }
 
 type reminderDeleteRequest struct {
