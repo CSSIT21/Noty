@@ -53,6 +53,9 @@ func Init() {
 
 	endpoints.Init(apiGroup)
 
+	// * Register static server
+	app.Static("static/", "./static")
+
 	// Register not found handler
 	app.Use(notfoundHandler)
 
