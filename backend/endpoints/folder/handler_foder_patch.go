@@ -50,9 +50,9 @@ func FolderPatchHandler(c *fiber.Ctx) error {
 	if err := mgm.Coll(&models.Folder{}).FindOneAndUpdate(mgm.Ctx(), bson.M{
 		"_id":     folderId,
 		"user_id": &userId,
-	}, bson.M{
+	}, bson.M{"$set": bson.M{
 		"name": body.NewName,
-	}); err.Err() != nil {
+	}}); err.Err() != nil {
 		return &responder.GenericError{
 			Message: "Unable to find the folder",
 			Err:     err.Err(),
