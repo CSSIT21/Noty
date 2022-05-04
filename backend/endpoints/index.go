@@ -52,6 +52,7 @@ func Init(router fiber.Router) {
 	meHandler.Get("info", me.MeGetHandler)
 	meHandler.Patch("edit/name", me.MePatchNameHandler)
 	meHandler.Patch("edit/password", me.MePatchPasswordHandler)
+	meHandler.Patch("avatar", me.MeAvatarPostHandler)
 
 	// * Tag
 	tagHandler := router.Group("tag/", middlewares.Jwt)

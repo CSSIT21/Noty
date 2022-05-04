@@ -7,6 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	mongoDriver "go.mongodb.org/mongo-driver/mongo"
+
 	"noty-backend/loaders/mongo/models"
 	"noty-backend/types/common"
 	"noty-backend/types/responder"
@@ -40,19 +41,12 @@ func MeGetHandler(c *fiber.Ctx) error {
 		}
 	}
 
-	var pictureId string
-	if user.PictureId != nil {
-		pictureId = user.PictureId.Hex()
-	} else {
-		pictureId = ""
-	}
-
 	data := &meGetResponse{
 		UserId:    user.ID.Hex(),
 		Firstname: *user.Firstname,
 		Lastname:  *user.Lastname,
 		Email:     *user.Email,
-		PictureId: pictureId,
+		AvatarUrl: *user.AvatarUrl,
 	}
 
 	// * Get all notes
