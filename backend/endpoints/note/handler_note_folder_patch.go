@@ -52,9 +52,9 @@ func NoteFolderPatchHandler(c *fiber.Ctx) error {
 	if err := mgm.Coll(&models.Notes{}).FindOneAndUpdate(mgm.Ctx(), bson.M{
 		"_id":     noteId,
 		"user_id": userId,
-	}, bson.M{
+	}, bson.M{"$set": bson.M{
 		"folder_id": body.FolderId,
-	}); err != nil {
+	}}); err != nil {
 		return &responder.GenericError{
 			Message: "Unable to update note",
 			Err:     err.Err(),
