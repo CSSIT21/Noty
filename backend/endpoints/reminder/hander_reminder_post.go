@@ -4,6 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/kamva/mgm/v3"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"noty-backend/loaders/mongo/models"
 	"noty-backend/types/common"
 	"noty-backend/types/responder"
@@ -18,7 +19,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param payload body reminderPostRequest true "reminder.reminderPostRequest"
-// @Success 200 {object} reminderPostRequest
+// @Success 200 {object} responder.InfoResponse
 // @Failure 400 {object} responder.ErrorResponse
 // @Router /reminder/add [post]
 func ReminderPostHandler(c *fiber.Ctx) error {
@@ -35,24 +36,22 @@ func ReminderPostHandler(c *fiber.Ctx) error {
 		}
 	}
 
+	// * Parse string to object_id
+	userId, _ := primitive.ObjectIDFromHex(*claims.UserId)
+	noteId, _ := primitive.ObjectIDFromHex(body.NoteId)
+
 	// * Validate body
 	if err := text.Validate.Struct(body); err != nil {
 		return err
 	}
 
-	var noteId string
-	if len(body.NoteId) > 0 {
-		noteId = body.NoteId
-	}
-
 	// * Create reminder
 	reminder := &models.Reminder{
-		UserId:      claims.UserId,
+		UserId:      &userId,
 		Title:       &body.Title,
 		Description: &body.Description,
 		NoteId:      &noteId,
 		RemindDate:  &body.RemindDate,
-		RemindTime:  &body.RemindTime,
 	}
 
 	if err := mgm.Coll(reminder).Create(reminder); err != nil {
@@ -65,5 +64,8 @@ func ReminderPostHandler(c *fiber.Ctx) error {
 	return c.JSON(&responder.InfoResponse{
 		Success: true,
 		Info:    "Add reminder successful",
+		Data: &reminderPostResponse{
+			ReminderId: reminder.ID.Hex(),
+		},
 	})
 }

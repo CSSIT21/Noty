@@ -5,6 +5,7 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/kamva/mgm/v3"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	mongoDriver "go.mongodb.org/mongo-driver/mongo"
 	"noty-backend/loaders/mongo/models"
 	"noty-backend/types/common"
@@ -20,7 +21,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param payload body folderPostRequest true "folder.folderPostRequest"
-// @Success 200 {object} folderPostRequest
+// @Success 200 {object} responder.InfoResponse
 // @Failure 400 {object} responder.ErrorResponse
 // @Router /folder/add [post]
 func FolderPostHandler(c *fiber.Ctx) error {
@@ -42,15 +43,18 @@ func FolderPostHandler(c *fiber.Ctx) error {
 		return err
 	}
 
+	// * Parse id to object_id
+	userId, _ := primitive.ObjectIDFromHex(*claims.UserId)
+
 	// * Create folder
 	folder := &models.Folder{
-		UserId: claims.UserId,
+		UserId: &userId,
 		Name:   &body.Name,
 	}
 
 	// * Check Duplicate folder
 	if err := mgm.Coll(folder).First(bson.M{
-		"user_id": claims.UserId,
+		"user_id": userId,
 		"name":    body.Name,
 	}, folder); err != mongoDriver.ErrNoDocuments {
 		return &responder.GenericError{
@@ -68,6 +72,6 @@ func FolderPostHandler(c *fiber.Ctx) error {
 
 	return c.JSON(&responder.InfoResponse{
 		Success: true,
-		Info:    "Add folder successful",
+		Info:    "Add folder successfully",
 	})
 }

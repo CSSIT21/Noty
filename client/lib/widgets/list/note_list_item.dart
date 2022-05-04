@@ -1,90 +1,129 @@
 import 'package:flutter/material.dart';
-import 'package:noty_client/models/note_detail.dart';
+import 'package:noty_client/models/response/notes/note_data.dart';
+import 'package:noty_client/models/response/notes/note_detail_data.dart';
+import 'package:noty_client/screens/core/note/note_view.dart';
+import 'package:noty_client/services/notes_sevice.dart';
+import 'package:noty_client/services/providers/providers.dart';
 import 'package:noty_client/widgets/reminder/reminder_label.dart';
 import 'package:noty_client/widgets/tag/tag_label.dart';
+import 'package:provider/provider.dart';
 
-class NoteListItem extends StatelessWidget {
+class NoteListItem extends StatefulWidget {
   final String title;
   final String date;
-  final List<NoteDetail> noteDetails;
+  final String noteId;
+  final String previousScreen;
 
-  const NoteListItem({
-    Key? key,
-    required this.title,
-    required this.date,
-    required this.noteDetails,
-  }) : super(key: key);
+  const NoteListItem(
+      {Key? key,
+      required this.title,
+      required this.date,
+      required this.noteId,
+      required this.previousScreen})
+      : super(key: key);
+
+  @override
+  State<NoteListItem> createState() => _NoteListItemState();
+}
+
+class _NoteListItemState extends State<NoteListItem> {
+  var tag = false;
+  var reminder = false;
+
+  Future<void> _readJson(String noteId) async {
+    var noteDetails = await NoteService.getNoteDetail(noteId);
+    if (noteDetails is NoteDetailResponse) {
+      context.read<NotesProvider>().setNoteDetails(noteDetails.data);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    NoteData note = context
+        .watch<NotesProvider>()
+        .notes
+        .singleWhere((note) => note.noteId == widget.noteId);
     double screenWidth = MediaQuery.of(context).size.width;
-    var tag = false;
-    var reminder = false;
-    for (var i = 0; i < noteDetails.length; i++) {
-      if (noteDetails[i].tags.isNotEmpty) {
+    if (note.tags.isNotEmpty) {
+      setState(() {
         tag = true;
-      }
-      break;
+      });
     }
-    for (var i = 0; i < noteDetails.length; i++) {
-      if (noteDetails[i].type == 'reminder') {
+    if (note.hasReminder) {
+      setState(() {
         reminder = true;
-      }
+      });
     }
 
-    return Container(
-      padding: const EdgeInsets.fromLTRB(18, 10, 18, 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: screenWidth / 1.5,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(bottom: 2),
-                  child: Text(
-                    title,
-                    style: const TextStyle(fontWeight: FontWeight.w500),
-                    overflow: TextOverflow.ellipsis,
+    return GestureDetector(
+      onTap: () {
+        _readJson(note.noteId);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => NoteDetailScreen(
+              previousScreen: widget.previousScreen,
+              noteId: note.noteId,
+              noteTitle: note.title,
+            ), //     ),
+          ),
+        );
+      },
+      behavior: HitTestBehavior.translucent,
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(18, 10, 18, 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: screenWidth / 1.5,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 2),
+                    child: Text(
+                      widget.title,
+                      style: const TextStyle(fontWeight: FontWeight.w500),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(bottom: 6),
-                  child: Text(
-                    date,
-                    style: const TextStyle(
-                        fontSize: 10, fontWeight: FontWeight.w300),
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 6),
+                    child: Text(
+                      widget.date.substring(0, 10),
+                      style: const TextStyle(
+                          fontSize: 10, fontWeight: FontWeight.w300),
+                    ),
                   ),
-                ),
-                Row(
-                  children: [
-                    reminder
-                        ? Container(
-                            child: const ReminderLabel(),
-                            margin: const EdgeInsets.only(right: 6),
-                          )
-                        : Container(),
-                    tag
-                        ? const TagLabel(
-                            textColor: Color(0xff828282),
-                            bgColor: Color(0xff252525),
-                            title: "Tag",
-                            iconFilled: true,
-                          )
-                        : Container(),
-                  ],
-                ),
-              ],
+                  Row(
+                    children: [
+                      reminder
+                          ? Container(
+                              child: const ReminderLabel(),
+                              margin: const EdgeInsets.only(right: 6),
+                            )
+                          : Container(),
+                      tag
+                          ? const TagLabel(
+                              textColor: Color(0xff828282),
+                              bgColor: Color(0xff252525),
+                              title: "Tag",
+                              iconFilled: true,
+                            )
+                          : Container(),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-          const Icon(
-            Icons.arrow_forward_ios_rounded,
-            size: 14,
-          ),
-        ],
+            const Icon(
+              Icons.arrow_forward_ios_rounded,
+              size: 14,
+            ),
+          ],
+        ),
       ),
     );
   }

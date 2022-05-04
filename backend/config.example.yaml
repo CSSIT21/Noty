@@ -23,3 +23,8 @@ jwtsecret: 08h4CrYdc8CkXDOH0WCYu0gWSN9wVyLV
 # MongoDB Connectivity
 mongouri: mongodb://noty:password@localhost:27017
 mongodbname: noty
+
+# SMTP Connectivity
+smtpuser: noty@example.com
+smptppass: password
+smtphost: mail.example.com:587

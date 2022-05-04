@@ -2,15 +2,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' as material;
 import 'package:motion_tab_bar_v2/motion-tab-bar.dart' as motion_tab_bar;
 import 'package:noty_client/constants/theme.dart';
-import 'package:noty_client/models/folder.dart';
-import 'package:noty_client/models/notes.dart';
+import 'package:noty_client/models/response/error/error_response.dart';
+import 'package:noty_client/models/response/folder/note_list.dart';
+import 'package:noty_client/models/response/me/me_infomation.dart';
+import 'package:noty_client/models/response/notes/notes_response.dart';
 import 'package:noty_client/screens/core/me/me.dart';
 import 'package:noty_client/screens/core/me/me_edit.dart';
 import 'package:noty_client/screens/core/note/note.dart';
 import 'package:noty_client/screens/core/reminder/reminder.dart';
 import 'package:noty_client/screens/core/tag/tag.dart';
+import 'package:noty_client/services/me.dart';
 import 'package:noty_client/services/notes_sevice.dart';
+import 'package:noty_client/services/providers/providers.dart';
 import 'package:noty_client/widgets/typography/appbar_text.dart';
+import 'package:provider/provider.dart';
 
 import '../../services/notes_sevice.dart';
 
@@ -26,15 +31,13 @@ class _CoreScreenState extends material.State<CoreScreen>
   late material.TabController _tabController;
   final List<String> titleList = ["Notes", "Reminders", "Tags", "Me"];
   final List<material.IconData> iconList = [
-    material.Icons.article_rounded,
-    material.Icons.format_list_bulleted_rounded,
+    CupertinoIcons.pencil_outline,
+    CupertinoIcons.list_bullet,
     material.Icons.sell_rounded,
-    material.Icons.person_rounded
+    CupertinoIcons.person_fill,
   ];
   late String currentTitle;
   late TextEditingController _textController;
-  List<Folder> _folders = [];
-  List<Notes> _notes = [];
 
   void changeTitle() {
     setState(() {
@@ -44,12 +47,38 @@ class _CoreScreenState extends material.State<CoreScreen>
   }
 
   Future<void> _readJson() async {
-    var response = await GetNoteService.getData();
+    var meResponse = await ProfileService.getProfile();
+    var notesDataResponse = await NoteService.getData();
+    var notelistfolder =
+        await NoteService.getNoteListFolder("626d8d9d41e7c73a9af2d73e");
+
     if (mounted) {
-      setState(() {
-        _folders = GetNoteService.getFolders(response);
-        _notes = GetNoteService.getNotes(response);
-      });
+      if (notesDataResponse is NotesResponse) {
+        // print(notesDataResponse.data.folders[0].name);
+        context
+            .read<NotesProvider>()
+            .setFoldersData(notesDataResponse.data.folders);
+        context
+            .read<NotesProvider>()
+            .setNotesData(notesDataResponse.data.notes);
+      }
+      if (notelistfolder is NoteListFolderResponse) {
+        // print(notelistfolder.data[0].title);
+      }
+      if (meResponse is ErrorResponse) {
+        var error = material.SnackBar(
+          behavior: material.SnackBarBehavior.floating,
+          margin: const EdgeInsets.only(bottom: 40, left: 15, right: 15),
+          content: Text(meResponse.message),
+          action: material.SnackBarAction(
+            label: 'OK',
+            onPressed: () {},
+          ),
+        );
+        material.ScaffoldMessenger.of(context).showSnackBar(error);
+      } else if (meResponse is MeResponse) {
+        context.read<ProfileProvider>().setMeData(meResponse.data);
+      }
     }
   }
 
@@ -75,6 +104,7 @@ class _CoreScreenState extends material.State<CoreScreen>
 
   @override
   material.Widget build(material.BuildContext context) {
+    MeData meData = context.watch<ProfileProvider>().meData;
     return material.WillPopScope(
       onWillPop: () async => false,
       child: material.Scaffold(
@@ -89,14 +119,20 @@ class _CoreScreenState extends material.State<CoreScreen>
                       material.Navigator.push(
                         context,
                         material.MaterialPageRoute(
-                          builder: (context) => const EditProfileScreen(),
+                          builder: (context) => EditProfileScreen(
+                            firstname: meData.firstname,
+                            lastname: meData.lastname,
+                          ),
                         ),
                       );
                     },
+                    style: material.ElevatedButton.styleFrom(
+                      splashFactory: material.NoSplash.splashFactory,
+                    ),
                     child: const Text(
                       "Edit",
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 17,
                         fontWeight: FontWeight.normal,
                       ),
                     ),
@@ -155,20 +191,11 @@ class _CoreScreenState extends material.State<CoreScreen>
             physics: const material
                 .NeverScrollableScrollPhysics(), // Swipe navigation handling is not supported
             controller: _tabController,
-            children: [
-              NotesFragment(
-                folders: _folders,
-                notes: _notes,
-              ),
-              const ReminderFragment(),
-              TagFragment(
-                notes: _notes,
-              ),
-              MeFragement(
-                folders: _folders,
-                notes: _notes,
-                tabController: _tabController,
-              ),
+            children: const [
+              NotesFragment(),
+              ReminderFragment(),
+              TagFragment(),
+              MeFragement(),
             ],
           ),
         ),

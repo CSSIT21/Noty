@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:noty_client/constants/theme.dart';
 
@@ -23,8 +24,8 @@ class FolderListItem extends StatelessWidget {
               Container(
                 margin: const EdgeInsets.only(right: 10),
                 child: const Icon(
-                  Icons.folder_rounded,
-                  size: 26,
+                  CupertinoIcons.folder_fill,
+                  size: 24,
                 ),
               ),
               SizedBox(

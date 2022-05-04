@@ -1,49 +1,123 @@
-import '../models/folder.dart';
-import '../models/note_detail.dart';
-import '../models/notes.dart';
+import 'package:noty_client/constants/environment.dart';
+import 'package:noty_client/models/response/error/error_response.dart';
+import 'package:noty_client/models/response/folder/note_list.dart';
+import 'package:noty_client/models/response/notes/note_detail_data.dart';
+import 'package:noty_client/models/response/notes/notes_response.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
 
-class GetNoteService {
-  static Future<Map<String, dynamic>> getData() async {
-    Response response =
-        await Dio().get('https://mock-noty.mixkoap.com/test-payload.json');
-    return response.data;
+class NoteService {
+  static Future<dynamic> getData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? userToken = prefs.getString('user');
+    try {
+      Response response = await Dio().get(
+          EnvironmentConstant.internalApiPrefix + "/note/info",
+          options: Options(headers: {"Authorization": "Bearer " + userToken!}));
+      NotesResponse res = NotesResponse.fromJson(response.data);
+      return res;
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 400 || e.response?.statusCode == 401) {
+        ErrorResponse error = ErrorResponse.fromJson(e.response?.data);
+        return error;
+      }
+    }
+    return "";
   }
 
-  static List<Folder> getFolders(data) {
-    List<dynamic> foldersData = data["folders"];
-    List<Folder> tempFolders = foldersData.map((folder) {
-      return Folder(
-          folderId: folder["folder_id"],
-          title: folder["title"],
-          count: folder["count"]);
-    }).toList();
-    return tempFolders;
+  static Future<dynamic> getNoteListFolder(String folderId) async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? userToken = prefs.getString('user');
+    try {
+      Response response = await Dio().post(
+          EnvironmentConstant.internalApiPrefix + "/note/info/folder",
+          data: {'folder_id': folderId},
+          options: Options(headers: {"Authorization": "Bearer " + userToken!}));
+      NoteListFolderResponse res =
+          NoteListFolderResponse.fromJson(response.data);
+      return res;
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 400 || e.response?.statusCode == 401) {
+        ErrorResponse error = ErrorResponse.fromJson(e.response?.data);
+        return error;
+      }
+    }
+    return "";
   }
 
-  static List<Notes> getNotes(data) {
-    List<dynamic> notesData = data["notes"];
-    List<Notes> tempNotes = notesData.map((note) {
-      List<dynamic> tempNoteDetail = note["note_detail"];
-      List<NoteDetail> noteDetails = tempNoteDetail.map((noteDetail) {
-        List<dynamic> tempTags = noteDetail["tags"] ?? [];
-        List<String> tags = tempTags.map((tag) => tag.toString()).toList();
-        return NoteDetail(
-            type: noteDetail["type"],
-            detail: noteDetail["detail"] ?? "",
-            createdAt: noteDetail["created_at"] ?? "",
-            reminderId: noteDetail["reminder_id"] ?? "",
-            tags: tags);
-      }).toList();
-      return Notes(
-        id: note["id"],
-        userId: note["user_id"],
-        title: note["title"],
-        folderId: note["folder_id"],
-        createdAt: note["created_at"],
-        noteDetail: noteDetails,
-      );
-    }).toList();
-    return tempNotes;
+  static Future<dynamic> getNoteDetail(String noteId) async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? userToken = prefs.getString('user');
+    try {
+      Response response = await Dio().post(
+          EnvironmentConstant.internalApiPrefix + "/note/info/id",
+          data: {'note_id': noteId},
+          options: Options(headers: {"Authorization": "Bearer " + userToken!}));
+      NoteDetailResponse res = NoteDetailResponse.fromJson(response.data);
+      return res;
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 400 || e.response?.statusCode == 401) {
+        ErrorResponse error = ErrorResponse.fromJson(e.response?.data);
+        return error;
+      }
+    }
+    return "";
+  }
+
+  static Future<dynamic> moveNote(String folderId, String noteId) async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? userToken = prefs.getString('user');
+    try {
+      Response response = await Dio().patch(
+          EnvironmentConstant.internalApiPrefix + "/note/move",
+          data: {'note_id': noteId, 'folder_id': folderId},
+          options: Options(headers: {"Authorization": "Bearer " + userToken!}));
+      NoteDetailResponse res = NoteDetailResponse.fromJson(response.data);
+      return res;
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 400 || e.response?.statusCode == 401) {
+        ErrorResponse error = ErrorResponse.fromJson(e.response?.data);
+        return error;
+      }
+    }
+    return "";
+  }
+
+  static Future<dynamic> deleteNote(String noteId) async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? userToken = prefs.getString('user');
+    try {
+      Response response = await Dio().delete(
+          EnvironmentConstant.internalApiPrefix + "/note/delete",
+          data: {'note_id': noteId},
+          options: Options(headers: {"Authorization": "Bearer " + userToken!}));
+      NoteDetailResponse res = NoteDetailResponse.fromJson(response.data);
+      return res;
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 400 || e.response?.statusCode == 401) {
+        ErrorResponse error = ErrorResponse.fromJson(e.response?.data);
+        return error;
+      }
+    }
+    return "";
+  }
+
+  static Future<dynamic> addNote(String folderId) async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? userToken = prefs.getString('user');
+    try {
+      Response response = await Dio().post(
+          EnvironmentConstant.internalApiPrefix + "/note/add",
+          data: {'folder_id': folderId},
+          options: Options(headers: {"Authorization": "Bearer " + userToken!}));
+      NoteDetailResponse res = NoteDetailResponse.fromJson(response.data);
+      return res;
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 400 || e.response?.statusCode == 401) {
+        ErrorResponse error = ErrorResponse.fromJson(e.response?.data);
+        return error;
+      }
+    }
+    return "";
   }
 }

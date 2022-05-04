@@ -12,4 +12,8 @@ type config struct {
 
 	MongoUri    string
 	MongoDbName string
+
+	SmtpUser string
+	SmtpPass string
+	SmtpHost string
 }

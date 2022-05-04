@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:noty_client/screens/core/note/note_view.dart';
+import 'package:noty_client/screens/core/reminder/edit_reminder.dart';
+import 'package:noty_client/screens/core/reminder/new_reminder.dart';
 import 'package:noty_client/types/widget/placement.dart';
 import 'package:noty_client/widgets/surface/curved_card.dart';
 import 'package:noty_client/widgets/typography/content_text.dart';
@@ -32,55 +36,76 @@ class _ReminderFragmentState extends State<ReminderFragment> {
               child: Column(
                 children: [
                   for (var i = 0; i < 2; i++)
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 2),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Transform.scale(
-                                scale: 1.25,
-                                child: Checkbox(
-                                  checkColor: Colors.black,
-                                  value: isChecked,
-                                  shape: const CircleBorder(),
-                                  onChanged: (bool? value) {
-                                    setState(() {
-                                      isChecked = value!;
-                                    });
-                                  },
-                                ),
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    margin: const EdgeInsets.only(bottom: 4),
-                                    child: const Text("Summarize the topic"),
+                    GestureDetector(
+                      onTap: () => showBarModalBottomSheet(
+                        context: context,
+                        builder: (context) => const EditReminder(),
+                        expand: true,
+                      ),
+                      behavior: HitTestBehavior.translucent,
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: 2),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Transform.scale(
+                                  scale: 1.2,
+                                  child: Checkbox(
+                                    checkColor: Colors.black,
+                                    value: isChecked,
+                                    shape: const CircleBorder(),
+                                    onChanged: (bool? value) {
+                                      setState(() {
+                                        isChecked = value!;
+                                      });
+                                    },
                                   ),
-                                  const ContentText(
-                                      text: "Monday, 20:00", size: Size.tiny),
-                                ],
-                              )
-                            ],
-                          ),
-                          Container(
-                            margin: const EdgeInsets.only(left: 8),
-                            padding: const EdgeInsets.only(right: 12),
-                            child: const Icon(
-                              Icons.arrow_forward_ios_rounded,
-                              size: 14,
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.only(bottom: 4),
+                                      child: const Text("Summarize the topic"),
+                                    ),
+                                    const ContentText(
+                                        text: "Monday, 20:00", size: Size.tiny),
+                                  ],
+                                )
+                              ],
                             ),
-                          ),
-                        ],
+                            Container(
+                              margin: const EdgeInsets.only(left: 8),
+                              padding: const EdgeInsets.only(right: 12),
+                              child: const Icon(
+                                Icons.arrow_forward_ios_rounded,
+                                size: 14,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                 ],
               ),
             ),
             CurvedCard(
+              child: GestureDetector(
+                onTap: (() {
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) => const NoteDetailScreen(
+                  //       previousScreen: "Reminders",
+                  //       noteId: 0,
+                  //     ), //     ),
+                  //   ),
+                  // );
+                }),
+                behavior: HitTestBehavior.translucent,
                 child: Container(
                   padding: const EdgeInsets.fromLTRB(8, 15, 8, 15),
                   child: Column(
@@ -108,7 +133,7 @@ class _ReminderFragmentState extends State<ReminderFragment> {
                         indent: 10,
                         endIndent: 5,
                       ),
-                      for (var i = 0; i < 2; i++)
+                      for (var i = 0; i < 4; i++)
                         Container(
                           margin: const EdgeInsets.only(bottom: 2),
                           child: Row(
@@ -118,7 +143,7 @@ class _ReminderFragmentState extends State<ReminderFragment> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Transform.scale(
-                                    scale: 1.25,
+                                    scale: 1.2,
                                     child: Checkbox(
                                       checkColor: Colors.black,
                                       value: isChecked,
@@ -153,15 +178,21 @@ class _ReminderFragmentState extends State<ReminderFragment> {
                     ],
                   ),
                 ),
-                margin: 20)
+              ),
+              margin: 20,
+            )
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () => showBarModalBottomSheet(
+          context: context,
+          builder: (context) => const NewReminder(),
+          expand: true,
+        ),
         child: const Icon(Icons.add_rounded),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }

@@ -40,6 +40,11 @@ dependencies:
   rounded_loading_button: ^2.1.0
   flutter_slidable: ^1.2.0
   dio: ^4.0.6
+  modal_bottom_sheet: ^2.0.1
+  flutter_datetime_picker: ^1.5.1
+  email_validator: ^2.0.1
+  provider: ^6.0.2
+  image_picker: ^0.8.5
 
 dev_dependencies:
   flutter_test:

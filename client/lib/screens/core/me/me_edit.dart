@@ -1,27 +1,137 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:noty_client/constants/theme.dart';
+import 'package:noty_client/models/response/error/error_response.dart';
+import 'package:noty_client/models/response/info_response.dart';
+import 'package:noty_client/models/response/me/me_infomation.dart';
+import 'package:noty_client/services/me.dart';
+import 'package:noty_client/services/providers/providers.dart';
 import 'package:noty_client/widgets/leading_button.dart';
-import 'package:noty_client/widgets/textfield/textfield.dart';
 import 'package:noty_client/widgets/typography/appbar_text.dart';
+import 'package:provider/provider.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class EditProfileScreen extends StatefulWidget {
-  const EditProfileScreen({Key? key}) : super(key: key);
+  final String firstname;
+  final String lastname;
+  const EditProfileScreen(
+      {Key? key, required this.firstname, required this.lastname})
+      : super(key: key);
 
   @override
   State<EditProfileScreen> createState() => _EditProfileScreenState();
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  final _firstNameController = TextEditingController();
-  final _lastNameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _newPasswordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  final RoundedLoadingButtonController _profileLoadingButton =
+      RoundedLoadingButtonController();
+
+  late File imagefile;
+  String tempFirstname = '';
+  String tempLastname = '';
+
+  @override
+  void initState() {
+    tempFirstname = widget.firstname;
+    tempLastname = widget.lastname;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    MeData meData = context.watch<ProfileProvider>().meData;
     var screenPadding = MediaQuery.of(context).padding;
     double height = MediaQuery.of(context).size.height;
     double screenHeight = height - screenPadding.top - screenPadding.bottom;
+
+    void updateProfile() async {
+      if (tempFirstname.isNotEmpty &&
+          tempLastname.isNotEmpty &&
+          _passwordController.text.isEmpty &&
+          _newPasswordController.text.isEmpty &&
+          _confirmPasswordController.text.isEmpty) {
+        context.read<ProfileProvider>().setFirstname(tempFirstname);
+        context.read<ProfileProvider>().setLastname(tempLastname);
+        var updateProfile =
+            await ProfileService.updateProfile(tempFirstname, tempLastname);
+        if (updateProfile is ErrorResponse) {
+          _profileLoadingButton.reset();
+          var profileErrorSnackBar = SnackBar(
+            content: Text(updateProfile.message),
+            behavior: SnackBarBehavior.floating,
+            margin: EdgeInsets.only(
+                bottom: screenHeight - 120, left: 15, right: 15),
+            action: SnackBarAction(
+              label: 'OK',
+              onPressed: () {},
+            ),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(profileErrorSnackBar);
+        } else if (updateProfile is InfoResponse) {
+          _profileLoadingButton.success();
+          Navigator.pop(context);
+        }
+      } else if (tempFirstname.isNotEmpty &&
+          tempLastname.isNotEmpty &&
+          _passwordController.text != _newPasswordController.text &&
+          _newPasswordController.text == _confirmPasswordController.text &&
+          _newPasswordController.text.length >= 8) {
+        context.read<ProfileProvider>().setFirstname(tempFirstname);
+        context.read<ProfileProvider>().setLastname(tempLastname);
+        var updateProfile =
+            await ProfileService.updateProfile(tempFirstname, tempLastname);
+        var updatePassword = await ProfileService.updatePassword(
+            _newPasswordController.text, _passwordController.text);
+        if (updateProfile is ErrorResponse) {
+          _profileLoadingButton.reset();
+          var profileErrorSnackBar = SnackBar(
+            content: Text(updateProfile.message),
+            behavior: SnackBarBehavior.floating,
+            margin: EdgeInsets.only(
+                bottom: screenHeight - 120, left: 15, right: 15),
+            action: SnackBarAction(
+              label: 'OK',
+              onPressed: () {},
+            ),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(profileErrorSnackBar);
+        } else if (updatePassword is ErrorResponse) {
+          _profileLoadingButton.reset();
+          var passwordErrorSnackBar = SnackBar(
+            content: Text(updatePassword.message),
+            behavior: SnackBarBehavior.floating,
+            margin: EdgeInsets.only(
+                bottom: screenHeight - 120, left: 15, right: 15),
+            action: SnackBarAction(
+              label: 'OK',
+              onPressed: () {},
+            ),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(passwordErrorSnackBar);
+        } else if (updateProfile is InfoResponse &&
+            updatePassword is InfoResponse) {
+          _profileLoadingButton.success();
+          Navigator.pop(context);
+        }
+      } else {
+        _profileLoadingButton.reset();
+        var error = SnackBar(
+          behavior: SnackBarBehavior.floating,
+          margin:
+              EdgeInsets.only(bottom: screenHeight - 120, left: 15, right: 15),
+          content: const Text("Error. Please check your password"),
+          action: SnackBarAction(
+            label: 'OK',
+            onPressed: () {},
+          ),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(error);
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const SizedBox(
@@ -50,10 +160,46 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 Column(
                   children: [
                     Container(
-                      margin: const EdgeInsets.only(bottom: 16),
-                      child: Image.asset(
-                        "assets/images/profile.png",
-                        width: 150,
+                      margin: const EdgeInsets.only(bottom: 20),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(120),
+                        child: SizedBox(
+                          height: 125,
+                          width: 125,
+                          child: Stack(
+                            children: [
+                              Image.asset(
+                                "assets/images/profile.png",
+                                width: 150,
+                              ),
+                              Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Container(
+                                  height: 150 * 0.25,
+                                  width: double.infinity,
+                                  color: Colors.black.withOpacity(0.5),
+                                  child: const Center(
+                                    child: Text(
+                                      "Edit",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Positioned.fill(
+                                  child: Material(
+                                      color: Colors.transparent,
+                                      child: InkWell(
+                                        splashColor: const Color(0xff24577a)
+                                            .withOpacity(0.5),
+                                        onTap: () {},
+                                      ))),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                     Container(
@@ -66,12 +212,39 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             width: double.infinity,
                             child: Text("Firstname-Lastname"),
                           ),
-                          TextFieldDark(
-                              controller: _firstNameController,
-                              labelText: 'Firstname'),
-                          TextFieldDark(
-                              controller: _lastNameController,
-                              labelText: 'Lastname'),
+                          TextFormField(
+                            initialValue: meData.firstname,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              hintText: "Firstname",
+                              hintStyle: TextStyle(
+                                color: ThemeConstant.textFieldTextColor,
+                              ),
+                              filled: true,
+                              fillColor: ThemeConstant.textFieldBgColor,
+                            ),
+                            onChanged: (text) => setState(() {
+                              tempFirstname = text;
+                            }),
+                          ),
+                          TextFormField(
+                            initialValue: meData.lastname,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              hintText: "Lastname",
+                              hintStyle: TextStyle(
+                                  color: ThemeConstant.textFieldTextColor),
+                              filled: true,
+                              fillColor: ThemeConstant.textFieldBgColor,
+                            ),
+                            onChanged: (text) => setState(() {
+                              tempLastname = text;
+                            }),
+                          ),
                         ],
                       ),
                     ),
@@ -91,8 +264,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 ),
-                                labelText: 'Current Password',
-                                labelStyle: TextStyle(
+                                hintText: 'Current Password',
+                                hintStyle: TextStyle(
                                     color: ThemeConstant.textFieldTextColor),
                                 filled: true,
                                 fillColor: ThemeConstant.textFieldBgColor),
@@ -104,8 +277,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 ),
-                                labelText: 'New Password',
-                                labelStyle: TextStyle(
+                                hintText: 'New Password',
+                                hintStyle: TextStyle(
                                     color: ThemeConstant.textFieldTextColor),
                                 filled: true,
                                 fillColor: ThemeConstant.textFieldBgColor),
@@ -117,8 +290,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 ),
-                                labelText: 'Confirm Password',
-                                labelStyle: TextStyle(
+                                hintText: 'Confirm Password',
+                                hintStyle: TextStyle(
                                     color: ThemeConstant.textFieldTextColor),
                                 filled: true,
                                 fillColor: ThemeConstant.textFieldBgColor),
@@ -131,16 +304,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 SizedBox(
                   width: double.infinity,
                   height: 50,
-                  child: ElevatedButton(
-                      child: const Text("Save"),
-                      onPressed: () {
-                        // Navigator.pushReplacement(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) => const LoginScreen()));
-                        Navigator.pop(context);
-                      }),
-                ),
+                  child: RoundedLoadingButton(
+                    child: const Text(
+                      'Save',
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                    color: ThemeConstant.colorPrimaryLight,
+                    borderRadius: 10,
+                    controller: _profileLoadingButton,
+                    onPressed: updateProfile,
+                  ),
+                )
               ],
             ),
           ),

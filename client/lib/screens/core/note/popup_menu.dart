@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:noty_client/constants/theme.dart';
 import 'package:noty_client/screens/core/note/dialog_new_folder.dart';
+import 'package:noty_client/screens/core/note/new_note_screen.dart';
 
 Widget menuPopup(BuildContext context) => PopupMenuButton(
       itemBuilder: (context) => [
@@ -17,7 +19,7 @@ Widget menuPopup(BuildContext context) => PopupMenuButton(
                 ),
               ),
               Icon(
-                Icons.folder_rounded,
+                CupertinoIcons.folder_fill,
                 color: ThemeConstant.colorPrimaryLight,
               ),
             ],
@@ -36,7 +38,7 @@ Widget menuPopup(BuildContext context) => PopupMenuButton(
                 ),
               ),
               Icon(
-                Icons.edit_note_rounded,
+                CupertinoIcons.pencil_outline,
                 color: ThemeConstant.colorPrimaryLight,
                 size: 24,
               )
@@ -47,6 +49,17 @@ Widget menuPopup(BuildContext context) => PopupMenuButton(
       onSelected: (selected) {
         if (selected == 1) {
           showNewFolderDialog(context);
+        }
+        if (selected == 2) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const NewNoteScreen(
+                noteName: "",
+                previousScreen: "All Notes",
+              ), //     ),
+            ),
+          );
         }
       },
       color: const Color(0xff232323),

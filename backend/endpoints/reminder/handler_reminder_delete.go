@@ -20,13 +20,16 @@ import (
 // @Accept json
 // @Produce json
 // @Param payload body reminderDeleteRequest true "reminder.reminderDeleteRequest"
-// @Success 200 {object} reminderDeleteRequest
+// @Success 200 {object} responder.InfoResponse
 // @Failure 400 {object} responder.ErrorResponse
 // @Router /reminder/delete [delete]
 func ReminderDeleteHandler(c *fiber.Ctx) error {
 	// * Parse user JWT token
 	token := c.Locals("user").(*jwt.Token)
 	claims := token.Claims.(*common.UserClaim)
+
+	// * Parse string to object_id
+	userId, _ := primitive.ObjectIDFromHex(*claims.UserId)
 
 	// * Parse Body
 	var body reminderDeleteRequest
@@ -45,23 +48,14 @@ func ReminderDeleteHandler(c *fiber.Ctx) error {
 	// * Parse folder id
 	reminderId, _ := primitive.ObjectIDFromHex(body.ReminderId)
 
-	// * Find the reminder
-	reminder := new(models.Reminder)
-	if err := mgm.Coll(reminder).First(bson.M{
+	// * Delete reminder
+	if err := mgm.Coll(&models.Reminder{}).FindOneAndDelete(mgm.Ctx(), bson.M{
 		"_id":     reminderId,
-		"user_id": claims.UserId,
-	}, reminder); err != nil {
+		"user_id": userId,
+	}); err.Err() != nil {
 		return &responder.GenericError{
 			Message: "Unable to find the reminder",
-			Err:     err,
-		}
-	}
-
-	// * Delete reminder
-	if err := mgm.Coll(reminder).Delete(reminder); err != nil {
-		return &responder.GenericError{
-			Message: "Unable to delete the reminder",
-			Err:     err,
+			Err:     err.Err(),
 		}
 	}
 

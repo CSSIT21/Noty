@@ -20,13 +20,16 @@ import (
 // @Accept json
 // @Produce json
 // @Param payload body reminderPatchRequest true "reminder.reminderPatchRequest"
-// @Success 200 {object} reminderPatchRequest
+// @Success 200 {object} responder.InfoResponse
 // @Failure 400 {object} responder.ErrorResponse
 // @Router /reminder/edit [patch]
 func ReminderPatchHandler(c *fiber.Ctx) error {
 	// * Parse user JWT token
 	token := c.Locals("user").(*jwt.Token)
 	claims := token.Claims.(*common.UserClaim)
+
+	// * Parse string to object_id
+	userId, _ := primitive.ObjectIDFromHex(*claims.UserId)
 
 	// * Parse Body
 	var body reminderPatchRequest
@@ -49,7 +52,7 @@ func ReminderPatchHandler(c *fiber.Ctx) error {
 	reminder := new(models.Reminder)
 	if err := mgm.Coll(reminder).First(bson.M{
 		"_id":     reminderId,
-		"user_id": claims.UserId,
+		"user_id": userId,
 	}, reminder); err != nil {
 		return &responder.GenericError{
 			Message: "Unable to fetch reminder",
@@ -58,10 +61,12 @@ func ReminderPatchHandler(c *fiber.Ctx) error {
 	} else {
 		reminder.Title = &body.Title
 		reminder.Description = &body.Description
-		reminder.RemindDate = &body.RemindDate
-		reminder.RemindTime = &body.RemindTime
 	}
 
+	if !body.RemindDate.IsZero() {
+		reminder.RemindDate = &body.RemindDate
+	}
+	
 	// * Update the reminder
 	if err := mgm.Coll(reminder).Update(reminder); err != nil {
 		return &responder.GenericError{

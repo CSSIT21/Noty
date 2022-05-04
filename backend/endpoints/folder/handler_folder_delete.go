@@ -20,7 +20,7 @@ import (
 // @Accept json
 // @Produce json
 // @Param payload body folderDeleteRequest true "folder.folderDeleteRequest"
-// @Success 200 {object} folderDeleteRequest
+// @Success 200 {object} responder.InfoResponse
 // @Failure 400 {object} responder.ErrorResponse
 // @Router /folder/delete [delete]
 func FolderDeleteHandler(c *fiber.Ctx) error {
@@ -42,26 +42,18 @@ func FolderDeleteHandler(c *fiber.Ctx) error {
 		return err
 	}
 
-	// * Parse folder id
+	// * Parse string id to object id
 	folderId, _ := primitive.ObjectIDFromHex(body.FolderId)
-
-	// * Find the folder
-	folder := new(models.Folder)
-	if err := mgm.Coll(folder).First(bson.M{
-		"_id":     folderId,
-		"user_id": claims.UserId,
-	}, folder); err != nil {
-		return &responder.GenericError{
-			Message: "Unable to find the folder",
-			Err:     err,
-		}
-	}
+	userId, _ := primitive.ObjectIDFromHex(*claims.UserId)
 
 	// * Delete the folder
-	if err := mgm.Coll(folder).Delete(folder); err != nil {
+	if err := mgm.Coll(&models.Folder{}).FindOneAndDelete(mgm.Ctx(), bson.M{
+		"_id":     folderId,
+		"user_id": &userId,
+	}); err.Err() != nil {
 		return &responder.GenericError{
-			Message: "Unable to delete the folder",
-			Err:     err,
+			Message: "Unable to find the folder",
+			Err:     err.Err(),
 		}
 	}
 

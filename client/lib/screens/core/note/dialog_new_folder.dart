@@ -46,8 +46,24 @@ showNewFolderDialog(BuildContext context) {
                 style: TextStyle(fontSize: 16),
               ),
               onPressed: () {
-                // Do something destructive.
-                Navigator.pop(context);
+                if (_folderController.text.isEmpty) {
+                  var error = SnackBar(
+                    behavior: SnackBarBehavior.floating,
+                    margin:
+                        const EdgeInsets.only(bottom: 40, left: 15, right: 15),
+                    content: const Text("Folder name cannot be empty"),
+                    action: SnackBarAction(
+                      label: 'OK',
+                      onPressed: () {},
+                    ),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(error);
+                } else {
+                  // context
+                  //     .read<NotesProvider>()
+                  //     .addFolder(_folderController.text);
+                  Navigator.pop(context);
+                }
               },
             )
           ],

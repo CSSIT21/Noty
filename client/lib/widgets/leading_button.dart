@@ -16,10 +16,14 @@ class LeadingButton extends StatelessWidget {
               Icons.arrow_back_ios,
               color: ThemeConstant.colorPrimaryLight,
             ),
-            Text(
-              text,
-              style: TextStyle(
-                  fontSize: 17, color: ThemeConstant.colorPrimaryLight),
+            SizedBox(
+              width: 60,
+              child: Text(
+                text,
+                style: TextStyle(
+                    fontSize: 17, color: ThemeConstant.colorPrimaryLight),
+                overflow: TextOverflow.ellipsis,
+              ),
             )
           ],
         ),
