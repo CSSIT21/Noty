@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:noty_client/constants/theme.dart';
+import 'package:noty_client/services/providers/providers.dart';
+import 'package:provider/provider.dart';
 
 TextEditingController _folderController = TextEditingController(text: '');
 
@@ -11,7 +13,7 @@ showNewFolderDialog(BuildContext context) {
       return Theme(
         data: ThemeData.dark(),
         child: CupertinoAlertDialog(
-          title: const Text('New folder'),
+          title: const Text('New Folder'),
           content: Column(
             children: [
               Container(
@@ -37,6 +39,7 @@ showNewFolderDialog(BuildContext context) {
                 style: TextStyle(fontSize: 16),
               ),
               onPressed: () {
+                _folderController.text = "";
                 Navigator.pop(context);
               },
             ),
@@ -59,10 +62,11 @@ showNewFolderDialog(BuildContext context) {
                   );
                   ScaffoldMessenger.of(context).showSnackBar(error);
                 } else {
-                  // context
-                  //     .read<NotesProvider>()
-                  //     .addFolder(_folderController.text);
+                  context
+                      .read<NotesProvider>()
+                      .addFolder(_folderController.text, context);
                   Navigator.pop(context);
+                  _folderController.text = "";
                 }
               },
             )

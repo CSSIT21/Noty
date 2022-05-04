@@ -9,8 +9,11 @@ import 'package:provider/provider.dart';
 import 'package:collection/collection.dart';
 
 class FolderMoveDialog extends StatefulWidget {
-  final String? folderId;
-  const FolderMoveDialog({Key? key, required this.folderId}) : super(key: key);
+  final String folderId;
+  final String noteId;
+  const FolderMoveDialog(
+      {Key? key, required this.folderId, required this.noteId})
+      : super(key: key);
 
   @override
   State<FolderMoveDialog> createState() => _FolderMoveDialogState();
@@ -53,10 +56,21 @@ class _FolderMoveDialogState extends State<FolderMoveDialog> {
                   .watch<NotesProvider>()
                   .folders
                   .mapIndexed(
-                    (index, folder) => FolderMoveList(
-                      title: folder.name,
-                      currentFolderId: widget.folderId,
-                      folderId: folder.folderId,
+                    (index, folder) => GestureDetector(
+                      onTap: () {
+                        context
+                            .read<NotesProvider>()
+                            .moveNote(folder.folderId, widget.noteId, context);
+                        context
+                            .read<NotesProvider>()
+                            .readFolderNoteListJson(widget.folderId);
+                        Navigator.pop(context);
+                      },
+                      child: FolderMoveList(
+                        title: folder.name,
+                        currentFolderId: widget.folderId,
+                        folderId: folder.folderId,
+                      ),
                     ),
                   )
                   .toList(),

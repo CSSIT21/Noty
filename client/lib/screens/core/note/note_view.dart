@@ -15,13 +15,15 @@ class NoteDetailScreen extends StatefulWidget {
   final String previousScreen;
   final String noteId;
   final String noteTitle;
+  final String? folderId;
 
-  const NoteDetailScreen(
-      {Key? key,
-      required this.previousScreen,
-      required this.noteId,
-      required this.noteTitle})
-      : super(key: key);
+  const NoteDetailScreen({
+    Key? key,
+    required this.previousScreen,
+    required this.noteId,
+    required this.noteTitle,
+    this.folderId,
+  }) : super(key: key);
 
   @override
   State<NoteDetailScreen> createState() => _NoteDetailScreenState();
@@ -33,12 +35,12 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
   @override
   void initState() {
     super.initState();
+    context.read<NotesProvider>().readNoteDetailJson(widget.noteId);
   }
 
   @override
   Widget build(BuildContext context) {
     FocusScopeNode currentFocus = FocusScope.of(context);
-
     NoteDetailData noteDetail = context.watch<NotesProvider>().noteDetails;
     List<NoteDetailDataDetails> noteDetails =
         context.watch<NotesProvider>().noteDetails.details;
@@ -54,6 +56,13 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
     //       .deleteNoteDetail(widget.noteIndex, noteDetailIndex);
     //   setState(() {});
     // }
+    void handleBack() {
+      if (widget.folderId != null) {
+        context
+            .read<NotesProvider>()
+            .readFolderNoteListJson(widget.folderId ?? "");
+      }
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -66,6 +75,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
         leadingWidth: 100,
         leading: LeadingButton(
           text: widget.previousScreen,
+          onPressed: handleBack,
         ),
         actions: [
           MediaQuery.of(context).viewInsets.bottom > 0

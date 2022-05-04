@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:noty_client/screens/core/note/note_view.dart';
 import 'package:noty_client/screens/core/reminder/edit_reminder.dart';
 import 'package:noty_client/screens/core/reminder/new_reminder.dart';
 import 'package:noty_client/types/widget/placement.dart';

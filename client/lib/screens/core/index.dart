@@ -3,7 +3,6 @@ import 'package:flutter/material.dart' as material;
 import 'package:motion_tab_bar_v2/motion-tab-bar.dart' as motion_tab_bar;
 import 'package:noty_client/constants/theme.dart';
 import 'package:noty_client/models/response/error/error_response.dart';
-import 'package:noty_client/models/response/folder/note_list.dart';
 import 'package:noty_client/models/response/me/me_infomation.dart';
 import 'package:noty_client/models/response/notes/notes_response.dart';
 import 'package:noty_client/screens/core/me/me.dart';
@@ -49,21 +48,15 @@ class _CoreScreenState extends material.State<CoreScreen>
   Future<void> _readJson() async {
     var meResponse = await ProfileService.getProfile();
     var notesDataResponse = await NoteService.getData();
-    var notelistfolder =
-        await NoteService.getNoteListFolder("626d8d9d41e7c73a9af2d73e");
 
     if (mounted) {
       if (notesDataResponse is NotesResponse) {
-        // print(notesDataResponse.data.folders[0].name);
         context
             .read<NotesProvider>()
             .setFoldersData(notesDataResponse.data.folders);
         context
             .read<NotesProvider>()
             .setNotesData(notesDataResponse.data.notes);
-      }
-      if (notelistfolder is NoteListFolderResponse) {
-        // print(notelistfolder.data[0].title);
       }
       if (meResponse is ErrorResponse) {
         var error = material.SnackBar(

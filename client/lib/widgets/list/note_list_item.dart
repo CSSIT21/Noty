@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:noty_client/models/response/notes/note_data.dart';
-import 'package:noty_client/models/response/notes/note_detail_data.dart';
 import 'package:noty_client/screens/core/note/note_view.dart';
-import 'package:noty_client/services/notes_sevice.dart';
 import 'package:noty_client/services/providers/providers.dart';
 import 'package:noty_client/widgets/reminder/reminder_label.dart';
 import 'package:noty_client/widgets/tag/tag_label.dart';
@@ -30,11 +28,10 @@ class _NoteListItemState extends State<NoteListItem> {
   var tag = false;
   var reminder = false;
 
-  Future<void> _readJson(String noteId) async {
-    var noteDetails = await NoteService.getNoteDetail(noteId);
-    if (noteDetails is NoteDetailResponse) {
-      context.read<NotesProvider>().setNoteDetails(noteDetails.data);
-    }
+  @override
+  void initState() {
+    super.initState();
+    context.read<NotesProvider>().readJsonData();
   }
 
   @override
@@ -42,8 +39,9 @@ class _NoteListItemState extends State<NoteListItem> {
     NoteData note = context
         .watch<NotesProvider>()
         .notes
-        .singleWhere((note) => note.noteId == widget.noteId);
+        .firstWhere((note) => note.noteId == widget.noteId);
     double screenWidth = MediaQuery.of(context).size.width;
+
     if (note.tags.isNotEmpty) {
       setState(() {
         tag = true;
@@ -57,7 +55,6 @@ class _NoteListItemState extends State<NoteListItem> {
 
     return GestureDetector(
       onTap: () {
-        _readJson(note.noteId);
         Navigator.push(
           context,
           MaterialPageRoute(

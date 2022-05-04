@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:noty_client/constants/theme.dart';
-import 'package:noty_client/screens/core/note/note_view.dart';
 import 'package:noty_client/services/providers/providers.dart';
 import 'package:noty_client/types/widget/placement.dart';
 import 'package:noty_client/utils/widget/divider_insert.dart';
@@ -76,9 +75,20 @@ class _TagFragmentState extends State<TagFragment> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                    child: const Text("# 3D-Printer"),
-                  ),
+                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 6),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "# ",
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: ThemeConstant.colorPrimaryLight),
+                          ),
+                          const Text("3D-Printer"),
+                        ],
+                      )),
                   Column(
                     children: dividerInsert(
                       context

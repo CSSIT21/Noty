@@ -25,7 +25,7 @@ class MeData {
         email: json["email"],
         firstname: json["firstname"],
         lastname: json["lastname"],
-        pictureId: json["picture_id"],
+        pictureId: json["picture_id"] ?? "",
         userId: json["user_id"],
         notes: json["notes"],
         folders: json["folders"],

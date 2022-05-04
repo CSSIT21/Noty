@@ -1,6 +1,8 @@
 import 'package:noty_client/constants/environment.dart';
 import 'package:noty_client/models/response/error/error_response.dart';
 import 'package:noty_client/models/response/folder/note_list.dart';
+import 'package:noty_client/models/response/info_response.dart';
+import 'package:noty_client/models/response/notes/add_note_response.dart';
 import 'package:noty_client/models/response/notes/note_detail_data.dart';
 import 'package:noty_client/models/response/notes/notes_response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -72,7 +74,7 @@ class NoteService {
           EnvironmentConstant.internalApiPrefix + "/note/move",
           data: {'note_id': noteId, 'folder_id': folderId},
           options: Options(headers: {"Authorization": "Bearer " + userToken!}));
-      NoteDetailResponse res = NoteDetailResponse.fromJson(response.data);
+      InfoResponse res = InfoResponse.fromJson(response.data);
       return res;
     } on DioError catch (e) {
       if (e.response?.statusCode == 400 || e.response?.statusCode == 401) {
@@ -91,7 +93,7 @@ class NoteService {
           EnvironmentConstant.internalApiPrefix + "/note/delete",
           data: {'note_id': noteId},
           options: Options(headers: {"Authorization": "Bearer " + userToken!}));
-      NoteDetailResponse res = NoteDetailResponse.fromJson(response.data);
+      InfoResponse res = InfoResponse.fromJson(response.data);
       return res;
     } on DioError catch (e) {
       if (e.response?.statusCode == 400 || e.response?.statusCode == 401) {
@@ -110,7 +112,7 @@ class NoteService {
           EnvironmentConstant.internalApiPrefix + "/note/add",
           data: {'folder_id': folderId},
           options: Options(headers: {"Authorization": "Bearer " + userToken!}));
-      NoteDetailResponse res = NoteDetailResponse.fromJson(response.data);
+      AddNoteResponse res = AddNoteResponse.fromJson(response.data);
       return res;
     } on DioError catch (e) {
       if (e.response?.statusCode == 400 || e.response?.statusCode == 401) {

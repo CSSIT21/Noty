@@ -3,7 +3,9 @@ import 'package:noty_client/constants/theme.dart';
 
 class LeadingButton extends StatelessWidget {
   final String text;
-  const LeadingButton({Key? key, required this.text}) : super(key: key);
+  final Function? onPressed;
+  const LeadingButton({Key? key, required this.text, this.onPressed})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +31,9 @@ class LeadingButton extends StatelessWidget {
         ),
       ),
       onTap: () {
+        if (onPressed != null) {
+          onPressed!();
+        }
         Navigator.pop(context);
       },
     );
