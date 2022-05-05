@@ -61,7 +61,7 @@ class _NotesFragmentState extends State<NotesFragment> {
           child: SizedBox(
             width: 75,
             height: 75,
-            child: WidgetsBinding.instance!.window.viewInsets.bottom > 0
+            child: MediaQuery.of(context).viewInsets.bottom > 0
                 ? null
                 : menuPopup(context),
           ),

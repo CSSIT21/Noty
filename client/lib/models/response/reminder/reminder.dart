@@ -5,8 +5,9 @@ class NoteReminderData {
   String userId;
   String title;
   String noteId;
-  String? description;
-  String? remindDate;
+  String description;
+  String remindDate;
+  bool success;
 
   NoteReminderData({
     required this.id,
@@ -17,6 +18,7 @@ class NoteReminderData {
     required this.noteId,
     required this.description,
     required this.remindDate,
+    required this.success,
   });
 
   factory NoteReminderData.fromJson(Map<String, dynamic> json) {
@@ -27,8 +29,9 @@ class NoteReminderData {
       userId: json['user_id'],
       title: json['title'],
       noteId: json['note_id'],
-      description: json['description'],
-      remindDate: json['remind_date'],
+      description: json['description'] ?? "",
+      remindDate: json['remind_date'] ?? "",
+      success: json['success'],
     );
   }
 }

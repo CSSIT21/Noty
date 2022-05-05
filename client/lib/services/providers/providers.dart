@@ -9,9 +9,14 @@ import 'package:noty_client/models/response/notes/folder_data.dart';
 import 'package:noty_client/models/response/notes/note_data.dart';
 import 'package:noty_client/models/response/notes/note_detail_data.dart';
 import 'package:noty_client/models/response/notes/notes_response.dart';
+import 'package:noty_client/models/response/reminder/add_reminder.dart';
+import 'package:noty_client/models/response/reminder/independent_reminder.dart';
+import 'package:noty_client/models/response/reminder/notes_reminder.dart';
+import 'package:noty_client/models/response/reminder/reminder_response.dart';
 import 'package:noty_client/services/folder_service.dart';
 import 'package:noty_client/services/me.dart';
 import 'package:noty_client/services/notes_sevice.dart';
+import 'package:noty_client/services/reminder_service.dart';
 
 class NotesProvider with ChangeNotifier, DiagnosticableTreeMixin {
   List<FolderData> folders = [];
@@ -224,6 +229,55 @@ class ProfileProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
   void setLastname(String text) {
     meData.lastname = text;
+    notifyListeners();
+  }
+}
+
+class ReminderProvider with ChangeNotifier, DiagnosticableTreeMixin {
+  List<IndependentReminder> independentReminder = [];
+  List<NoteReminders> noteReminders = [];
+
+  void setIndependentReminder(List<IndependentReminder> data) {
+    independentReminder = data;
+    notifyListeners();
+  }
+
+  void setNoteReminders(List<NoteReminders> data) {
+    noteReminders = data;
+    notifyListeners();
+  }
+
+  void readReminderJson() async {
+    var response = await ReminderService.getReminder();
+    if (response is ReminderResponse) {
+      setIndependentReminder(response.data.independentReminders);
+      setNoteReminders(response.data.notesReminders);
+    }
+    notifyListeners();
+  }
+
+  void addReminder(String title, String description, String remindDate,
+      BuildContext context) async {
+    print(remindDate);
+    if (remindDate != "0001-01-01T00:00:00.000Z") {
+      remindDate = remindDate + "Z";
+    }
+    var response =
+        await ReminderService.addReminder(title, description, remindDate);
+    if (response is AddReminderResponse) {
+      readReminderJson();
+    } else if (response is ErrorResponse) {
+      var error = SnackBar(
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.only(bottom: 40, left: 15, right: 15),
+        content: Text(response.message),
+        action: SnackBarAction(
+          label: 'OK',
+          onPressed: () {},
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(error);
+    }
     notifyListeners();
   }
 }

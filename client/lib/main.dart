@@ -11,6 +11,7 @@ void main() {
     providers: [
       ChangeNotifierProvider(create: (_) => NotesProvider()),
       ChangeNotifierProvider(create: (_) => ProfileProvider()),
+      ChangeNotifierProvider(create: (_) => ReminderProvider()),
     ],
     child: const MyApp(),
   ));

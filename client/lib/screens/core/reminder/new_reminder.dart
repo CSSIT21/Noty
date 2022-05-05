@@ -1,8 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:noty_client/constants/theme.dart';
+import 'package:noty_client/models/response/reminder/add_reminder.dart';
+import 'package:noty_client/services/providers/providers.dart';
 import 'package:noty_client/widgets/typography/appbar_text.dart';
+import 'package:provider/provider.dart';
 
 class NewReminder extends StatefulWidget {
   const NewReminder({Key? key}) : super(key: key);
@@ -12,10 +16,9 @@ class NewReminder extends StatefulWidget {
 }
 
 class _NewReminderState extends State<NewReminder> {
-  bool isButtonDisabled = false;
-  final _titleController = TextEditingController();
-  final _detailsController = TextEditingController();
-  DateTime selectedDate = DateTime.now();
+  final _titleController = TextEditingController(text: "");
+  final _detailsController = TextEditingController(text: "");
+  DateTime selectedDate = DateTime.parse("0001-01-01T00:00:00Z");
   bool isDateSelected = false;
 
   void showDatePicker() {
@@ -34,7 +37,7 @@ class _NewReminderState extends State<NewReminder> {
                 });
               },
               use24hFormat: true,
-              initialDateTime: selectedDate,
+              initialDateTime: DateTime.now(),
               minimumYear: DateTime.now().year,
               maximumYear: 2099,
             ),
@@ -69,26 +72,37 @@ class _NewReminderState extends State<NewReminder> {
         ),
         actions: [
           TextButton(
-            onPressed: isButtonDisabled
-                ? null
-                : () {
-                    Navigator.pop(context);
-                  },
+            onPressed: () {
+              if (_titleController.text.isNotEmpty) {
+                context.read<ReminderProvider>().addReminder(
+                    _titleController.text,
+                    _detailsController.text,
+                    selectedDate.toIso8601String(),
+                    context);
+                Navigator.pop(context);
+              } else {
+                var error = SnackBar(
+                  behavior: SnackBarBehavior.floating,
+                  margin:
+                      const EdgeInsets.only(bottom: 20, left: 15, right: 15),
+                  content: const Text("Title cannot be empty"),
+                  action: SnackBarAction(
+                    label: 'OK',
+                    onPressed: () {},
+                  ),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(error);
+              }
+            },
             style: ElevatedButton.styleFrom(
               splashFactory: NoSplash.splashFactory,
             ),
             child: Text(
               "Add",
-              style: !isButtonDisabled
-                  ? TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.normal,
-                      color: ThemeConstant.colorPrimaryLight)
-                  : TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.normal,
-                      color: ThemeConstant.textColorSecondary,
-                    ),
+              style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.normal,
+                  color: ThemeConstant.colorPrimaryLight),
             ),
           )
         ],
@@ -173,7 +187,8 @@ class _NewReminderState extends State<NewReminder> {
                       ),
                       isDateSelected
                           ? Text(
-                              selectedDate.toString().substring(0, 16),
+                              DateFormat("dd-MM-yyyy HH:mm")
+                                  .format(selectedDate),
                               style: TextStyle(
                                   color: ThemeConstant.colorPrimaryLight),
                             )

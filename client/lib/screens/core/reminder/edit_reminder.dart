@@ -1,20 +1,29 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:noty_client/constants/theme.dart';
 import 'package:noty_client/widgets/typography/appbar_text.dart';
 
 class EditReminder extends StatefulWidget {
-  const EditReminder({Key? key}) : super(key: key);
+  final String title;
+  final String details;
+  final String date;
+  const EditReminder(
+      {Key? key,
+      required this.title,
+      required this.details,
+      required this.date})
+      : super(key: key);
 
   @override
   State<EditReminder> createState() => _EditReminderState();
 }
 
 class _EditReminderState extends State<EditReminder> {
-  final _titleController = TextEditingController();
-  final _detailsController = TextEditingController();
-  DateTime selectedDate = DateTime.now();
+  TextEditingController _titleController = TextEditingController();
+  TextEditingController _detailsController = TextEditingController();
+  late DateTime selectedDate;
   bool isDateSelected = false;
 
   void showDatePicker() {
@@ -33,7 +42,10 @@ class _EditReminderState extends State<EditReminder> {
                 });
               },
               use24hFormat: true,
-              initialDateTime: selectedDate,
+              initialDateTime:
+                  selectedDate == DateTime.parse("0001-01-01T00:00:00Z")
+                      ? DateTime.now()
+                      : selectedDate,
               minimumYear: DateTime.now().year,
               maximumYear: 2099,
             ),
@@ -42,10 +54,18 @@ class _EditReminderState extends State<EditReminder> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _titleController = TextEditingController(text: widget.title);
+    _detailsController = TextEditingController(text: widget.details);
+    selectedDate = DateTime.parse(widget.date);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const AppBarText(text: "Mixko's reminder"),
+        title: AppBarText(text: widget.title),
         centerTitle: true,
         leadingWidth: 100,
         toolbarHeight: 60,
@@ -163,9 +183,10 @@ class _EditReminderState extends State<EditReminder> {
                           const Text("Date & Time"),
                         ],
                       ),
-                      isDateSelected
+                      isDateSelected || widget.date != "0001-01-01T00:00:00Z"
                           ? Text(
-                              selectedDate.toString().substring(0, 16),
+                              DateFormat("dd-MM-yyyy HH:mm")
+                                  .format(selectedDate),
                               style: TextStyle(
                                   color: ThemeConstant.colorPrimaryLight),
                             )

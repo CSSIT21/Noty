@@ -197,11 +197,11 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                                   }),
                                 )
                               : GestureDetector(
-                                  onTap: () => showBarModalBottomSheet(
-                                    context: context,
-                                    builder: (context) => const EditReminder(),
-                                    expand: true,
-                                  ),
+                                  // onTap: () => showBarModalBottomSheet(
+                                  //   context: context,
+                                  //   builder: (context) => const EditReminder(),
+                                  //   expand: true,
+                                  // ),
                                   behavior: HitTestBehavior.translucent,
                                   child: Container(
                                     margin: const EdgeInsets.only(
