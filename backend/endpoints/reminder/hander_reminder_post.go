@@ -59,6 +59,7 @@ func ReminderPostHandler(c *fiber.Ctx) error {
 		Description: &body.Description,
 		RemindDate:  remindDate,
 		Success:     &success,
+		NoteId:      &primitive.ObjectID{},
 	}
 
 	if err := mgm.Coll(reminder).Create(reminder); err != nil {
