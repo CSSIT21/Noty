@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:noty_client/constants/theme.dart';
+import 'package:noty_client/models/response/account/account_response.dart';
 import 'package:noty_client/models/response/error/error_response.dart';
 import 'package:noty_client/screens/core/index.dart';
 import 'package:noty_client/services/account.dart';
@@ -45,7 +46,7 @@ class _LoginFragmentState extends State<LoginFragment> {
         errorText = login.message;
       });
       _loginBtnController.reset();
-    } else {
+    } else if (login is LoginResponse) {
       _loginBtnController.success();
       _loginNavigate();
     }

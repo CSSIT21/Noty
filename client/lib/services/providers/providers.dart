@@ -10,6 +10,7 @@ import 'package:noty_client/models/response/notes/note_data.dart';
 import 'package:noty_client/models/response/notes/note_detail_data.dart';
 import 'package:noty_client/models/response/notes/notes_response.dart';
 import 'package:noty_client/services/folder_service.dart';
+import 'package:noty_client/services/me.dart';
 import 'package:noty_client/services/notes_sevice.dart';
 
 class NotesProvider with ChangeNotifier, DiagnosticableTreeMixin {
@@ -205,6 +206,14 @@ class ProfileProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
   void setMeData(MeData data) {
     meData = data;
+    notifyListeners();
+  }
+
+  void readMeJson() async {
+    var meResponse = await ProfileService.getProfile();
+    if (meResponse is MeResponse) {
+      setMeData(meResponse.data);
+    }
     notifyListeners();
   }
 
