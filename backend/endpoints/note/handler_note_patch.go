@@ -40,6 +40,8 @@ func NotePatchHandler(c *fiber.Ctx) error {
 		}
 	}
 
+	// TODO: Change reminder_id key to content
+
 	// * Validate body
 	if err := text.Validate.Struct(body); err != nil {
 		return err
@@ -100,6 +102,9 @@ func NotePatchHandler(c *fiber.Ctx) error {
 			})
 		}
 	}
+
+	// * Remove duplicate tag
+	tags = text.RemoveDuplicate(tags)
 
 	// * Update note
 	if err := mgm.Coll(&models.Notes{}).FindOneAndUpdate(mgm.Ctx(), bson.M{
