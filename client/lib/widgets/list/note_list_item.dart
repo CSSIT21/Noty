@@ -5,6 +5,7 @@ import 'package:noty_client/services/providers/providers.dart';
 import 'package:noty_client/widgets/reminder/reminder_label.dart';
 import 'package:noty_client/widgets/tag/tag_label.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class NoteListItem extends StatefulWidget {
   final String title;
@@ -89,7 +90,7 @@ class _NoteListItemState extends State<NoteListItem> {
                   Container(
                     margin: const EdgeInsets.only(bottom: 6),
                     child: Text(
-                      widget.date.substring(0, 10),
+                      DateFormat.yMd().format(DateTime.parse(widget.date)),
                       style: const TextStyle(
                           fontSize: 10, fontWeight: FontWeight.w300),
                     ),

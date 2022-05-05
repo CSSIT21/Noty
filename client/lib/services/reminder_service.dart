@@ -27,7 +27,7 @@ class ReminderService {
   }
 
   static Future<dynamic> editReminder(String title, String description,
-      String noteId, String reminderId, String remindDate) async {
+      String reminderId, String remindDate) async {
     final prefs = await SharedPreferences.getInstance();
     final String? userToken = prefs.getString('user');
     try {
@@ -36,7 +36,6 @@ class ReminderService {
           data: {
             "title": title,
             "description": description,
-            "note_id": noteId,
             "reminder_id": reminderId,
             "remind_date": remindDate,
           },
@@ -57,7 +56,7 @@ class ReminderService {
     final String? userToken = prefs.getString('user');
     try {
       Response response = await Dio().delete(
-          EnvironmentConstant.internalApiPrefix + "/reminder/info",
+          EnvironmentConstant.internalApiPrefix + "/reminder/delete",
           data: {"reminder_id": reminderId},
           options: Options(headers: {"Authorization": "Bearer " + userToken!}));
       InfoResponse res = InfoResponse.fromJson(response.data);
@@ -71,17 +70,16 @@ class ReminderService {
     return "";
   }
 
-  static Future<dynamic> addReminder(String title, String description,
-      String noteId, String remindDate) async {
+  static Future<dynamic> addReminder(
+      String title, String description, String remindDate) async {
     final prefs = await SharedPreferences.getInstance();
     final String? userToken = prefs.getString('user');
     try {
       Response response = await Dio().post(
-          EnvironmentConstant.internalApiPrefix + "/reminder/info",
+          EnvironmentConstant.internalApiPrefix + "/reminder/add",
           data: {
             "title": title,
             "description": description,
-            "note_id": noteId,
             "remind_date": remindDate,
           },
           options: Options(headers: {"Authorization": "Bearer " + userToken!}));

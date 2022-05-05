@@ -26,8 +26,11 @@ class ReminderResponseData {
       {required this.independentReminders, required this.notesReminders});
 
   factory ReminderResponseData.fromJson(Map<String, dynamic> json) {
-    var indepenReminders = json['independent_reminders'] as List;
-    var notesReminder = json['notes_reminders'] as List;
+    var indepenReminders = json['independent_reminders'] != null
+        ? json['independent_reminders'] as List
+        : [];
+    var notesReminder =
+        json['notes_reminders'] != null ? json['notes_reminders'] as List : [];
     List<IndependentReminder> tempIndepenList =
         indepenReminders.map((e) => IndependentReminder.fromJson(e)).toList();
     List<NoteReminders> tempNotesList =

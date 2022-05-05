@@ -48,6 +48,7 @@ class _CoreScreenState extends material.State<CoreScreen>
   Future<void> _readJson() async {
     var meResponse = await ProfileService.getProfile();
     var notesDataResponse = await NoteService.getData();
+    context.read<ReminderProvider>().readReminderJson();
 
     if (mounted) {
       if (notesDataResponse is NotesResponse) {
@@ -92,6 +93,7 @@ class _CoreScreenState extends material.State<CoreScreen>
     _tabController.addListener(changeTitle);
     _textController = TextEditingController(text: '');
     _readJson();
+
     super.initState();
   }
 
