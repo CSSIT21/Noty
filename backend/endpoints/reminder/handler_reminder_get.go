@@ -53,6 +53,7 @@ func ReminderGetHandler(c *fiber.Ctx) error {
 				Title:       *tempReminder.Title,
 				Description: *tempReminder.Description,
 				RemindDate:  *tempReminder.RemindDate,
+				Success:     *tempReminder.Success,
 			}
 			independentRemindersResponse = append(independentRemindersResponse, tempIndependentReminder)
 		}

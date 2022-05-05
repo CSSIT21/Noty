@@ -23,6 +23,7 @@ type reminderPatchRequest struct {
 	NoteId      string `json:"note_id"`
 	Description string `json:"description,omitempty"`
 	RemindDate  string `json:"remind_date,omitempty"`
+	Success     bool   `json:"success"`
 }
 
 type reminderDeleteRequest struct {
@@ -39,6 +40,7 @@ type independentReminders struct {
 	Title       string    `json:"title"`
 	Description string    `json:"description"`
 	RemindDate  time.Time `json:"remind_date"`
+	Success     bool      `json:"success"`
 }
 
 type noteAllGetDecode struct {

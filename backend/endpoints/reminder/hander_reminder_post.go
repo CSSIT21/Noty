@@ -53,12 +53,14 @@ func ReminderPostHandler(c *fiber.Ctx) error {
 	}
 
 	// * Create reminder
+	var success bool = false
 	reminder := &models.Reminder{
 		UserId:      &userId,
 		Title:       &body.Title,
 		Description: &body.Description,
 		NoteId:      &noteId,
 		RemindDate:  remindDate,
+		Success:     &success,
 	}
 
 	if err := mgm.Coll(reminder).Create(reminder); err != nil {
