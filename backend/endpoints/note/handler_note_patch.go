@@ -39,9 +39,7 @@ func NotePatchHandler(c *fiber.Ctx) error {
 			Err:     err,
 		}
 	}
-
-	// TODO: Change reminder_id key to content
-
+	
 	// * Validate body
 	if err := text.Validate.Struct(body); err != nil {
 		return err
@@ -61,7 +59,7 @@ func NotePatchHandler(c *fiber.Ctx) error {
 			_ = mapstructure.Decode(detail.Data, reminderContent)
 
 			// TODO: Decode reminder content
-			tempReminderId, _ := primitive.ObjectIDFromHex(detail.Data.(map[string]any)["reminder_id"].(string))
+			tempReminderId, _ := primitive.ObjectIDFromHex(detail.Data.(map[string]any)["content"].(string))
 			noteDetails = append(noteDetails, &models.NoteDetail{
 				Type: &reminderType,
 				Data: &models.ReminderContent{
