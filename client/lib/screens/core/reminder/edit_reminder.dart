@@ -3,17 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:noty_client/constants/theme.dart';
+import 'package:noty_client/services/providers/providers.dart';
 import 'package:noty_client/widgets/typography/appbar_text.dart';
+import 'package:provider/provider.dart';
 
 class EditReminder extends StatefulWidget {
   final String title;
   final String details;
   final String date;
+  final String reminderId;
   const EditReminder(
       {Key? key,
       required this.title,
       required this.details,
-      required this.date})
+      required this.date,
+      required this.reminderId})
       : super(key: key);
 
   @override
@@ -89,7 +93,27 @@ class _EditReminderState extends State<EditReminder> {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.pop(context);
+              if (_titleController.text.isNotEmpty) {
+                context.read<ReminderProvider>().editReminder(
+                    _titleController.text,
+                    _detailsController.text,
+                    selectedDate.toIso8601String(),
+                    widget.reminderId,
+                    context);
+                Navigator.pop(context);
+              } else {
+                var error = SnackBar(
+                  behavior: SnackBarBehavior.floating,
+                  margin:
+                      const EdgeInsets.only(bottom: 20, left: 15, right: 15),
+                  content: const Text("Title cannot be empty"),
+                  action: SnackBarAction(
+                    label: 'OK',
+                    onPressed: () {},
+                  ),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(error);
+              }
             },
             child: Text(
               "Save",
@@ -203,11 +227,17 @@ class _EditReminderState extends State<EditReminder> {
                 width: double.infinity,
                 height: 48,
                 child: ElevatedButton(
-                    child: const Text("Delete"),
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.red,
-                    ),
-                    onPressed: () {}),
+                  child: const Text("Delete"),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.red,
+                  ),
+                  onPressed: () {
+                    context
+                        .read<ReminderProvider>()
+                        .deleteReminder(widget.reminderId, context);
+                    Navigator.pop(context);
+                  },
+                ),
               )
             ],
           ),

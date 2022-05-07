@@ -258,13 +258,55 @@ class ReminderProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
   void addReminder(String title, String description, String remindDate,
       BuildContext context) async {
-    print(remindDate);
     if (remindDate != "0001-01-01T00:00:00.000Z") {
       remindDate = remindDate + "Z";
     }
     var response =
         await ReminderService.addReminder(title, description, remindDate);
     if (response is AddReminderResponse) {
+      readReminderJson();
+    } else if (response is ErrorResponse) {
+      var error = SnackBar(
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.only(bottom: 40, left: 15, right: 15),
+        content: Text(response.message),
+        action: SnackBarAction(
+          label: 'OK',
+          onPressed: () {},
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(error);
+    }
+    notifyListeners();
+  }
+
+  void editReminder(String title, String description, String remindDate,
+      String reminderId, BuildContext context) async {
+    if (!remindDate.endsWith("Z")) {
+      remindDate = remindDate + "Z";
+    }
+    var response = await ReminderService.editReminder(
+        title, description, reminderId, remindDate);
+    if (response is InfoResponse) {
+      readReminderJson();
+    } else if (response is ErrorResponse) {
+      var error = SnackBar(
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.only(bottom: 40, left: 15, right: 15),
+        content: Text(response.message),
+        action: SnackBarAction(
+          label: 'OK',
+          onPressed: () {},
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(error);
+    }
+    notifyListeners();
+  }
+
+  void deleteReminder(String reminderId, BuildContext context) async {
+    var response = await ReminderService.deleteReminder(reminderId);
+    if (response is InfoResponse) {
       readReminderJson();
     } else if (response is ErrorResponse) {
       var error = SnackBar(

@@ -62,6 +62,7 @@ class _ReminderFragmentState extends State<ReminderFragment> {
                                   title: reminder.title,
                                   details: reminder.description,
                                   date: reminder.remindDate,
+                                  reminderId: reminder.reminderId,
                                 ),
                                 expand: true,
                               ),
