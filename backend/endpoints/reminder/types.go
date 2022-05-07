@@ -52,3 +52,8 @@ type noteAllGetDecoded struct {
 	Title     string            `json:"title"`
 	Reminders []models.Reminder `json:"reminders"`
 }
+
+type reminderProgressPatch struct {
+	ReminderId string `json:"reminder_id"`
+	Success    bool   `json:"success"`
+}

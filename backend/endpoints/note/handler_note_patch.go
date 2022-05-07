@@ -39,7 +39,7 @@ func NotePatchHandler(c *fiber.Ctx) error {
 			Err:     err,
 		}
 	}
-	
+
 	// * Validate body
 	if err := text.Validate.Struct(body); err != nil {
 		return err
