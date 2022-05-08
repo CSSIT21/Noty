@@ -57,3 +57,15 @@ type reminderProgressPatch struct {
 	ReminderId string `json:"reminder_id"`
 	Success    bool   `json:"success"`
 }
+
+type reminderByIdPost struct {
+	ReminderId string `json:"reminder_id"`
+}
+
+type reminderByIdPostResponse struct {
+	ReminderId  string    `json:"reminder_id"`
+	Title       string    `json:"title"`
+	Description string    `json:"description"`
+	RemindDate  time.Time `json:"remind_date"`
+	Success     bool      `json:"success"`
+}

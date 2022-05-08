@@ -30,6 +30,7 @@ func Init(router fiber.Router) {
 	reminderHandler.Patch("edit", reminder.ReminderPatchHandler)
 	reminderHandler.Delete("delete", reminder.ReminderDeleteHandler)
 	reminderHandler.Patch("update/progress", reminder.ReminderPrgressPatchHandler)
+	reminderHandler.Post("info/id", reminder.ReminderPostByIdHandler)
 
 	// * Folder
 	folderHandler := router.Group("folder/", middlewares.Jwt)
