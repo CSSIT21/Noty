@@ -60,11 +60,13 @@ class _FolderMoveDialogState extends State<FolderMoveDialog> {
                       onTap: () {
                         context
                             .read<NotesProvider>()
-                            .moveNote(folder.folderId, widget.noteId, context);
-                        context
-                            .read<NotesProvider>()
-                            .readFolderNoteListJson(widget.folderId);
-                        Navigator.pop(context);
+                            .moveNote(folder.folderId, widget.noteId, context)
+                            .then((_) {
+                          context
+                              .read<NotesProvider>()
+                              .readFolderNoteListJson(widget.folderId);
+                          Navigator.pop(context);
+                        });
                       },
                       child: FolderMoveList(
                         title: folder.name,

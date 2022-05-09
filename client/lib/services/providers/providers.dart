@@ -8,10 +8,12 @@ import 'package:noty_client/models/response/notes/add_note_response.dart';
 import 'package:noty_client/models/response/notes/folder_data.dart';
 import 'package:noty_client/models/response/notes/note_data.dart';
 import 'package:noty_client/models/response/notes/note_detail_data.dart';
+import 'package:noty_client/models/response/notes/note_detail_details.dart';
 import 'package:noty_client/models/response/notes/notes_response.dart';
 import 'package:noty_client/models/response/reminder/add_reminder.dart';
 import 'package:noty_client/models/response/reminder/independent_reminder.dart';
 import 'package:noty_client/models/response/reminder/notes_reminder.dart';
+import 'package:noty_client/models/response/reminder/reminder_in_note.dart';
 import 'package:noty_client/models/response/reminder/reminder_response.dart';
 import 'package:noty_client/services/folder_service.dart';
 import 'package:noty_client/services/me.dart';
@@ -45,7 +47,7 @@ class NotesProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  void readJsonData() async {
+  Future<void> readJsonData() async {
     var response = await NoteService.getData();
     if (response is NotesResponse) {
       setFoldersData(response.data.folders);
@@ -119,7 +121,7 @@ class NotesProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  void readNoteDetailJson(String noteId) async {
+  Future<void> readNoteDetailJson(String noteId) async {
     var noteDetails = await NoteService.getNoteDetail(noteId);
     if (noteDetails is NoteDetailResponse) {
       setNoteDetails(noteDetails.data);
@@ -148,7 +150,7 @@ class NotesProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  void deleteNote(String noteId, BuildContext context) async {
+  Future<void> deleteNote(String noteId, BuildContext context) async {
     var response = await NoteService.deleteNote(noteId);
     if (response is InfoResponse) {
       readJsonData();
@@ -167,7 +169,8 @@ class NotesProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  void moveNote(String folderId, String noteId, BuildContext context) async {
+  Future<void> moveNote(
+      String folderId, String noteId, BuildContext context) async {
     var response = await NoteService.moveNote(folderId, noteId);
     if (response is InfoResponse) {
       readJsonData();
@@ -186,15 +189,54 @@ class NotesProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  // void addNoteDetail(int index, String type) {
-  //   notes[index].noteDetail.add(NoteDetail(type: type));
-  //   notifyListeners();
-  // }
+  void editNote(BuildContext context) async {
+    Map<String, dynamic> details = {
+      'folder_id': noteDetails.folderId,
+      'note_id': noteDetails.id,
+      'title': noteDetails.title,
+      'note_details': noteDetails.details,
+    };
+    var response = await NoteService.editNote(details);
+    if (response is InfoResponse) {
+      readNoteDetailJson(noteDetails.id);
+    } else if (response is ErrorResponse) {
+      var error = SnackBar(
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.only(bottom: 40, left: 15, right: 15),
+        content: Text(response.message),
+        action: SnackBarAction(
+          label: 'OK',
+          onPressed: () {},
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(error);
+    }
+    notifyListeners();
+  }
 
-  // void deleteNoteDetail(int noteIndex, int noteDetailIndex) {
-  //   notes[noteIndex].noteDetail.removeAt(noteDetailIndex);
-  //   notifyListeners();
-  // }
+  void editNoteText(int index, String text) {
+    noteDetails.details[index].data!.content = text;
+    notifyListeners();
+  }
+
+  void addNoteDetail(String noteId, String type) {
+    noteDetails.details
+        .add(NoteDetailDataDetails(type: type, data: DetailsData(content: "")));
+    notifyListeners();
+  }
+
+  void addNoteDetailReminder(String noteId, String reminderId) {
+    noteDetails.details.add(NoteDetailDataDetails(
+        type: "reminder", data: DetailsData(content: reminderId)));
+    notifyListeners();
+  }
+
+  void deleteReminderFromNote(String reminderId, BuildContext context) {
+    noteDetails.details
+        .removeWhere((element) => element.data!.content == reminderId);
+    editNote(context);
+    notifyListeners();
+  }
 }
 
 class ProfileProvider with ChangeNotifier, DiagnosticableTreeMixin {
@@ -256,8 +298,8 @@ class ReminderProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  void addReminder(String title, String description, String remindDate,
-      BuildContext context) async {
+  Future<dynamic> addReminder(String title, String description,
+      String remindDate, BuildContext context) async {
     if (remindDate != "0001-01-01T00:00:00.000Z") {
       remindDate = remindDate + "Z";
     }
@@ -265,6 +307,7 @@ class ReminderProvider with ChangeNotifier, DiagnosticableTreeMixin {
         await ReminderService.addReminder(title, description, remindDate);
     if (response is AddReminderResponse) {
       readReminderJson();
+      return response.data.reminderId;
     } else if (response is ErrorResponse) {
       var error = SnackBar(
         behavior: SnackBarBehavior.floating,
@@ -276,6 +319,7 @@ class ReminderProvider with ChangeNotifier, DiagnosticableTreeMixin {
         ),
       );
       ScaffoldMessenger.of(context).showSnackBar(error);
+      return response.success;
     }
     notifyListeners();
   }
@@ -308,6 +352,46 @@ class ReminderProvider with ChangeNotifier, DiagnosticableTreeMixin {
     var response = await ReminderService.deleteReminder(reminderId);
     if (response is InfoResponse) {
       readReminderJson();
+    } else if (response is ErrorResponse) {
+      var error = SnackBar(
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.only(bottom: 40, left: 15, right: 15),
+        content: Text(response.message),
+        action: SnackBarAction(
+          label: 'OK',
+          onPressed: () {},
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(error);
+    }
+    notifyListeners();
+  }
+
+  void updateReminderProgress(
+      String reminderId, bool success, BuildContext context) async {
+    var response = await ReminderService.updateReminder(reminderId, success);
+    if (response is InfoResponse) {
+      readReminderJson();
+    } else if (response is ErrorResponse) {
+      var error = SnackBar(
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.only(bottom: 40, left: 15, right: 15),
+        content: Text(response.message),
+        action: SnackBarAction(
+          label: 'OK',
+          onPressed: () {},
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(error);
+    }
+    notifyListeners();
+  }
+
+  Future<dynamic> getReminderInNoteTitle(
+      String reminderId, BuildContext context) async {
+    var response = await ReminderService.getReminderInfo(reminderId);
+    if (response is ReminderInNote) {
+      return response;
     } else if (response is ErrorResponse) {
       var error = SnackBar(
         behavior: SnackBarBehavior.floating,

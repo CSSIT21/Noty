@@ -8,7 +8,15 @@ import 'package:noty_client/widgets/typography/appbar_text.dart';
 import 'package:provider/provider.dart';
 
 class NewReminder extends StatefulWidget {
-  const NewReminder({Key? key}) : super(key: key);
+  final String prevScreen;
+  final String noteId;
+  final Function? updateNote;
+  const NewReminder(
+      {Key? key,
+      required this.prevScreen,
+      required this.noteId,
+      this.updateNote})
+      : super(key: key);
 
   @override
   State<NewReminder> createState() => _NewReminderState();
@@ -71,14 +79,28 @@ class _NewReminderState extends State<NewReminder> {
         ),
         actions: [
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               if (_titleController.text.isNotEmpty) {
-                context.read<ReminderProvider>().addReminder(
-                    _titleController.text,
-                    _detailsController.text,
-                    selectedDate.toIso8601String(),
-                    context);
-                Navigator.pop(context);
+                var response = await context
+                    .read<ReminderProvider>()
+                    .addReminder(_titleController.text, _detailsController.text,
+                        selectedDate.toIso8601String(), context);
+                if (response != false && widget.prevScreen == "Note") {
+                  context
+                      .read<NotesProvider>()
+                      .addNoteDetailReminder(widget.noteId, response);
+                  context.read<NotesProvider>().editNote(context);
+                  context.read<ReminderProvider>().readReminderJson();
+                  widget.updateNote!();
+                  context
+                      .read<NotesProvider>()
+                      .readNoteDetailJson(widget.noteId)
+                      .then(
+                        (_) => Navigator.pop(context),
+                      );
+                } else {
+                  Navigator.pop(context);
+                }
               } else {
                 var error = SnackBar(
                   behavior: SnackBarBehavior.floating,

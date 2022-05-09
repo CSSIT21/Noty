@@ -12,13 +12,15 @@ class NoteListItem extends StatefulWidget {
   final String date;
   final String noteId;
   final String previousScreen;
+  final String? folderId;
 
   const NoteListItem(
       {Key? key,
       required this.title,
       required this.date,
       required this.noteId,
-      required this.previousScreen})
+      required this.previousScreen,
+      this.folderId})
       : super(key: key);
 
   @override
@@ -56,16 +58,19 @@ class _NoteListItemState extends State<NoteListItem> {
 
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => NoteDetailScreen(
-              previousScreen: widget.previousScreen,
-              noteId: note.noteId,
-              noteTitle: note.title,
-            ), //     ),
-          ),
-        );
+        context.read<NotesProvider>().readNoteDetailJson(widget.noteId).then(
+              (_) => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NoteDetailScreen(
+                    previousScreen: widget.previousScreen,
+                    noteId: note.noteId,
+                    noteTitle: note.title,
+                    folderId: widget.folderId,
+                  ), //     ),
+                ),
+              ),
+            );
       },
       behavior: HitTestBehavior.translucent,
       child: Container(

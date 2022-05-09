@@ -19,8 +19,6 @@ class ReminderFragment extends StatefulWidget {
 }
 
 class _ReminderFragmentState extends State<ReminderFragment> {
-  bool isChecked = false;
-
   @override
   void initState() {
     super.initState();
@@ -63,6 +61,8 @@ class _ReminderFragmentState extends State<ReminderFragment> {
                                   details: reminder.description,
                                   date: reminder.remindDate,
                                   reminderId: reminder.reminderId,
+                                  prevScreen: "Reminder",
+                                  noteId: "",
                                 ),
                                 expand: true,
                               ),
@@ -86,6 +86,12 @@ class _ReminderFragmentState extends State<ReminderFragment> {
                                               setState(() {
                                                 reminder.success = value!;
                                               });
+                                              context
+                                                  .read<ReminderProvider>()
+                                                  .updateReminderProgress(
+                                                      reminder.reminderId,
+                                                      reminder.success,
+                                                      context);
                                             },
                                           ),
                                         ),
@@ -231,6 +237,14 @@ class _ReminderFragmentState extends State<ReminderFragment> {
                                                               reminder.success =
                                                                   value!;
                                                             });
+                                                            context
+                                                                .read<
+                                                                    ReminderProvider>()
+                                                                .updateReminderProgress(
+                                                                    reminder.id,
+                                                                    reminder
+                                                                        .success,
+                                                                    context);
                                                           },
                                                         ),
                                                       ),
@@ -288,7 +302,10 @@ class _ReminderFragmentState extends State<ReminderFragment> {
       floatingActionButton: FloatingActionButton(
         onPressed: () => showBarModalBottomSheet(
           context: context,
-          builder: (context) => const NewReminder(),
+          builder: (context) => const NewReminder(
+            prevScreen: "Reminder",
+            noteId: "",
+          ),
           expand: true,
         ),
         child: const Icon(Icons.add_rounded),

@@ -12,12 +12,19 @@ class EditReminder extends StatefulWidget {
   final String details;
   final String date;
   final String reminderId;
+  final String prevScreen;
+  final String noteId;
+  final Function? updateNote;
+
   const EditReminder(
       {Key? key,
       required this.title,
       required this.details,
       required this.date,
-      required this.reminderId})
+      required this.reminderId,
+      required this.prevScreen,
+      required this.noteId,
+      this.updateNote})
       : super(key: key);
 
   @override
@@ -100,7 +107,15 @@ class _EditReminderState extends State<EditReminder> {
                     selectedDate.toIso8601String(),
                     widget.reminderId,
                     context);
-                Navigator.pop(context);
+                context.read<NotesProvider>().editNote(context);
+                context.read<ReminderProvider>().readReminderJson();
+                context
+                    .read<NotesProvider>()
+                    .readNoteDetailJson(widget.noteId)
+                    .then((_) {
+                  widget.updateNote!();
+                  Navigator.pop(context);
+                });
               } else {
                 var error = SnackBar(
                   behavior: SnackBarBehavior.floating,
@@ -235,7 +250,14 @@ class _EditReminderState extends State<EditReminder> {
                     context
                         .read<ReminderProvider>()
                         .deleteReminder(widget.reminderId, context);
-                    Navigator.pop(context);
+                    if (widget.prevScreen == "Note") {
+                      context
+                          .read<NotesProvider>()
+                          .deleteReminderFromNote(widget.reminderId, context);
+                      context.read<NotesProvider>().editNote(context);
+                      widget.updateNote!();
+                      Navigator.pop(context);
+                    }
                   },
                 ),
               )

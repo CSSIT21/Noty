@@ -10,6 +10,12 @@ class NoteDetailDataDetails {
       data: DetailsData.fromJson(json['data']),
     );
   }
+  Map toJson() {
+    return {
+      'type': type,
+      'data': data!.toJson(),
+    };
+  }
 }
 
 class DetailsData {
@@ -23,5 +29,10 @@ class DetailsData {
     return DetailsData(
       content: json['content'],
     );
+  }
+  Map toJson() {
+    return {
+      'content': content,
+    };
   }
 }

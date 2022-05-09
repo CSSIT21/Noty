@@ -125,12 +125,13 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
                                         onPressed: (BuildContext context) {
                                           context
                                               .read<NotesProvider>()
-                                              .deleteNote(note.noteId, context);
-                                          context
-                                              .read<NotesProvider>()
-                                              .readFolderNoteListJson(
-                                                  folder.folderId);
-                                          setState(() {});
+                                              .deleteNote(note.noteId, context)
+                                              .then(
+                                                (value) => context
+                                                    .read<NotesProvider>()
+                                                    .readFolderNoteListJson(
+                                                        folder.folderId),
+                                              );
                                         },
                                         backgroundColor: Colors.red,
                                         foregroundColor: Colors.white,
@@ -143,6 +144,7 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
                                     date: note.updatedAt,
                                     noteId: note.noteId,
                                     previousScreen: folder.name,
+                                    folderId: widget.folderId,
                                   ),
                                 ),
                               )
