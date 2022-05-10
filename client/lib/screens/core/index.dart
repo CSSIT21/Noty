@@ -49,30 +49,25 @@ class _CoreScreenState extends material.State<CoreScreen>
     var meResponse = await ProfileService.getProfile();
     var notesDataResponse = await NoteService.getData();
     context.read<ReminderProvider>().readReminderJson();
-
-    if (mounted) {
-      if (notesDataResponse is NotesResponse) {
-        context
-            .read<NotesProvider>()
-            .setFoldersData(notesDataResponse.data.folders);
-        context
-            .read<NotesProvider>()
-            .setNotesData(notesDataResponse.data.notes);
-      }
-      if (meResponse is ErrorResponse) {
-        var error = material.SnackBar(
-          behavior: material.SnackBarBehavior.floating,
-          margin: const EdgeInsets.only(bottom: 40, left: 15, right: 15),
-          content: Text(meResponse.message),
-          action: material.SnackBarAction(
-            label: 'OK',
-            onPressed: () {},
-          ),
-        );
-        material.ScaffoldMessenger.of(context).showSnackBar(error);
-      } else if (meResponse is MeResponse) {
-        context.read<ProfileProvider>().setMeData(meResponse.data);
-      }
+    if (notesDataResponse is NotesResponse) {
+      context
+          .read<NotesProvider>()
+          .setFoldersData(notesDataResponse.data.folders);
+      context.read<NotesProvider>().setNotesData(notesDataResponse.data.notes);
+    }
+    if (meResponse is ErrorResponse) {
+      var error = material.SnackBar(
+        behavior: material.SnackBarBehavior.floating,
+        margin: const EdgeInsets.only(bottom: 40, left: 15, right: 15),
+        content: Text(meResponse.message),
+        action: material.SnackBarAction(
+          label: 'OK',
+          onPressed: () {},
+        ),
+      );
+      material.ScaffoldMessenger.of(context).showSnackBar(error);
+    } else if (meResponse is MeResponse) {
+      context.read<ProfileProvider>().setMeData(meResponse.data);
     }
   }
 

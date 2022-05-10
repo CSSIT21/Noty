@@ -289,7 +289,7 @@ class ReminderProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  void readReminderJson() async {
+  Future<void> readReminderJson() async {
     var response = await ReminderService.getReminder();
     if (response is ReminderResponse) {
       setIndependentReminder(response.data.independentReminders);

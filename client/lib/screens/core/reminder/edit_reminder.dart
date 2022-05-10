@@ -107,15 +107,21 @@ class _EditReminderState extends State<EditReminder> {
                     selectedDate.toIso8601String(),
                     widget.reminderId,
                     context);
-                context.read<NotesProvider>().editNote(context);
-                context.read<ReminderProvider>().readReminderJson();
-                context
-                    .read<NotesProvider>()
-                    .readNoteDetailJson(widget.noteId)
-                    .then((_) {
-                  widget.updateNote!();
-                  Navigator.pop(context);
-                });
+                if (widget.prevScreen == "Note") {
+                  context.read<NotesProvider>().editNote(context);
+                  context.read<ReminderProvider>().readReminderJson();
+                  context
+                      .read<NotesProvider>()
+                      .readNoteDetailJson(widget.noteId)
+                      .then((_) {
+                    widget.updateNote!();
+                    Navigator.pop(context);
+                  });
+                } else {
+                  context.read<ReminderProvider>().readReminderJson().then(
+                        (_) => Navigator.pop(context),
+                      );
+                }
               } else {
                 var error = SnackBar(
                   behavior: SnackBarBehavior.floating,
