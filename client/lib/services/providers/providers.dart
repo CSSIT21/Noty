@@ -15,10 +15,12 @@ import 'package:noty_client/models/response/reminder/independent_reminder.dart';
 import 'package:noty_client/models/response/reminder/notes_reminder.dart';
 import 'package:noty_client/models/response/reminder/reminder_in_note.dart';
 import 'package:noty_client/models/response/reminder/reminder_response.dart';
+import 'package:noty_client/models/response/tag/tag_response.dart';
 import 'package:noty_client/services/folder_service.dart';
 import 'package:noty_client/services/me.dart';
 import 'package:noty_client/services/notes_sevice.dart';
 import 'package:noty_client/services/reminder_service.dart';
+import 'package:noty_client/services/tag_service.dart';
 
 class NotesProvider with ChangeNotifier, DiagnosticableTreeMixin {
   List<FolderData> folders = [];
@@ -189,7 +191,7 @@ class NotesProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  void editNote(BuildContext context) async {
+  Future<void> editNote(BuildContext context) async {
     Map<String, dynamic> details = {
       'folder_id': noteDetails.folderId,
       'note_id': noteDetails.id,
@@ -403,6 +405,30 @@ class ReminderProvider with ChangeNotifier, DiagnosticableTreeMixin {
         ),
       );
       ScaffoldMessenger.of(context).showSnackBar(error);
+    }
+    notifyListeners();
+  }
+}
+
+class TagProvider with ChangeNotifier, DiagnosticableTreeMixin {
+  List<String> tagname = [];
+  List<TagListData> tagList = [];
+
+  void setTagName(List<String> data) {
+    tagname = data;
+    notifyListeners();
+  }
+
+  void setTagList(List<TagListData> data) {
+    tagList = data;
+    notifyListeners();
+  }
+
+  void readTagJson() async {
+    var response = await TagService.getTagData();
+    if (response is TagResponse) {
+      setTagName(response.data.tagName);
+      setTagList(response.data.tagList);
     }
     notifyListeners();
   }

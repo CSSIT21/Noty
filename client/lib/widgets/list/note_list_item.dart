@@ -28,9 +28,6 @@ class NoteListItem extends StatefulWidget {
 }
 
 class _NoteListItemState extends State<NoteListItem> {
-  var tag = false;
-  var reminder = false;
-
   @override
   void initState() {
     super.initState();
@@ -43,17 +40,6 @@ class _NoteListItemState extends State<NoteListItem> {
         .notes
         .firstWhere((note) => note.noteId == widget.noteId);
     double screenWidth = MediaQuery.of(context).size.width;
-
-    if (note.tags.isNotEmpty) {
-      setState(() {
-        tag = true;
-      });
-    }
-    if (note.hasReminder) {
-      setState(() {
-        reminder = true;
-      });
-    }
 
     return GestureDetector(
       onTap: () {
@@ -101,13 +87,13 @@ class _NoteListItemState extends State<NoteListItem> {
                   ),
                   Row(
                     children: [
-                      reminder
+                      note.hasReminder
                           ? Container(
                               child: const ReminderLabel(),
                               margin: const EdgeInsets.only(right: 6),
                             )
                           : Container(),
-                      tag
+                      note.tags.isNotEmpty
                           ? const TagLabel(
                               textColor: Color(0xff828282),
                               bgColor: Color(0xff252525),

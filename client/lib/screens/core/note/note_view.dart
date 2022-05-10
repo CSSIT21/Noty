@@ -301,15 +301,17 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
           ),
           onTap: () {
             handleBack();
-            context.read<NotesProvider>().editNote(context);
-            context.read<NotesProvider>().readJsonData().then((_) {
-              if (widget.folderId != null) {
-                context
-                    .read<NotesProvider>()
-                    .readFolderNoteListJson(widget.folderId ?? "");
-              }
-              context.read<ReminderProvider>().readReminderJson();
-              Navigator.pop(context);
+            context.read<NotesProvider>().editNote(context).then((_) {
+              context.read<NotesProvider>().readJsonData().then((_) {
+                if (widget.folderId != null) {
+                  context
+                      .read<NotesProvider>()
+                      .readFolderNoteListJson(widget.folderId ?? "");
+                }
+                context.read<ReminderProvider>().readReminderJson();
+                context.read<TagProvider>().readTagJson();
+                Navigator.pop(context);
+              });
             });
           },
         ),

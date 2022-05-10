@@ -49,6 +49,7 @@ class _CoreScreenState extends material.State<CoreScreen>
     var meResponse = await ProfileService.getProfile();
     var notesDataResponse = await NoteService.getData();
     context.read<ReminderProvider>().readReminderJson();
+    context.read<TagProvider>().readTagJson();
     if (notesDataResponse is NotesResponse) {
       context
           .read<NotesProvider>()

@@ -12,6 +12,7 @@ void main() {
       ChangeNotifierProvider(create: (_) => NotesProvider()),
       ChangeNotifierProvider(create: (_) => ProfileProvider()),
       ChangeNotifierProvider(create: (_) => ReminderProvider()),
+      ChangeNotifierProvider(create: (_) => TagProvider()),
     ],
     child: const MyApp(),
   ));
