@@ -12,6 +12,7 @@ import 'package:noty_client/screens/core/reminder/reminder.dart';
 import 'package:noty_client/screens/core/tag/tag.dart';
 import 'package:noty_client/services/me.dart';
 import 'package:noty_client/services/notes_sevice.dart';
+import 'package:noty_client/services/notification_sevice.dart';
 import 'package:noty_client/services/providers/providers.dart';
 import 'package:noty_client/widgets/typography/appbar_text.dart';
 import 'package:provider/provider.dart';
@@ -91,7 +92,14 @@ class _CoreScreenState extends material.State<CoreScreen>
     _readJson();
 
     super.initState();
+    NotificationService.init();
+    listenNotifications();
   }
+
+  void listenNotifications() =>
+      NotificationService.onNotifications.stream.listen(onClickedNotification);
+
+  void onClickedNotification(String? payload) => print(payload);
 
   @override
   material.Widget build(material.BuildContext context) {

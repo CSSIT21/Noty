@@ -27,7 +27,6 @@ class _TagFragmentState extends State<TagFragment> {
   void initState() {
     super.initState();
     context.read<TagProvider>().readTagJson();
-    print(Provider.of<TagProvider>(context, listen: false).tagname[0]);
   }
 
   @override
