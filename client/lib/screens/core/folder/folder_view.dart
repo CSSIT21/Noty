@@ -171,7 +171,7 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => NoteDetailScreen(
-                          previousScreen: "All Notes",
+                          previousScreen: folder.name,
                           noteId: response,
                           noteTitle: "Untitled",
                           folderId: widget.folderId,

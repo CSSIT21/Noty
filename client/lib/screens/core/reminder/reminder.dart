@@ -162,15 +162,22 @@ class _ReminderFragmentState extends State<ReminderFragment> {
                           (noteReminder) => CurvedCard(
                             child: GestureDetector(
                               onTap: (() {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => NoteDetailScreen(
-                                        previousScreen: "Reminders",
-                                        noteId: noteReminder.noteId,
-                                        noteTitle: noteReminder.title),
-                                  ),
-                                );
+                                context
+                                    .read<NotesProvider>()
+                                    .readNoteDetailJson(noteReminder.noteId)
+                                    .then(
+                                      (_) => Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              NoteDetailScreen(
+                                                  previousScreen: "Reminders",
+                                                  noteId: noteReminder.noteId,
+                                                  noteTitle:
+                                                      noteReminder.title),
+                                        ),
+                                      ),
+                                    );
                               }),
                               behavior: HitTestBehavior.translucent,
                               child: Container(

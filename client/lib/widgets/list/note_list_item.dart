@@ -39,8 +39,7 @@ class _NoteListItemState extends State<NoteListItem> {
 
   @override
   Widget build(BuildContext context) {
-    NoteData note = context
-        .watch<NotesProvider>()
+    NoteData note = Provider.of<NotesProvider>(context, listen: false)
         .notes
         .firstWhere((note) => note.noteId == widget.noteId);
     double screenWidth = MediaQuery.of(context).size.width;
