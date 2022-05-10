@@ -162,22 +162,24 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          var response = await context
+          await context
               .read<NotesProvider>()
-              .addNote(widget.folderId, context);
-          if (response != false) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => NoteDetailScreen(
-                        previousScreen: "All Notes",
-                        noteId: response,
-                        noteTitle: "Untitled",
-                        folderId: widget.folderId,
-                      ) //     ),
-                  ),
-            );
-          }
+              .addNote(widget.folderId, context)
+              .then((response) {
+            if (response != false) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => NoteDetailScreen(
+                          previousScreen: "All Notes",
+                          noteId: response,
+                          noteTitle: "Untitled",
+                          folderId: widget.folderId,
+                        ) //     ),
+                    ),
+              );
+            }
+          });
         },
         child: const Icon(CupertinoIcons.pencil_outline),
       ),

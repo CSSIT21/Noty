@@ -53,19 +53,22 @@ Widget menuPopup(BuildContext context) => PopupMenuButton(
           showNewFolderDialog(context);
         }
         if (selected == 2) {
-          var response =
-              await context.read<NotesProvider>().addNote("", context);
-          if (response != false) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => NoteDetailScreen(
-                      previousScreen: "All Notes",
-                      noteId: response,
-                      noteTitle: "Untitled") //     ),
-                  ),
-            );
-          }
+          await context
+              .read<NotesProvider>()
+              .addNote("", context)
+              .then((response) {
+            if (response != false) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => NoteDetailScreen(
+                        previousScreen: "All Notes",
+                        noteId: response,
+                        noteTitle: "Untitled") //     ),
+                    ),
+              );
+            }
+          });
         }
       },
       color: const Color(0xff232323),

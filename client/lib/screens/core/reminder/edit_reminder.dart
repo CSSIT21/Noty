@@ -257,6 +257,8 @@ class _EditReminderState extends State<EditReminder> {
                       context.read<NotesProvider>().editNote(context);
                       widget.updateNote!();
                       Navigator.pop(context);
+                    } else {
+                      Navigator.pop(context);
                     }
                   },
                 ),

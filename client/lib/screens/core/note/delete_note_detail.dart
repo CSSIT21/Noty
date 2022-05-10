@@ -13,11 +13,6 @@ class DeleteNoteDetail extends StatefulWidget {
 class _DeleteNoteDetailState extends State<DeleteNoteDetail> {
   @override
   Widget build(BuildContext context) {
-    debugPrint(Provider.of<NotesProvider>(context, listen: false)
-        .noteDetails
-        .details[widget.index]
-        .data!
-        .content);
     if (Provider.of<NotesProvider>(context, listen: false)
         .noteDetails
         .details[widget.index]

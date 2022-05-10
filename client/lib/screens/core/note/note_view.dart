@@ -5,7 +5,7 @@ import 'package:noty_client/constants/theme.dart';
 import 'package:noty_client/models/response/reminder/reminder_in_note.dart';
 import 'package:noty_client/screens/core/note/action_button.dart';
 import 'package:noty_client/screens/core/note/checkbox.dart';
-import 'package:noty_client/screens/core/note/delete_note_detail.dart';
+// import 'package:noty_client/screens/core/note/delete_note_detail.dart';
 import 'package:noty_client/screens/core/reminder/edit_reminder.dart';
 import 'package:noty_client/services/providers/providers.dart';
 import 'package:noty_client/types/widget/placement.dart';
@@ -212,7 +212,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                     ? FontWeight.w500
                     : FontWeight.normal,
           ),
-          suffix: DeleteNoteDetail(index: i),
+          // suffix: DeleteNoteDetail(index: i),
         ),
         onChanged: (text) =>
             context.read<NotesProvider>().editNoteText(i, text),
