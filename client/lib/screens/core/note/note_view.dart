@@ -308,6 +308,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                     .read<NotesProvider>()
                     .readFolderNoteListJson(widget.folderId ?? "");
               }
+              context.read<ReminderProvider>().readReminderJson();
               Navigator.pop(context);
             });
           },
