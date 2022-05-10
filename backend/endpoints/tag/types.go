@@ -13,9 +13,11 @@ type notesInTag struct {
 }
 
 type noteObject struct {
-	Title  string   `json:"title"`
-	Tags   []string `json:"tags"`
-	NoteId string   `json:"note_id"`
+	Title       string    `json:"title"`
+	Tags        []string  `json:"tags"`
+	NoteId      string    `json:"note_id"`
+	HasReminder bool      `json:"has_reminder"`
+	UpdatedAt   time.Time `json:"updated_at"`
 }
 
 type noteSearchPost struct {

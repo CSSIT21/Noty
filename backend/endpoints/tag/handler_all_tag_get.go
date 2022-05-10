@@ -55,13 +55,21 @@ func TagGetHandler(c *fiber.Ctx) error {
 	// * Notes List for each tag
 	for _, tag := range tags {
 		var tempNoteObject []noteObject
+		hasReminder := false
 		for _, note := range notes {
+			for _, remCheck := range note.Details {
+				if *remCheck.Type == "reminder" {
+					hasReminder = true
+				}
+			}
 			for _, noteTag := range note.Tags {
 				if noteTag == tag {
 					tempNoteObject = append(tempNoteObject, noteObject{
-						Title:  *note.Title,
-						Tags:   note.Tags,
-						NoteId: note.ID.Hex(),
+						Title:       *note.Title,
+						Tags:        note.Tags,
+						NoteId:      note.ID.Hex(),
+						HasReminder: hasReminder,
+						UpdatedAt:   note.UpdatedAt,
 					})
 				}
 			}
