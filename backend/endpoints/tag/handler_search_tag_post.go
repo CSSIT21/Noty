@@ -40,7 +40,7 @@ func TagSearchPostHandler(c *fiber.Ctx) error {
 	userId, _ := primitive.ObjectIDFromHex(*claims.UserId)
 
 	// * Search the tag in notes
-	var notes []models.Notes
+	var notes []noteObject
 	if result, err := mgm.Coll(new(models.Notes)).Aggregate(mgm.Ctx(), bson.A{bson.M{
 		"$match": bson.M{
 			"user_id": userId,
@@ -49,12 +49,6 @@ func TagSearchPostHandler(c *fiber.Ctx) error {
 					body.TagName,
 				},
 			},
-		},
-	}, bson.M{
-		"$project": bson.M{
-			"details":   0,
-			"user_id":   0,
-			"folder_id": 0,
 		},
 	}}); err != nil {
 		return &responder.GenericError{
@@ -70,7 +64,19 @@ func TagSearchPostHandler(c *fiber.Ctx) error {
 					Err:     err,
 				}
 			}
-			notes = append(notes, *tempNote)
+			tempNoteObject := &noteObject{
+				Title:     *tempNote.Title,
+				Tags:      tempNote.Tags,
+				NoteId:    tempNote.ID.Hex(),
+				UpdatedAt: tempNote.UpdatedAt,
+			}
+
+			for _, detail := range tempNote.Details {
+				if *detail.Type == "reminder" {
+					tempNoteObject.HasReminder = true
+				}
+			}
+			notes = append(notes, *tempNoteObject)
 		}
 	}
 
