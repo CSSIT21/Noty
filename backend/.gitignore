@@ -1,3 +1,9 @@
+# Config file
+/config.yaml
+
+# Static directory
+/static
+
 # Local files/directories
 /local
 
@@ -5,14 +11,8 @@
 /swagger/*
 !/swagger/index.go
 
-# Config file
-/config.yaml
-
 # Log file
 /*.log
-
-# Static directory
-/static
 
 # IDE files
 .idea/

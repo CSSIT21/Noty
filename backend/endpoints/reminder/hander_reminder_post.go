@@ -9,6 +9,7 @@ import (
 	"noty-backend/types/common"
 	"noty-backend/types/responder"
 	"noty-backend/utils/text"
+	"time"
 )
 
 // ReminderPostHandler
@@ -38,20 +39,27 @@ func ReminderPostHandler(c *fiber.Ctx) error {
 
 	// * Parse string to object_id
 	userId, _ := primitive.ObjectIDFromHex(*claims.UserId)
-	noteId, _ := primitive.ObjectIDFromHex(body.NoteId)
 
 	// * Validate body
 	if err := text.Validate.Struct(body); err != nil {
 		return err
 	}
 
+	var remindDate = new(time.Time)
+	if len(body.RemindDate) != 0 {
+		convertedDate, _ := text.ConvertDate(body.RemindDate)
+		remindDate = convertedDate
+	}
+
 	// * Create reminder
+	var success bool = false
 	reminder := &models.Reminder{
 		UserId:      &userId,
 		Title:       &body.Title,
 		Description: &body.Description,
-		NoteId:      &noteId,
-		RemindDate:  &body.RemindDate,
+		RemindDate:  remindDate,
+		Success:     &success,
+		NoteId:      &primitive.ObjectID{},
 	}
 
 	if err := mgm.Coll(reminder).Create(reminder); err != nil {

@@ -2,7 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:noty_client/constants/theme.dart';
 import 'package:noty_client/screens/core/note/dialog_new_folder.dart';
-import 'package:noty_client/screens/core/note/new_note_screen.dart';
+import 'package:noty_client/screens/core/note/note_view.dart';
+import 'package:noty_client/services/notification_sevice.dart';
+import 'package:noty_client/services/providers/providers.dart';
+import 'package:provider/provider.dart';
 
 Widget menuPopup(BuildContext context) => PopupMenuButton(
       itemBuilder: (context) => [
@@ -46,20 +49,31 @@ Widget menuPopup(BuildContext context) => PopupMenuButton(
           ),
         ),
       ],
-      onSelected: (selected) {
+      onSelected: (selected) async {
         if (selected == 1) {
+          NotificationService.showNotification(
+              title: "Reminder",
+              body: "This is a notification from add folder button",
+              payload: "test");
           showNewFolderDialog(context);
         }
         if (selected == 2) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const NewNoteScreen(
-                noteName: "",
-                previousScreen: "All Notes",
-              ), //     ),
-            ),
-          );
+          await context
+              .read<NotesProvider>()
+              .addNote("", context)
+              .then((response) {
+            if (response != false) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => NoteDetailScreen(
+                        previousScreen: "All Notes",
+                        noteId: response,
+                        noteTitle: "Untitled") //     ),
+                    ),
+              );
+            }
+          });
         }
       },
       color: const Color(0xff232323),

@@ -1,8 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:noty_client/constants/theme.dart';
 import 'package:noty_client/models/response/notes/folder_data.dart';
+import 'package:noty_client/models/response/notes/note_detail_data.dart';
 import 'package:noty_client/screens/core/folder/dialog_edit_folder.dart';
-import 'package:noty_client/screens/core/note/new_note_screen.dart';
+import 'package:noty_client/screens/core/folder/folder_move_dialog.dart';
+import 'package:noty_client/screens/core/note/note_view.dart';
+import 'package:noty_client/services/notes_sevice.dart';
 import 'package:noty_client/services/providers/providers.dart';
 import 'package:noty_client/types/widget/placement.dart';
 import 'package:noty_client/utils/widget/divider_insert.dart';
@@ -24,6 +30,12 @@ class FolderDetailScreen extends StatefulWidget {
 }
 
 class _FolderDetailScreenState extends State<FolderDetailScreen> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<NotesProvider>().readFolderNoteListJson(widget.folderId);
+  }
+
   @override
   Widget build(BuildContext context) {
     FolderData folder = context
@@ -80,11 +92,60 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
                               .watch<NotesProvider>()
                               .folderNoteList
                               .mapIndexed(
-                                (index, note) => NoteListItem(
-                                  title: note.title,
-                                  date: note.updatedAt,
-                                  noteId: note.noteId,
-                                  previousScreen: folder.name,
+                                (index, note) => Slidable(
+                                  key: ValueKey(index),
+                                  endActionPane: ActionPane(
+                                    motion: const StretchMotion(),
+                                    children: [
+                                      SlidableAction(
+                                        onPressed:
+                                            (BuildContext context) async {
+                                          var folderId =
+                                              await NoteService.getNoteDetail(
+                                                  note.noteId);
+                                          if (folderId is NoteDetailResponse) {
+                                            showBarModalBottomSheet(
+                                              context: context,
+                                              builder: (context) =>
+                                                  FolderMoveDialog(
+                                                folderId:
+                                                    folderId.data.folderId,
+                                                noteId: note.noteId,
+                                              ),
+                                              expand: true,
+                                            );
+                                          }
+                                        },
+                                        backgroundColor:
+                                            ThemeConstant.colorPrimaryLight,
+                                        foregroundColor: Colors.white,
+                                        icon: CupertinoIcons.folder_fill,
+                                      ),
+                                      SlidableAction(
+                                        onPressed: (BuildContext context) {
+                                          context
+                                              .read<NotesProvider>()
+                                              .deleteNote(note.noteId, context)
+                                              .then(
+                                                (value) => context
+                                                    .read<NotesProvider>()
+                                                    .readFolderNoteListJson(
+                                                        folder.folderId),
+                                              );
+                                        },
+                                        backgroundColor: Colors.red,
+                                        foregroundColor: Colors.white,
+                                        icon: Icons.delete_rounded,
+                                      ),
+                                    ],
+                                  ),
+                                  child: NoteListItem(
+                                    title: note.title,
+                                    date: note.updatedAt,
+                                    noteId: note.noteId,
+                                    previousScreen: folder.name,
+                                    folderId: widget.folderId,
+                                  ),
                                 ),
                               )
                               .toList(),
@@ -100,16 +161,25 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => NewNoteScreen(
-                noteName: "Untitled Note",
-                previousScreen: folder.name,
-              ), //     ),
-            ),
-          );
+        onPressed: () async {
+          await context
+              .read<NotesProvider>()
+              .addNote(widget.folderId, context)
+              .then((response) {
+            if (response != false) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => NoteDetailScreen(
+                          previousScreen: folder.name,
+                          noteId: response,
+                          noteTitle: "Untitled",
+                          folderId: widget.folderId,
+                        ) //     ),
+                    ),
+              );
+            }
+          });
         },
         child: const Icon(CupertinoIcons.pencil_outline),
       ),

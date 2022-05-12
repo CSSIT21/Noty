@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:noty_client/config/api.dart';
+import 'package:noty_client/constants/environment.dart';
 import 'package:noty_client/models/response/error/error_response.dart';
 import 'package:noty_client/models/response/info_response.dart';
 import 'package:noty_client/models/response/me/me_infomation.dart';
@@ -10,7 +10,8 @@ class ProfileService {
     final prefs = await SharedPreferences.getInstance();
     final String? userToken = prefs.getString('user');
     try {
-      Response response = await Dio().get(apiEndpoint + "/me/info",
+      Response response = await Dio().get(
+          EnvironmentConstant.internalApiPrefix + "/me/info",
           options: Options(headers: {"Authorization": "Bearer " + userToken!}));
       MeResponse res = MeResponse.fromJson(response.data);
       return res;
@@ -28,7 +29,8 @@ class ProfileService {
     final prefs = await SharedPreferences.getInstance();
     final String? userToken = prefs.getString('user');
     try {
-      Response response = await Dio().patch(apiEndpoint + "/me/edit/name",
+      Response response = await Dio().patch(
+          EnvironmentConstant.internalApiPrefix + "/me/edit/name",
           data: {"firstname": firstname, "lastname": lastname},
           options: Options(headers: {"Authorization": "Bearer " + userToken!}));
       InfoResponse res = InfoResponse.fromJson(response.data);
@@ -47,7 +49,8 @@ class ProfileService {
     final prefs = await SharedPreferences.getInstance();
     final String? userToken = prefs.getString('user');
     try {
-      Response response = await Dio().patch(apiEndpoint + "/me/edit/password",
+      Response response = await Dio().patch(
+          EnvironmentConstant.internalApiPrefix + "/me/edit/password",
           data: {"new_password": newPass, "current_password": currentPass},
           options: Options(headers: {"Authorization": "Bearer " + userToken!}));
       InfoResponse res = InfoResponse.fromJson(response.data);

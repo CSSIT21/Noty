@@ -1,21 +1,31 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:noty_client/constants/theme.dart';
+import 'package:noty_client/services/providers/providers.dart';
 import 'package:noty_client/widgets/typography/appbar_text.dart';
+import 'package:provider/provider.dart';
 
 class NewReminder extends StatefulWidget {
-  const NewReminder({Key? key}) : super(key: key);
+  final String prevScreen;
+  final String noteId;
+  final Function? updateNote;
+  const NewReminder(
+      {Key? key,
+      required this.prevScreen,
+      required this.noteId,
+      this.updateNote})
+      : super(key: key);
 
   @override
   State<NewReminder> createState() => _NewReminderState();
 }
 
 class _NewReminderState extends State<NewReminder> {
-  bool isButtonDisabled = false;
-  final _titleController = TextEditingController();
-  final _detailsController = TextEditingController();
-  DateTime selectedDate = DateTime.now();
+  final _titleController = TextEditingController(text: "");
+  final _detailsController = TextEditingController(text: "");
+  DateTime selectedDate = DateTime.parse("0001-01-01T00:00:00Z");
   bool isDateSelected = false;
 
   void showDatePicker() {
@@ -34,7 +44,7 @@ class _NewReminderState extends State<NewReminder> {
                 });
               },
               use24hFormat: true,
-              initialDateTime: selectedDate,
+              initialDateTime: DateTime.now(),
               minimumYear: DateTime.now().year,
               maximumYear: 2099,
             ),
@@ -69,26 +79,51 @@ class _NewReminderState extends State<NewReminder> {
         ),
         actions: [
           TextButton(
-            onPressed: isButtonDisabled
-                ? null
-                : () {
-                    Navigator.pop(context);
-                  },
+            onPressed: () async {
+              if (_titleController.text.isNotEmpty) {
+                var response = await context
+                    .read<ReminderProvider>()
+                    .addReminder(_titleController.text, _detailsController.text,
+                        selectedDate.toIso8601String(), context);
+                if (response != false && widget.prevScreen == "Note") {
+                  context
+                      .read<NotesProvider>()
+                      .addNoteDetailReminder(widget.noteId, response);
+                  context.read<NotesProvider>().editNote(context);
+                  context.read<ReminderProvider>().readReminderJson();
+                  widget.updateNote!();
+                  context
+                      .read<NotesProvider>()
+                      .readNoteDetailJson(widget.noteId)
+                      .then(
+                        (_) => Navigator.pop(context),
+                      );
+                } else {
+                  Navigator.pop(context);
+                }
+              } else {
+                var error = SnackBar(
+                  behavior: SnackBarBehavior.floating,
+                  margin:
+                      const EdgeInsets.only(bottom: 20, left: 15, right: 15),
+                  content: const Text("Title cannot be empty"),
+                  action: SnackBarAction(
+                    label: 'OK',
+                    onPressed: () {},
+                  ),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(error);
+              }
+            },
             style: ElevatedButton.styleFrom(
               splashFactory: NoSplash.splashFactory,
             ),
             child: Text(
               "Add",
-              style: !isButtonDisabled
-                  ? TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.normal,
-                      color: ThemeConstant.colorPrimaryLight)
-                  : TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.normal,
-                      color: ThemeConstant.textColorSecondary,
-                    ),
+              style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.normal,
+                  color: ThemeConstant.colorPrimaryLight),
             ),
           )
         ],
@@ -173,7 +208,8 @@ class _NewReminderState extends State<NewReminder> {
                       ),
                       isDateSelected
                           ? Text(
-                              selectedDate.toString().substring(0, 16),
+                              DateFormat("dd-MM-yyyy HH:mm")
+                                  .format(selectedDate),
                               style: TextStyle(
                                   color: ThemeConstant.colorPrimaryLight),
                             )

@@ -21,22 +21,20 @@ class NoteDetailData {
   String id;
   String updatedAt;
   String title;
-  String? folderId;
-  List<String>? tags;
+  String folderId;
+  List<String> tags;
   List<NoteDetailDataDetails> details;
 
   NoteDetailData({
     required this.id,
     required this.updatedAt,
     required this.title,
-    this.folderId,
-    this.tags,
+    required this.folderId,
+    required this.tags,
     required this.details,
   });
 
   factory NoteDetailData.fromJson(Map<String, dynamic> json) {
-    // var noteList = json['data'] != null ? json['data'] as List : [];
-
     var noteDetailsDataList = json['data'] != null ? json['data'] as List : [];
     List<NoteDetailDataDetails> tempDataList = noteDetailsDataList
         .map((e) => NoteDetailDataDetails.fromJson(e))

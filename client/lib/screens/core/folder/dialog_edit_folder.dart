@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:noty_client/constants/theme.dart';
+import 'package:noty_client/services/providers/providers.dart';
+import 'package:provider/provider.dart';
 
 showEditFolderDialog(BuildContext context, String folderName, String folderId) {
   TextEditingController _folderEditController =
@@ -38,6 +40,7 @@ showEditFolderDialog(BuildContext context, String folderName, String folderId) {
               ),
               onPressed: () {
                 Navigator.pop(context);
+                _folderEditController.text = folderName;
               },
             ),
             CupertinoDialogAction(
@@ -46,9 +49,9 @@ showEditFolderDialog(BuildContext context, String folderName, String folderId) {
                 style: TextStyle(fontSize: 16),
               ),
               onPressed: () {
-                // context
-                //     .read<NotesProvider>()
-                //     .editFolderName(folderIndex, _folderEditController.text);
+                context
+                    .read<NotesProvider>()
+                    .editFolder(_folderEditController.text, folderId, context);
                 Navigator.pop(context);
               },
             )

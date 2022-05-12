@@ -29,6 +29,8 @@ func Init(router fiber.Router) {
 	reminderHandler.Post("add", reminder.ReminderPostHandler)
 	reminderHandler.Patch("edit", reminder.ReminderPatchHandler)
 	reminderHandler.Delete("delete", reminder.ReminderDeleteHandler)
+	reminderHandler.Patch("update/progress", reminder.ReminderPrgressPatchHandler)
+	reminderHandler.Post("info/id", reminder.ReminderPostByIdHandler)
 
 	// * Folder
 	folderHandler := router.Group("folder/", middlewares.Jwt)
@@ -52,8 +54,10 @@ func Init(router fiber.Router) {
 	meHandler.Get("info", me.MeGetHandler)
 	meHandler.Patch("edit/name", me.MePatchNameHandler)
 	meHandler.Patch("edit/password", me.MePatchPasswordHandler)
+	meHandler.Patch("avatar", me.MeAvatarPostHandler)
 
 	// * Tag
 	tagHandler := router.Group("tag/", middlewares.Jwt)
 	tagHandler.Get("list", tag.TagGetHandler)
+	tagHandler.Post("search", tag.TagSearchPostHandler)
 }

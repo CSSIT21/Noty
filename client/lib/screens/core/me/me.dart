@@ -28,6 +28,12 @@ class _MeFragementState extends State<MeFragement> {
   }
 
   @override
+  void initState() {
+    context.read<ProfileProvider>().readMeJson();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     MeData meData = context.watch<ProfileProvider>().meData;
 

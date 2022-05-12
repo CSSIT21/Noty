@@ -50,8 +50,12 @@ func Init() {
 	apiGroup.Use(middlewares.Limiter)
 	apiGroup.Use(middlewares.Cors)
 	apiGroup.Use(middlewares.Recover)
+	apiGroup.Use(middlewares.Logger)
 
 	endpoints.Init(apiGroup)
+
+	// * Register static server
+	app.Static("static/", "./static")
 
 	// Register not found handler
 	app.Use(notfoundHandler)

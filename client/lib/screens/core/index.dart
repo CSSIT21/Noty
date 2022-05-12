@@ -3,7 +3,6 @@ import 'package:flutter/material.dart' as material;
 import 'package:motion_tab_bar_v2/motion-tab-bar.dart' as motion_tab_bar;
 import 'package:noty_client/constants/theme.dart';
 import 'package:noty_client/models/response/error/error_response.dart';
-import 'package:noty_client/models/response/folder/note_list.dart';
 import 'package:noty_client/models/response/me/me_infomation.dart';
 import 'package:noty_client/models/response/notes/notes_response.dart';
 import 'package:noty_client/screens/core/me/me.dart';
@@ -13,6 +12,7 @@ import 'package:noty_client/screens/core/reminder/reminder.dart';
 import 'package:noty_client/screens/core/tag/tag.dart';
 import 'package:noty_client/services/me.dart';
 import 'package:noty_client/services/notes_sevice.dart';
+import 'package:noty_client/services/notification_sevice.dart';
 import 'package:noty_client/services/providers/providers.dart';
 import 'package:noty_client/widgets/typography/appbar_text.dart';
 import 'package:provider/provider.dart';
@@ -49,36 +49,27 @@ class _CoreScreenState extends material.State<CoreScreen>
   Future<void> _readJson() async {
     var meResponse = await ProfileService.getProfile();
     var notesDataResponse = await NoteService.getData();
-    var notelistfolder =
-        await NoteService.getNoteListFolder("626d8d9d41e7c73a9af2d73e");
-
-    if (mounted) {
-      if (notesDataResponse is NotesResponse) {
-        // print(notesDataResponse.data.folders[0].name);
-        context
-            .read<NotesProvider>()
-            .setFoldersData(notesDataResponse.data.folders);
-        context
-            .read<NotesProvider>()
-            .setNotesData(notesDataResponse.data.notes);
-      }
-      if (notelistfolder is NoteListFolderResponse) {
-        // print(notelistfolder.data[0].title);
-      }
-      if (meResponse is ErrorResponse) {
-        var error = material.SnackBar(
-          behavior: material.SnackBarBehavior.floating,
-          margin: const EdgeInsets.only(bottom: 40, left: 15, right: 15),
-          content: Text(meResponse.message),
-          action: material.SnackBarAction(
-            label: 'OK',
-            onPressed: () {},
-          ),
-        );
-        material.ScaffoldMessenger.of(context).showSnackBar(error);
-      } else if (meResponse is MeResponse) {
-        context.read<ProfileProvider>().setMeData(meResponse.data);
-      }
+    context.read<ReminderProvider>().readReminderJson();
+    context.read<TagProvider>().readTagJson();
+    if (notesDataResponse is NotesResponse) {
+      context
+          .read<NotesProvider>()
+          .setFoldersData(notesDataResponse.data.folders);
+      context.read<NotesProvider>().setNotesData(notesDataResponse.data.notes);
+    }
+    if (meResponse is ErrorResponse) {
+      var error = material.SnackBar(
+        behavior: material.SnackBarBehavior.floating,
+        margin: const EdgeInsets.only(bottom: 40, left: 15, right: 15),
+        content: Text(meResponse.message),
+        action: material.SnackBarAction(
+          label: 'OK',
+          onPressed: () {},
+        ),
+      );
+      material.ScaffoldMessenger.of(context).showSnackBar(error);
+    } else if (meResponse is MeResponse) {
+      context.read<ProfileProvider>().setMeData(meResponse.data);
     }
   }
 
@@ -99,7 +90,19 @@ class _CoreScreenState extends material.State<CoreScreen>
     _tabController.addListener(changeTitle);
     _textController = TextEditingController(text: '');
     _readJson();
+
     super.initState();
+    NotificationService.init();
+    listenNotifications();
+  }
+
+  void listenNotifications() =>
+      NotificationService.onNotifications.stream.listen(onClickedNotification);
+
+  void onClickedNotification(String? payload) {
+    // setState(() {
+    //   _tabController.index = 1;
+    // });
   }
 
   @override
@@ -140,23 +143,24 @@ class _CoreScreenState extends material.State<CoreScreen>
                 ],
               )
             : material.AppBar(
-                toolbarHeight: 85,
-                title: SizedBox(
-                  height: 65,
-                  child: material.Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      AppBarText(text: currentTitle),
-                      CupertinoSearchTextField(
-                        controller: _textController,
-                        style: TextStyle(
-                            color: ThemeConstant.textColorPrimary,
-                            fontSize: 14),
-                        itemColor: ThemeConstant.colorPrimaryLight,
-                      ),
-                    ],
-                  ),
-                ),
+                // toolbarHeight: 85,
+                // title: SizedBox(
+                //   height: 65,
+                //   child: material.Column(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       AppBarText(text: currentTitle),
+                //       CupertinoSearchTextField(
+                //         controller: _textController,
+                //         style: TextStyle(
+                //             color: ThemeConstant.textColorPrimary,
+                //             fontSize: 14),
+                //         itemColor: ThemeConstant.colorPrimaryLight,
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                title: AppBarText(text: currentTitle),
                 centerTitle: true,
                 automaticallyImplyLeading: false,
               ),

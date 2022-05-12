@@ -13,5 +13,6 @@ type Reminder struct {
 	Title            *string             `json:"title" bson:"title"`
 	NoteId           *primitive.ObjectID `json:"note_id" bson:"note_id"`
 	Description      *string             `json:"description" bson:"description"`
+	Success          *bool               `json:"success" bson:"success"`
 	RemindDate       *time.Time          `json:"remind_date" bson:"remind_date"`
 }

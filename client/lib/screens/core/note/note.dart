@@ -39,13 +39,21 @@ class _NotesFragmentState extends State<NotesFragment> {
                           FolderSection(),
                         ],
                       )
-                    : Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          FolderSection(),
-                          NoteSection(),
-                        ],
-                      ),
+                    : context.watch<NotesProvider>().folders.isEmpty &&
+                            context.watch<NotesProvider>().notes.isNotEmpty
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: const [
+                              NoteSection(),
+                            ],
+                          )
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: const [
+                              FolderSection(),
+                              NoteSection(),
+                            ],
+                          ),
           ),
         ),
         Align(
@@ -53,7 +61,7 @@ class _NotesFragmentState extends State<NotesFragment> {
           child: SizedBox(
             width: 75,
             height: 75,
-            child: WidgetsBinding.instance!.window.viewInsets.bottom > 0
+            child: MediaQuery.of(context).viewInsets.bottom > 0
                 ? null
                 : menuPopup(context),
           ),

@@ -2,13 +2,15 @@ class IndependentReminder {
   String reminderId;
   String title;
   String description;
-  String? remindDate;
+  String remindDate;
+  bool success;
 
   IndependentReminder({
     required this.reminderId,
     required this.title,
     required this.description,
-    this.remindDate,
+    required this.remindDate,
+    required this.success,
   });
 
   factory IndependentReminder.fromJson(Map<String, dynamic> json) {
@@ -16,7 +18,8 @@ class IndependentReminder {
       reminderId: json['reminder_id'],
       title: json['title'],
       description: json['description'],
-      remindDate: json['remind_date'],
+      remindDate: json['remind_date'] ?? "",
+      success: json['success'],
     );
   }
 }

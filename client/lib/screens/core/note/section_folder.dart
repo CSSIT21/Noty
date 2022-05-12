@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:noty_client/models/response/folder/note_list.dart';
 import 'package:noty_client/screens/core/folder/folder_view.dart';
-import 'package:noty_client/services/notes_sevice.dart';
 import 'package:noty_client/services/providers/providers.dart';
 import 'package:noty_client/types/widget/placement.dart';
 import 'package:noty_client/utils/widget/divider_insert.dart';
@@ -20,13 +18,6 @@ class FolderSection extends StatefulWidget {
 }
 
 class _FolderSectionState extends State<FolderSection> {
-  Future<void> _readJson(String folderId) async {
-    var folderNoteList = await NoteService.getNoteListFolder(folderId);
-    if (folderNoteList is NoteListFolderResponse) {
-      context.read<NotesProvider>().setFolderNoteList(folderNoteList.data);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -46,14 +37,18 @@ class _FolderSectionState extends State<FolderSection> {
                     .mapIndexed(
                       (index, folder) => GestureDetector(
                         onTap: () {
-                          _readJson(folder.folderId);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  FolderDetailScreen(folderId: folder.folderId),
-                            ),
-                          );
+                          context
+                              .read<NotesProvider>()
+                              .readFolderNoteListJson(folder.folderId)
+                              .then(
+                                (_) => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => FolderDetailScreen(
+                                        folderId: folder.folderId),
+                                  ),
+                                ),
+                              );
                         },
                         behavior: HitTestBehavior.translucent,
                         child: Slidable(
@@ -63,9 +58,9 @@ class _FolderSectionState extends State<FolderSection> {
                             children: [
                               SlidableAction(
                                 onPressed: (BuildContext context) {
-                                  // context
-                                  //     .read<NotesProvider>()
-                                  //     .deleteFolder(index);
+                                  context
+                                      .read<NotesProvider>()
+                                      .deleteFolder(folder.folderId, context);
                                 },
                                 backgroundColor: Colors.red,
                                 foregroundColor: Colors.white,

@@ -1,20 +1,42 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:noty_client/constants/theme.dart';
+import 'package:noty_client/services/providers/providers.dart';
 import 'package:noty_client/widgets/typography/appbar_text.dart';
+import 'package:provider/provider.dart';
 
 class EditReminder extends StatefulWidget {
-  const EditReminder({Key? key}) : super(key: key);
+  final String title;
+  final String details;
+  final String date;
+  final String reminderId;
+  final String prevScreen;
+  final String noteId;
+  final Function? updateNote;
+  final bool reminderState;
+
+  const EditReminder(
+      {Key? key,
+      required this.title,
+      required this.details,
+      required this.date,
+      required this.reminderId,
+      required this.prevScreen,
+      required this.noteId,
+      required this.reminderState,
+      this.updateNote})
+      : super(key: key);
 
   @override
   State<EditReminder> createState() => _EditReminderState();
 }
 
 class _EditReminderState extends State<EditReminder> {
-  final _titleController = TextEditingController();
-  final _detailsController = TextEditingController();
-  DateTime selectedDate = DateTime.now();
+  TextEditingController _titleController = TextEditingController();
+  TextEditingController _detailsController = TextEditingController();
+  late DateTime selectedDate;
   bool isDateSelected = false;
 
   void showDatePicker() {
@@ -33,7 +55,10 @@ class _EditReminderState extends State<EditReminder> {
                 });
               },
               use24hFormat: true,
-              initialDateTime: selectedDate,
+              initialDateTime:
+                  selectedDate == DateTime.parse("0001-01-01T00:00:00Z")
+                      ? DateTime.now()
+                      : selectedDate,
               minimumYear: DateTime.now().year,
               maximumYear: 2099,
             ),
@@ -42,10 +67,18 @@ class _EditReminderState extends State<EditReminder> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _titleController = TextEditingController(text: widget.title);
+    _detailsController = TextEditingController(text: widget.details);
+    selectedDate = DateTime.parse(widget.date);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const AppBarText(text: "Mixko's reminder"),
+        title: AppBarText(text: widget.title),
         centerTitle: true,
         leadingWidth: 100,
         toolbarHeight: 60,
@@ -69,7 +102,42 @@ class _EditReminderState extends State<EditReminder> {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.pop(context);
+              if (_titleController.text.isNotEmpty) {
+                context.read<ReminderProvider>().editReminder(
+                    _titleController.text,
+                    _detailsController.text,
+                    selectedDate.toIso8601String(),
+                    widget.reminderId,
+                    widget.reminderState,
+                    context);
+                if (widget.prevScreen == "Note") {
+                  context.read<NotesProvider>().editNote(context);
+                  context.read<ReminderProvider>().readReminderJson();
+                  context
+                      .read<NotesProvider>()
+                      .readNoteDetailJson(widget.noteId)
+                      .then((_) {
+                    widget.updateNote!();
+                    Navigator.pop(context);
+                  });
+                } else {
+                  context.read<ReminderProvider>().readReminderJson().then(
+                        (_) => Navigator.pop(context),
+                      );
+                }
+              } else {
+                var error = SnackBar(
+                  behavior: SnackBarBehavior.floating,
+                  margin:
+                      const EdgeInsets.only(bottom: 20, left: 15, right: 15),
+                  content: const Text("Title cannot be empty"),
+                  action: SnackBarAction(
+                    label: 'OK',
+                    onPressed: () {},
+                  ),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(error);
+              }
             },
             child: Text(
               "Save",
@@ -163,9 +231,10 @@ class _EditReminderState extends State<EditReminder> {
                           const Text("Date & Time"),
                         ],
                       ),
-                      isDateSelected
+                      isDateSelected || widget.date != "0001-01-01T00:00:00Z"
                           ? Text(
-                              selectedDate.toString().substring(0, 16),
+                              DateFormat("dd-MM-yyyy HH:mm")
+                                  .format(selectedDate),
                               style: TextStyle(
                                   color: ThemeConstant.colorPrimaryLight),
                             )
@@ -182,11 +251,26 @@ class _EditReminderState extends State<EditReminder> {
                 width: double.infinity,
                 height: 48,
                 child: ElevatedButton(
-                    child: const Text("Delete"),
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.red,
-                    ),
-                    onPressed: () {}),
+                  child: const Text("Delete"),
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.red,
+                  ),
+                  onPressed: () {
+                    context
+                        .read<ReminderProvider>()
+                        .deleteReminder(widget.reminderId, context);
+                    if (widget.prevScreen == "Note") {
+                      context
+                          .read<NotesProvider>()
+                          .deleteReminderFromNote(widget.reminderId, context);
+                      context.read<NotesProvider>().editNote(context);
+                      widget.updateNote!();
+                      Navigator.pop(context);
+                    } else {
+                      Navigator.pop(context);
+                    }
+                  },
+                ),
               )
             ],
           ),

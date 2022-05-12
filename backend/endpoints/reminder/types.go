@@ -7,10 +7,9 @@ import (
 )
 
 type reminderPostRequest struct {
-	Title       string    `json:"title" validate:"required,max=255"`
-	NoteId      string    `json:"note_id"`
-	Description string    `json:"description,omitempty"`
-	RemindDate  time.Time `json:"remind_date,omitempty"`
+	Title       string `json:"title" validate:"required,max=255"`
+	Description string `json:"description,omitempty"`
+	RemindDate  string `json:"remind_date,omitempty"`
 }
 
 type reminderPostResponse struct {
@@ -18,11 +17,11 @@ type reminderPostResponse struct {
 }
 
 type reminderPatchRequest struct {
-	ReminderId  string    `json:"reminder_id" validate:"required"`
-	Title       string    `json:"title" validate:"required,max=255"`
-	NoteId      string    `json:"note_id"`
-	Description string    `json:"description,omitempty"`
-	RemindDate  time.Time `json:"remind_date,omitempty"`
+	ReminderId  string `json:"reminder_id" validate:"required"`
+	Title       string `json:"title" validate:"required,max=255"`
+	Description string `json:"description,omitempty"`
+	RemindDate  string `json:"remind_date,omitempty"`
+	Success     bool   `json:"success"`
 }
 
 type reminderDeleteRequest struct {
@@ -39,6 +38,7 @@ type independentReminders struct {
 	Title       string    `json:"title"`
 	Description string    `json:"description"`
 	RemindDate  time.Time `json:"remind_date"`
+	Success     bool      `json:"success"`
 }
 
 type noteAllGetDecode struct {
@@ -51,4 +51,21 @@ type noteAllGetDecoded struct {
 	NoteId    string            `json:"note_id"`
 	Title     string            `json:"title"`
 	Reminders []models.Reminder `json:"reminders"`
+}
+
+type reminderProgressPatch struct {
+	ReminderId string `json:"reminder_id"`
+	Success    bool   `json:"success"`
+}
+
+type reminderByIdPost struct {
+	ReminderId string `json:"reminder_id"`
+}
+
+type reminderByIdPostResponse struct {
+	ReminderId  string    `json:"reminder_id"`
+	Title       string    `json:"title"`
+	Description string    `json:"description"`
+	RemindDate  time.Time `json:"remind_date"`
+	Success     bool      `json:"success"`
 }

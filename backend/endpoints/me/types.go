@@ -4,7 +4,7 @@ type meGetResponse struct {
 	Firstname string `json:"firstname"`
 	Lastname  string `json:"lastname"`
 	Email     string `json:"email"`
-	PictureId string `json:"picture_id"`
+	AvatarUrl string `json:"avatar_url"`
 	UserId    string `json:"user_id"`
 	Notes     uint64 `json:"notes"`
 	Folders   uint64 `json:"folders"`

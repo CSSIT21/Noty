@@ -24,9 +24,8 @@ class NotesResponseData {
   NotesResponseData({required this.folders, required this.notes});
 
   factory NotesResponseData.fromJson(Map<String, dynamic> json) {
-    var folderList = json['folders'] as List;
-    var noteList = json['notes'] as List;
-
+    var folderList = json['folders'] != null ? json['folders'] as List : [];
+    var noteList = json['notes'] != null ? json['notes'] as List : [];
     List<FolderData> tempFolders =
         folderList.map((e) => FolderData.fromJson(e)).toList();
     List<NoteData> tempNotes =

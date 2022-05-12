@@ -6,10 +6,14 @@ import 'package:noty_client/screens/core/reminder/new_reminder.dart';
 
 class NewNoteAction extends StatefulWidget {
   final String noteId;
-  // final Function addNoteDetail;
+  final Function addNoteDetail;
+  final Function detailsHandler;
 
   const NewNoteAction(
-      {Key? key, required this.noteId /*, required this.addNoteDetail*/})
+      {Key? key,
+      required this.noteId,
+      required this.addNoteDetail,
+      required this.detailsHandler})
       : super(key: key);
 
   @override
@@ -108,22 +112,29 @@ class _NewNoteActionState extends State<NewNoteAction> {
         ),
       ],
       onSelected: (selected) {
-        if (selected == 1) {
-          // widget.addNoteDetail(widget.noteIndex, "h1");
-        }
-        if (selected == 2) {
-          // widget.addNoteDetail(widget.noteIndex, "h2");
-        }
-        if (selected == 3) {
-          // widget.addNoteDetail(widget.noteIndex, "note");
-        }
-        if (selected == 4) {
-          showBarModalBottomSheet(
-            context: context,
-            builder: (context) => const NewReminder(),
-            expand: true,
-          );
-          // widget.addNoteDetail(widget.noteIndex, "reminder");
+        switch (selected) {
+          case 1:
+            widget.addNoteDetail(widget.noteId, "h1");
+            break;
+          case 2:
+            widget.addNoteDetail(widget.noteId, "h2");
+            break;
+          case 3:
+            widget.addNoteDetail(widget.noteId, "text");
+            break;
+          case 4:
+            showBarModalBottomSheet(
+              context: context,
+              builder: (context) => NewReminder(
+                prevScreen: "Note",
+                noteId: widget.noteId,
+                updateNote: widget.detailsHandler,
+              ),
+              expand: true,
+            );
+            break;
+          default:
+            Navigator.pop(context);
         }
       },
       color: const Color(0xff232323),

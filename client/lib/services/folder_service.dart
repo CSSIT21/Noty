@@ -1,7 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:noty_client/config/api.dart';
+import 'package:noty_client/constants/environment.dart';
 import 'package:noty_client/models/response/error/error_response.dart';
 import 'package:noty_client/models/response/folder/folder_move_list.dart';
+import 'package:noty_client/models/response/info_response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FolderService {
@@ -9,9 +10,12 @@ class FolderService {
     final prefs = await SharedPreferences.getInstance();
     final String? userToken = prefs.getString('user');
     try {
-      await Dio().post(apiEndpoint + "/folder/add",
+      var response = await Dio().post(
+          EnvironmentConstant.internalApiPrefix + "/folder/add",
           data: {'name': name},
           options: Options(headers: {"Authorization": "Bearer " + userToken!}));
+      InfoResponse res = InfoResponse.fromJson(response.data);
+      return res;
     } on DioError catch (e) {
       if (e.response?.statusCode == 400 || e.response?.statusCode == 401) {
         ErrorResponse error = ErrorResponse.fromJson(e.response?.data);
@@ -25,9 +29,12 @@ class FolderService {
     final prefs = await SharedPreferences.getInstance();
     final String? userToken = prefs.getString('user');
     try {
-      await Dio().patch(apiEndpoint + "/folder/edit",
+      var response = await Dio().patch(
+          EnvironmentConstant.internalApiPrefix + "/folder/edit",
           data: {'folder_id': folderId, 'new_name': newName},
           options: Options(headers: {"Authorization": "Bearer " + userToken!}));
+      InfoResponse res = InfoResponse.fromJson(response.data);
+      return res;
     } on DioError catch (e) {
       if (e.response?.statusCode == 400 || e.response?.statusCode == 401) {
         ErrorResponse error = ErrorResponse.fromJson(e.response?.data);
@@ -41,9 +48,12 @@ class FolderService {
     final prefs = await SharedPreferences.getInstance();
     final String? userToken = prefs.getString('user');
     try {
-      await Dio().delete(apiEndpoint + "/folder/delete",
+      var response = await Dio().delete(
+          EnvironmentConstant.internalApiPrefix + "/folder/delete",
           data: {'folder_id': folderId},
           options: Options(headers: {"Authorization": "Bearer " + userToken!}));
+      InfoResponse res = InfoResponse.fromJson(response.data);
+      return res;
     } on DioError catch (e) {
       if (e.response?.statusCode == 400 || e.response?.statusCode == 401) {
         ErrorResponse error = ErrorResponse.fromJson(e.response?.data);
@@ -57,9 +67,9 @@ class FolderService {
     final prefs = await SharedPreferences.getInstance();
     final String? userToken = prefs.getString('user');
     try {
-      Response response = await Dio().get(apiEndpoint + "/folder/list",
+      Response response = await Dio().get(
+          EnvironmentConstant.internalApiPrefix + "/folder/list",
           options: Options(headers: {"Authorization": "Bearer " + userToken!}));
-
       List<dynamic> tempFolderList = response.data["data"];
       List<FolderMoveList> folderMoveList = tempFolderList.map((folder) {
         return FolderMoveList(

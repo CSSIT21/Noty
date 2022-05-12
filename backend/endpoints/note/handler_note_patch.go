@@ -7,11 +7,11 @@ import (
 	"github.com/mitchellh/mapstructure"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"strings"
 
 	"noty-backend/loaders/mongo/models"
 	"noty-backend/types/common"
 	"noty-backend/types/responder"
-	"noty-backend/utils/logger"
 	"noty-backend/utils/text"
 )
 
@@ -51,8 +51,7 @@ func NotePatchHandler(c *fiber.Ctx) error {
 	noteId, _ := primitive.ObjectIDFromHex(body.NoteId)
 
 	var noteDetails []*models.NoteDetail
-	logger.Dump(body)
-
+	var tags []string
 	for _, detail := range body.NoteDetails {
 		if detail.Type == "reminder" {
 			reminderType := "reminder"
@@ -60,7 +59,7 @@ func NotePatchHandler(c *fiber.Ctx) error {
 			_ = mapstructure.Decode(detail.Data, reminderContent)
 
 			// TODO: Decode reminder content
-			tempReminderId, _ := primitive.ObjectIDFromHex(detail.Data.(map[string]any)["reminder_id"].(string))
+			tempReminderId, _ := primitive.ObjectIDFromHex(detail.Data.(map[string]any)["content"].(string))
 			noteDetails = append(noteDetails, &models.NoteDetail{
 				Type: &reminderType,
 				Data: &models.ReminderContent{
@@ -84,6 +83,15 @@ func NotePatchHandler(c *fiber.Ctx) error {
 		} else {
 			noteContent := new(models.NoteText)
 			_ = mapstructure.Decode(detail.Data, noteContent)
+
+			// * Find hashtags
+			textArray := strings.Fields(*noteContent.Content)
+			for _, s := range textArray {
+				if strings.Index(s, "#") == 0 && len(s[1:]) <= 16 {
+					tags = append(tags, s[1:])
+				}
+			}
+
 			noteDetails = append(noteDetails, &models.NoteDetail{
 				Type: &detail.Type,
 				Data: &models.NoteText{
@@ -92,6 +100,9 @@ func NotePatchHandler(c *fiber.Ctx) error {
 			})
 		}
 	}
+
+	// * Remove duplicate tag
+	tags = text.RemoveDuplicate(tags)
 
 	// * Update note
 	if err := mgm.Coll(&models.Notes{}).FindOneAndUpdate(mgm.Ctx(), bson.M{
@@ -102,6 +113,7 @@ func NotePatchHandler(c *fiber.Ctx) error {
 		"folder_id": &folderId,
 		"user_id":   &userId,
 		"details":   noteDetails,
+		"tags":      tags,
 	}}); err.Err() != nil {
 		return &responder.GenericError{
 			Message: "Unable to update note",

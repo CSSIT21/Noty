@@ -45,25 +45,35 @@ class _NoteSectionState extends State<NoteSection> {
                       endActionPane: ActionPane(
                         motion: const StretchMotion(),
                         children: [
+                          context.watch<NotesProvider>().folders.isNotEmpty
+                              ? SlidableAction(
+                                  onPressed: (BuildContext context) async {
+                                    var folderId =
+                                        await NoteService.getNoteDetail(
+                                            note.noteId);
+                                    if (folderId is NoteDetailResponse) {
+                                      showBarModalBottomSheet(
+                                        context: context,
+                                        builder: (context) => FolderMoveDialog(
+                                          folderId: folderId.data.folderId,
+                                          noteId: note.noteId,
+                                        ),
+                                        expand: true,
+                                      );
+                                    }
+                                  },
+                                  backgroundColor:
+                                      ThemeConstant.colorPrimaryLight,
+                                  foregroundColor: Colors.white,
+                                  icon: CupertinoIcons.folder_fill,
+                                )
+                              : Container(),
                           SlidableAction(
-                            onPressed: (BuildContext context) async {
-                              var folderId =
-                                  await NoteService.getNoteDetail(note.noteId);
-                              if (folderId is NoteDetailResponse) {
-                                showBarModalBottomSheet(
-                                  context: context,
-                                  builder: (context) => FolderMoveDialog(
-                                      folderId: folderId.data.folderId),
-                                  expand: true,
-                                );
-                              }
+                            onPressed: (BuildContext context) {
+                              context
+                                  .read<NotesProvider>()
+                                  .deleteNote(note.noteId, context);
                             },
-                            backgroundColor: ThemeConstant.colorPrimaryLight,
-                            foregroundColor: Colors.white,
-                            icon: CupertinoIcons.folder_fill,
-                          ),
-                          SlidableAction(
-                            onPressed: (BuildContext context) {},
                             backgroundColor: Colors.red,
                             foregroundColor: Colors.white,
                             icon: Icons.delete_rounded,
