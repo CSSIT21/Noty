@@ -74,7 +74,7 @@ class NotesProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  void addFolder(String title, BuildContext context) async {
+  Future<void> addFolder(String title, BuildContext context) async {
     var response = await FolderService.add(title);
     if (response is InfoResponse) {
       readJsonData();

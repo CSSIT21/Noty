@@ -64,9 +64,11 @@ showNewFolderDialog(BuildContext context) {
                 } else {
                   context
                       .read<NotesProvider>()
-                      .addFolder(_folderController.text, context);
-                  Navigator.pop(context);
-                  _folderController.text = "";
+                      .addFolder(_folderController.text, context)
+                      .then((_) {
+                    Navigator.pop(context);
+                    _folderController.text = "";
+                  });
                 }
               },
             )
