@@ -28,7 +28,7 @@ class ReminderService {
   }
 
   static Future<dynamic> editReminder(String title, String description,
-      String reminderId, String remindDate) async {
+      String reminderId, String remindDate, bool success) async {
     final prefs = await SharedPreferences.getInstance();
     final String? userToken = prefs.getString('user');
     try {
@@ -39,6 +39,7 @@ class ReminderService {
             "description": description,
             "reminder_id": reminderId,
             "remind_date": remindDate,
+            "success": success
           },
           options: Options(headers: {"Authorization": "Bearer " + userToken!}));
       InfoResponse res = InfoResponse.fromJson(response.data);

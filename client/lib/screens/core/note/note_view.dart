@@ -61,6 +61,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
               prevScreen: "Note",
               noteId: widget.noteId,
               updateNote: reminderHandler,
+              reminderState: response.reminder.success,
             ),
             expand: true,
           ),
@@ -261,13 +262,6 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
     //       .deleteNoteDetail(widget.noteIndex, noteDetailIndex);
     //   setState(() {});
     // }
-    void handleBack() {
-      if (widget.folderId != null) {
-        context
-            .read<NotesProvider>()
-            .readFolderNoteListJson(widget.folderId ?? "");
-      }
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -300,7 +294,6 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
             ),
           ),
           onTap: () {
-            handleBack();
             context.read<NotesProvider>().editNote(context).then((_) {
               context.read<NotesProvider>().readJsonData().then((_) {
                 if (widget.folderId != null) {
@@ -310,6 +303,10 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                 }
                 context.read<ReminderProvider>().readReminderJson();
                 context.read<TagProvider>().readTagJson();
+                context.read<NotesProvider>().clearNoteDetail();
+                setState(() {
+                  details = [];
+                });
                 Navigator.pop(context);
               });
             });

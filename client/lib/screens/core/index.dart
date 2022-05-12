@@ -100,9 +100,9 @@ class _CoreScreenState extends material.State<CoreScreen>
       NotificationService.onNotifications.stream.listen(onClickedNotification);
 
   void onClickedNotification(String? payload) {
-    setState(() {
-      _tabController.index = 1;
-    });
+    // setState(() {
+    //   _tabController.index = 1;
+    // });
   }
 
   @override

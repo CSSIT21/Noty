@@ -60,11 +60,17 @@ class NotesProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  void readFolderNoteListJson(String folderId) async {
+  Future<void> readFolderNoteListJson(String folderId) async {
     var folderNoteList = await NoteService.getNoteListFolder(folderId);
     if (folderNoteList is NoteListFolderResponse) {
       setFolderNoteList(folderNoteList.data);
     }
+    notifyListeners();
+  }
+
+  void clearNoteDetail() {
+    noteDetails = NoteDetailData(
+        id: "", updatedAt: "", title: "", details: [], tags: [], folderId: "");
     notifyListeners();
   }
 
@@ -329,12 +335,12 @@ class ReminderProvider with ChangeNotifier, DiagnosticableTreeMixin {
   }
 
   void editReminder(String title, String description, String remindDate,
-      String reminderId, BuildContext context) async {
+      String reminderId, bool success, BuildContext context) async {
     if (!remindDate.endsWith("Z")) {
       remindDate = remindDate + "Z";
     }
     var response = await ReminderService.editReminder(
-        title, description, reminderId, remindDate);
+        title, description, reminderId, remindDate, success);
     if (response is InfoResponse) {
       readReminderJson();
     } else if (response is ErrorResponse) {
@@ -437,7 +443,7 @@ class TagProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  void readTagJson() async {
+  Future<void> readTagJson() async {
     var response = await TagService.getTagData();
     if (response is TagResponse) {
       setTagName(response.data.tagName);
@@ -446,7 +452,7 @@ class TagProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  void searchTag(String tagName) async {
+  Future<void> searchTag(String tagName) async {
     var response = await TagService.searchTag(tagName);
     if (response is SearchTagResponse) {
       setFilteredNote(response.notes);

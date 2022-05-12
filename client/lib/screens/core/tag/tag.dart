@@ -51,7 +51,7 @@ class _TagFragmentState extends State<TagFragment> {
                             margin: const EdgeInsets.only(right: 8),
                             child: GestureDetector(
                               behavior: HitTestBehavior.translucent,
-                              onTap: () {
+                              onTap: () async {
                                 for (var i = 0;
                                     i <
                                         Provider.of<TagProvider>(context,
@@ -74,11 +74,13 @@ class _TagFragmentState extends State<TagFragment> {
                                           .selected = !tag.selected;
                                     });
                                     if (tag.selected) {
-                                      context
+                                      await context
                                           .read<TagProvider>()
                                           .searchTag(tag.name);
                                     } else {
-                                      context.read<TagProvider>().readTagJson();
+                                      await context
+                                          .read<TagProvider>()
+                                          .readTagJson();
                                     }
                                   }
                                 }
@@ -160,7 +162,7 @@ class _TagFragmentState extends State<TagFragment> {
               ],
             )
           : const Center(
-              child: Text("No reminder"),
+              child: Text("No tags"),
             ),
     );
   }

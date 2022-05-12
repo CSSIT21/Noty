@@ -15,6 +15,7 @@ class EditReminder extends StatefulWidget {
   final String prevScreen;
   final String noteId;
   final Function? updateNote;
+  final bool reminderState;
 
   const EditReminder(
       {Key? key,
@@ -24,6 +25,7 @@ class EditReminder extends StatefulWidget {
       required this.reminderId,
       required this.prevScreen,
       required this.noteId,
+      required this.reminderState,
       this.updateNote})
       : super(key: key);
 
@@ -106,6 +108,7 @@ class _EditReminderState extends State<EditReminder> {
                     _detailsController.text,
                     selectedDate.toIso8601String(),
                     widget.reminderId,
+                    widget.reminderState,
                     context);
                 if (widget.prevScreen == "Note") {
                   context.read<NotesProvider>().editNote(context);

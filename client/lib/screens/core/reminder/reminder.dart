@@ -63,6 +63,7 @@ class _ReminderFragmentState extends State<ReminderFragment> {
                                   reminderId: reminder.reminderId,
                                   prevScreen: "Reminder",
                                   noteId: "",
+                                  reminderState: reminder.success,
                                 ),
                                 expand: true,
                               ),

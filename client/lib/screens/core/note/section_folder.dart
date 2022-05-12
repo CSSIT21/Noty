@@ -39,14 +39,16 @@ class _FolderSectionState extends State<FolderSection> {
                         onTap: () {
                           context
                               .read<NotesProvider>()
-                              .readFolderNoteListJson(folder.folderId);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  FolderDetailScreen(folderId: folder.folderId),
-                            ),
-                          );
+                              .readFolderNoteListJson(folder.folderId)
+                              .then(
+                                (_) => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => FolderDetailScreen(
+                                        folderId: folder.folderId),
+                                  ),
+                                ),
+                              );
                         },
                         behavior: HitTestBehavior.translucent,
                         child: Slidable(

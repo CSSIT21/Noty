@@ -14,14 +14,14 @@ class NoteListItem extends StatefulWidget {
   final String previousScreen;
   final String? folderId;
 
-  const NoteListItem(
-      {Key? key,
-      required this.title,
-      required this.date,
-      required this.noteId,
-      required this.previousScreen,
-      this.folderId})
-      : super(key: key);
+  const NoteListItem({
+    Key? key,
+    required this.title,
+    required this.date,
+    required this.noteId,
+    required this.previousScreen,
+    this.folderId,
+  }) : super(key: key);
 
   @override
   State<NoteListItem> createState() => _NoteListItemState();
@@ -49,8 +49,8 @@ class _NoteListItemState extends State<NoteListItem> {
                 MaterialPageRoute(
                   builder: (context) => NoteDetailScreen(
                     previousScreen: widget.previousScreen,
-                    noteId: note.noteId,
-                    noteTitle: note.title,
+                    noteId: widget.noteId,
+                    noteTitle: widget.title,
                     folderId: widget.folderId,
                   ), //     ),
                 ),
