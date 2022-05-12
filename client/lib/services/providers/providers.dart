@@ -15,6 +15,8 @@ import 'package:noty_client/models/response/reminder/independent_reminder.dart';
 import 'package:noty_client/models/response/reminder/notes_reminder.dart';
 import 'package:noty_client/models/response/reminder/reminder_in_note.dart';
 import 'package:noty_client/models/response/reminder/reminder_response.dart';
+import 'package:noty_client/models/response/tag/filter_tag_list.dart';
+import 'package:noty_client/models/response/tag/search_tag_response.dart';
 import 'package:noty_client/models/response/tag/tag_response.dart';
 import 'package:noty_client/services/folder_service.dart';
 import 'package:noty_client/services/me.dart';
@@ -413,14 +415,25 @@ class ReminderProvider with ChangeNotifier, DiagnosticableTreeMixin {
 class TagProvider with ChangeNotifier, DiagnosticableTreeMixin {
   List<String> tagname = [];
   List<TagListData> tagList = [];
+  List<FilterTag> filterTagList = [];
+  List<NoteData> filteredNote = [];
 
   void setTagName(List<String> data) {
     tagname = data;
+    filterTagList.clear();
+    for (var i = 0; i < data.length; i++) {
+      filterTagList.add(FilterTag(name: data[i], selected: false));
+    }
     notifyListeners();
   }
 
   void setTagList(List<TagListData> data) {
     tagList = data;
+    notifyListeners();
+  }
+
+  void setFilteredNote(List<NoteData> data) {
+    filteredNote = data;
     notifyListeners();
   }
 
@@ -430,6 +443,17 @@ class TagProvider with ChangeNotifier, DiagnosticableTreeMixin {
       setTagName(response.data.tagName);
       setTagList(response.data.tagList);
     }
+    notifyListeners();
+  }
+
+  void searchTag(String tagName) async {
+    var response = await TagService.searchTag(tagName);
+    if (response is SearchTagResponse) {
+      setFilteredNote(response.notes);
+      tagList.clear();
+      tagList.add(TagListData(name: tagName, notes: response.notes));
+    }
+
     notifyListeners();
   }
 }

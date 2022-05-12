@@ -99,7 +99,11 @@ class _CoreScreenState extends material.State<CoreScreen>
   void listenNotifications() =>
       NotificationService.onNotifications.stream.listen(onClickedNotification);
 
-  void onClickedNotification(String? payload) => print(payload);
+  void onClickedNotification(String? payload) {
+    setState(() {
+      _tabController.index = 1;
+    });
+  }
 
   @override
   material.Widget build(material.BuildContext context) {
@@ -139,23 +143,24 @@ class _CoreScreenState extends material.State<CoreScreen>
                 ],
               )
             : material.AppBar(
-                toolbarHeight: 85,
-                title: SizedBox(
-                  height: 65,
-                  child: material.Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      AppBarText(text: currentTitle),
-                      CupertinoSearchTextField(
-                        controller: _textController,
-                        style: TextStyle(
-                            color: ThemeConstant.textColorPrimary,
-                            fontSize: 14),
-                        itemColor: ThemeConstant.colorPrimaryLight,
-                      ),
-                    ],
-                  ),
-                ),
+                // toolbarHeight: 85,
+                // title: SizedBox(
+                //   height: 65,
+                //   child: material.Column(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       AppBarText(text: currentTitle),
+                //       CupertinoSearchTextField(
+                //         controller: _textController,
+                //         style: TextStyle(
+                //             color: ThemeConstant.textColorPrimary,
+                //             fontSize: 14),
+                //         itemColor: ThemeConstant.colorPrimaryLight,
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                title: AppBarText(text: currentTitle),
                 centerTitle: true,
                 automaticallyImplyLeading: false,
               ),

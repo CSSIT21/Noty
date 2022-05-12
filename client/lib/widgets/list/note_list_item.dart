@@ -95,10 +95,9 @@ class _NoteListItemState extends State<NoteListItem> {
                           : Container(),
                       note.tags.isNotEmpty
                           ? const TagLabel(
-                              textColor: Color(0xff828282),
-                              bgColor: Color(0xff252525),
                               title: "Tag",
                               iconFilled: true,
+                              isSelected: false,
                             )
                           : Container(),
                     ],

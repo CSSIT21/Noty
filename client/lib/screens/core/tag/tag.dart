@@ -33,7 +33,9 @@ class _TagFragmentState extends State<TagFragment> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       padding: const EdgeInsets.only(top: 20, bottom: 20),
-      child: Provider.of<TagProvider>(context, listen: false).tagname.isNotEmpty
+      child: Provider.of<TagProvider>(context, listen: false)
+              .filterTagList
+              .isNotEmpty
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -43,29 +45,48 @@ class _TagFragmentState extends State<TagFragment> {
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: Provider.of<TagProvider>(context, listen: false)
-                        .tagname
+                        .filterTagList
                         .mapIndexed(
                           (index, tag) => Container(
                             margin: const EdgeInsets.only(right: 8),
                             child: GestureDetector(
                               behavior: HitTestBehavior.translucent,
                               onTap: () {
-                                setState(() {
-                                  tagBgColor =
-                                      tagBgColor == const Color(0xff252525)
-                                          ? ThemeConstant.colorPrimaryLight
-                                          : const Color(0xff252525);
-                                  tagTextColor =
-                                      tagTextColor == const Color(0xff828282)
-                                          ? ThemeConstant.textColorPrimary
-                                          : const Color(0xff828282);
-                                });
+                                for (var i = 0;
+                                    i <
+                                        Provider.of<TagProvider>(context,
+                                                listen: false)
+                                            .filterTagList
+                                            .length;
+                                    i++) {
+                                  if (i != index) {
+                                    setState(() {
+                                      Provider.of<TagProvider>(context,
+                                              listen: false)
+                                          .filterTagList[i]
+                                          .selected = false;
+                                    });
+                                  } else if (i == index) {
+                                    setState(() {
+                                      Provider.of<TagProvider>(context,
+                                              listen: false)
+                                          .filterTagList[i]
+                                          .selected = !tag.selected;
+                                    });
+                                    if (tag.selected) {
+                                      context
+                                          .read<TagProvider>()
+                                          .searchTag(tag.name);
+                                    } else {
+                                      context.read<TagProvider>().readTagJson();
+                                    }
+                                  }
+                                }
                               },
                               child: TagLabel(
-                                bgColor: tagBgColor,
-                                textColor: tagTextColor,
-                                title: tag,
+                                title: tag.name,
                                 iconFilled: false,
+                                isSelected: tag.selected,
                               ),
                             ),
                           ),
