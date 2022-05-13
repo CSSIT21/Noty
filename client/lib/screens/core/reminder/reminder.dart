@@ -4,11 +4,13 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:noty_client/screens/core/note/note_view.dart';
 import 'package:noty_client/screens/core/reminder/edit_reminder.dart';
 import 'package:noty_client/screens/core/reminder/new_reminder.dart';
+import 'package:noty_client/services/notification_sevice.dart';
 import 'package:noty_client/services/providers/providers.dart';
 import 'package:noty_client/types/widget/placement.dart';
 import 'package:noty_client/widgets/surface/curved_card.dart';
 import 'package:noty_client/widgets/typography/content_text.dart';
 import 'package:noty_client/widgets/typography/header_text.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:provider/provider.dart';
 
 class ReminderFragment extends StatefulWidget {
@@ -23,6 +25,12 @@ class _ReminderFragmentState extends State<ReminderFragment> {
   void initState() {
     super.initState();
     context.read<ReminderProvider>().readReminderJson();
+    tz.initializeTimeZones();
+    NotificationService.showScheduledNotification(
+        title: "Reminder",
+        body: "This is a notification from reminder page",
+        payload: "test",
+        scheduledDate: DateTime.now().add(const Duration(seconds: 5)));
   }
 
   @override

@@ -51,10 +51,6 @@ Widget menuPopup(BuildContext context) => PopupMenuButton(
       ],
       onSelected: (selected) async {
         if (selected == 1) {
-          NotificationService.showNotification(
-              title: "Reminder",
-              body: "This is a notification from add folder button",
-              payload: "test");
           showNewFolderDialog(context);
         }
         if (selected == 2) {
