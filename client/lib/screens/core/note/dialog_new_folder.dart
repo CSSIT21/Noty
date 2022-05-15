@@ -22,6 +22,7 @@ showNewFolderDialog(BuildContext context) {
               ),
               CupertinoTextField(
                 controller: _folderController,
+                keyboardAppearance: Brightness.dark,
                 autofocus: true,
                 placeholder: "Name",
                 placeholderStyle: const TextStyle(

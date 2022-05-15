@@ -261,6 +261,8 @@ class ProfileProvider with ChangeNotifier, DiagnosticableTreeMixin {
       reminders: 0,
       tags: 0);
 
+  String email = '';
+
   void setMeData(MeData data) {
     meData = data;
     notifyListeners();
@@ -281,6 +283,11 @@ class ProfileProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
   void setLastname(String text) {
     meData.lastname = text;
+    notifyListeners();
+  }
+
+  void setResetEmail(String text) {
+    email = text;
     notifyListeners();
   }
 }

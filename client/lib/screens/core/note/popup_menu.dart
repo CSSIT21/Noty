@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:noty_client/constants/theme.dart';
 import 'package:noty_client/screens/core/note/dialog_new_folder.dart';
 import 'package:noty_client/screens/core/note/note_view.dart';
-import 'package:noty_client/services/notification_sevice.dart';
 import 'package:noty_client/services/providers/providers.dart';
 import 'package:provider/provider.dart';
 

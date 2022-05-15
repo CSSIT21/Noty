@@ -22,6 +22,7 @@ showEditFolderDialog(BuildContext context, String folderName, String folderId) {
             children: [
               CupertinoTextField(
                 controller: _folderEditController,
+                keyboardAppearance: Brightness.dark,
                 autofocus: true,
                 placeholder: "Name",
                 placeholderStyle: const TextStyle(
