@@ -5,7 +5,6 @@ import 'package:noty_client/constants/theme.dart';
 import 'package:noty_client/models/response/reminder/reminder_in_note.dart';
 import 'package:noty_client/screens/core/note/action_button.dart';
 import 'package:noty_client/screens/core/note/checkbox.dart';
-// import 'package:noty_client/screens/core/note/delete_note_detail.dart';
 import 'package:noty_client/screens/core/reminder/edit_reminder.dart';
 import 'package:noty_client/services/providers/providers.dart';
 import 'package:noty_client/types/widget/placement.dart';
@@ -139,6 +138,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
             .data!
             .content,
         keyboardType: TextInputType.multiline,
+        keyboardAppearance: Brightness.dark,
         maxLines: null,
         style: TextStyle(
           fontSize: Provider.of<NotesProvider>(context, listen: false)
@@ -213,10 +213,12 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
                     ? FontWeight.w500
                     : FontWeight.normal,
           ),
-          // suffix: DeleteNoteDetail(index: i),
         ),
         onChanged: (text) =>
             context.read<NotesProvider>().editNoteText(i, text),
+        onTap: () {
+          context.read<NotesProvider>().setCurrentTfIndex(i);
+        },
       );
     }
     return Container();
@@ -249,153 +251,170 @@ class _NoteDetailScreenState extends State<NoteDetailScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     FocusScopeNode currentFocus = FocusScope.of(context);
+
     void addNoteDetail(String noteId, String type) {
       context.read<NotesProvider>().addNoteDetail(noteId, type);
       reminderHandler();
     }
 
-    // void deleteNoteDetail(int noteDetailIndex) {
-    //   context
-    //       .read<NotesProvider>()
-    //       .deleteNoteDetail(widget.noteIndex, noteDetailIndex);
-    //   setState(() {});
-    // }
-
-    return Scaffold(
-      appBar: AppBar(
-        title: SizedBox(
-          width: 120,
-          child: AppBarText(
-              text: context.watch<NotesProvider>().noteDetails.title),
-        ),
-        centerTitle: true,
-        leadingWidth: 100,
-        leading: GestureDetector(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 15),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.arrow_back_ios,
-                  color: ThemeConstant.colorPrimaryLight,
-                ),
-                SizedBox(
-                  width: 60,
-                  child: Text(
-                    widget.previousScreen,
-                    style: TextStyle(
-                        fontSize: 17, color: ThemeConstant.colorPrimaryLight),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                )
-              ],
-            ),
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus &&
+            currentFocus.focusedChild != null) {
+          FocusManager.instance.primaryFocus!.unfocus();
+        }
+      },
+      behavior: HitTestBehavior.translucent,
+      child: Scaffold(
+        appBar: AppBar(
+          title: SizedBox(
+            width: 120,
+            child: AppBarText(
+                text: context.watch<NotesProvider>().noteDetails.title),
           ),
-          onTap: () {
-            context.read<NotesProvider>().editNote(context).then((_) {
-              context.read<NotesProvider>().readJsonData().then((_) {
-                if (widget.folderId != null) {
-                  context
-                      .read<NotesProvider>()
-                      .readFolderNoteListJson(widget.folderId ?? "");
-                }
-                context.read<ReminderProvider>().readReminderJson();
-                context.read<TagProvider>().readTagJson();
-                context.read<NotesProvider>().clearNoteDetail();
-                setState(() {
-                  details = [];
-                });
-                Navigator.pop(context);
-              });
-            });
-          },
-        ),
-        actions: [
-          MediaQuery.of(context).viewInsets.bottom > 0
-              ? TextButton(
-                  onPressed: () {
-                    if (!currentFocus.hasPrimaryFocus) {
-                      currentFocus.unfocus();
-                    }
-                    context.read<NotesProvider>().editNote(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    splashFactory: NoSplash.splashFactory,
-                  ),
-                  child: const Text(
-                    "Done",
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                )
-              : Container(),
-        ],
-      ),
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
-            child: SizedBox(
-              width: double.infinity,
-              child: Column(
+          centerTitle: true,
+          leadingWidth: 100,
+          leading: GestureDetector(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 15),
+              child: Row(
                 children: [
-                  TextFormField(
-                    initialValue: widget.noteTitle,
-                    keyboardType: TextInputType.multiline,
-                    textInputAction: TextInputAction.done,
-                    maxLines: null,
-                    style: const TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    decoration: const InputDecoration.collapsed(
-                      hintText: "Note Title",
-                      hintStyle: TextStyle(
-                        color: Color(0xff636367),
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    onChanged: (text) => setState(() {
-                      Provider.of<NotesProvider>(context, listen: false)
-                          .noteDetails
-                          .title = text;
-                    }),
+                  Icon(
+                    Icons.arrow_back_ios,
+                    color: ThemeConstant.colorPrimaryLight,
                   ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 15, bottom: 10),
-                    child: const Divider(
-                      color: Color(0xff434345),
-                      height: 1,
+                  SizedBox(
+                    width: 60,
+                    child: Text(
+                      widget.previousScreen,
+                      style: TextStyle(
+                          fontSize: 17, color: ThemeConstant.colorPrimaryLight),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                  Column(
-                    children: details,
-                  ),
+                  )
                 ],
               ),
             ),
+            onTap: () {
+              context.read<NotesProvider>().editNote(context).then((_) {
+                context.read<NotesProvider>().readJsonData().then((_) {
+                  if (widget.folderId != null) {
+                    context
+                        .read<NotesProvider>()
+                        .readFolderNoteListJson(widget.folderId ?? "");
+                  }
+                  context.read<ReminderProvider>().readReminderJson();
+                  context.read<TagProvider>().readTagJson();
+                  context.read<NotesProvider>().clearNoteDetail();
+                  setState(() {
+                    details = [];
+                  });
+                  Navigator.pop(context);
+                });
+              });
+            },
           ),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Container(
-              margin: const EdgeInsets.only(bottom: 30, right: 15),
-              width: 75,
-              height: 75,
-              child: MediaQuery.of(context).viewInsets.bottom > 0
-                  ? null
-                  : NewNoteAction(
-                      noteId: widget.noteId,
-                      addNoteDetail: addNoteDetail,
-                      detailsHandler: reminderHandler,
+          actions: [
+            MediaQuery.of(context).viewInsets.bottom > 0 &&
+                    context.read<NotesProvider>().currentTextFieldIndex != -1
+                ? TextButton(
+                    onPressed: () {
+                      context.read<NotesProvider>().deleteNoteDetail(
+                          context.read<NotesProvider>().currentTextFieldIndex);
+                      reminderHandler();
+                      if (!currentFocus.hasPrimaryFocus) {
+                        currentFocus.unfocus();
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      splashFactory: NoSplash.splashFactory,
                     ),
+                    child: const Text(
+                      "Delete",
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.normal,
+                        color: Colors.red,
+                      ),
+                    ),
+                  )
+                : Container(),
+          ],
+        ),
+        body: Stack(
+          children: [
+            SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
+              child: SizedBox(
+                width: double.infinity,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      initialValue: widget.noteTitle,
+                      keyboardType: TextInputType.multiline,
+                      textInputAction: TextInputAction.done,
+                      keyboardAppearance: Brightness.dark,
+                      maxLines: null,
+                      style: const TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      decoration: const InputDecoration.collapsed(
+                        hintText: "Note Title",
+                        hintStyle: TextStyle(
+                          color: Color(0xff636367),
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      onChanged: (text) => setState(() {
+                        Provider.of<NotesProvider>(context, listen: false)
+                            .noteDetails
+                            .title = text;
+                      }),
+                      onTap: () {
+                        context.read<NotesProvider>().setCurrentTfIndex(-1);
+                      },
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(top: 15, bottom: 10),
+                      child: const Divider(
+                        color: Color(0xff434345),
+                        height: 1,
+                      ),
+                    ),
+                    Column(
+                      children: details,
+                    ),
+                  ],
+                ),
+              ),
             ),
-          )
-        ],
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Container(
+                margin: const EdgeInsets.only(bottom: 30, right: 15),
+                width: 75,
+                height: 75,
+                child: MediaQuery.of(context).viewInsets.bottom > 0
+                    ? null
+                    : NewNoteAction(
+                        noteId: widget.noteId,
+                        addNoteDetail: addNoteDetail,
+                        detailsHandler: reminderHandler,
+                      ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

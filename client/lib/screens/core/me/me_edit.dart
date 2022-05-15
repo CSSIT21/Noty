@@ -132,193 +132,203 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       }
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const SizedBox(
-          width: 120,
-          child: AppBarText(text: "Edit Profile"),
-        ),
-        centerTitle: true,
-        leadingWidth: 100,
-        leading: const LeadingButton(
-          text: "Back",
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(20, 20, 20, 50),
-        child: ConstrainedBox(
-          constraints: BoxConstraints.tightFor(
-            height: screenHeight - 80,
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus &&
+            currentFocus.focusedChild != null) {
+          FocusManager.instance.primaryFocus!.unfocus();
+        }
+      },
+      behavior: HitTestBehavior.translucent,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const SizedBox(
+            width: 120,
+            child: AppBarText(text: "Edit Profile"),
           ),
-          child: SizedBox(
-            width: double.infinity,
-            height: double.infinity,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Column(
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 20),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(120),
-                        child: SizedBox(
-                          height: 125,
-                          width: 125,
-                          child: Stack(
-                            children: [
-                              Image.asset(
-                                "assets/images/profile.png",
-                                width: 150,
-                              ),
-                              Align(
-                                alignment: Alignment.bottomCenter,
-                                child: Container(
-                                  height: 150 * 0.25,
-                                  width: double.infinity,
-                                  color: Colors.black.withOpacity(0.5),
-                                  child: const Center(
-                                    child: Text(
-                                      "Edit",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w500),
+          centerTitle: true,
+          leadingWidth: 100,
+          leading: const LeadingButton(
+            text: "Back",
+          ),
+        ),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 50),
+          child: ConstrainedBox(
+            constraints: BoxConstraints.tightFor(
+              height: screenHeight - 80,
+            ),
+            child: SizedBox(
+              width: double.infinity,
+              height: double.infinity,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Column(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 20),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(120),
+                          child: SizedBox(
+                            height: 125,
+                            width: 125,
+                            child: Stack(
+                              children: [
+                                Image.asset(
+                                  "assets/images/profile.png",
+                                  width: 150,
+                                ),
+                                Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Container(
+                                    height: 150 * 0.25,
+                                    width: double.infinity,
+                                    color: Colors.black.withOpacity(0.5),
+                                    child: const Center(
+                                      child: Text(
+                                        "Edit",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w500),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              Positioned.fill(
-                                  child: Material(
-                                      color: Colors.transparent,
-                                      child: InkWell(
-                                        splashColor: const Color(0xff24577a)
-                                            .withOpacity(0.5),
-                                        onTap: () {},
-                                      ))),
-                            ],
+                                Positioned.fill(
+                                    child: Material(
+                                        color: Colors.transparent,
+                                        child: InkWell(
+                                          splashColor: const Color(0xff24577a)
+                                              .withOpacity(0.5),
+                                          onTap: () {},
+                                        ))),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 20),
-                      height: 160,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const SizedBox(
-                            width: double.infinity,
-                            child: Text("Firstname-Lastname"),
-                          ),
-                          TextFormField(
-                            initialValue: meData.firstname,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              hintText: "Firstname",
-                              hintStyle: TextStyle(
-                                color: ThemeConstant.textFieldTextColor,
-                              ),
-                              filled: true,
-                              fillColor: ThemeConstant.textFieldBgColor,
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 20),
+                        height: 160,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const SizedBox(
+                              width: double.infinity,
+                              child: Text("Firstname-Lastname"),
                             ),
-                            onChanged: (text) => setState(() {
-                              tempFirstname = text;
-                            }),
-                          ),
-                          TextFormField(
-                            initialValue: meData.lastname,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
+                            TextFormField(
+                              initialValue: meData.firstname,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                hintText: "Firstname",
+                                hintStyle: TextStyle(
+                                  color: ThemeConstant.textFieldTextColor,
+                                ),
+                                filled: true,
+                                fillColor: ThemeConstant.textFieldBgColor,
                               ),
-                              hintText: "Lastname",
-                              hintStyle: TextStyle(
-                                  color: ThemeConstant.textFieldTextColor),
-                              filled: true,
-                              fillColor: ThemeConstant.textFieldBgColor,
+                              onChanged: (text) => setState(() {
+                                tempFirstname = text;
+                              }),
                             ),
-                            onChanged: (text) => setState(() {
-                              tempLastname = text;
-                            }),
-                          ),
-                        ],
+                            TextFormField(
+                              initialValue: meData.lastname,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                hintText: "Lastname",
+                                hintStyle: TextStyle(
+                                    color: ThemeConstant.textFieldTextColor),
+                                filled: true,
+                                fillColor: ThemeConstant.textFieldBgColor,
+                              ),
+                              onChanged: (text) => setState(() {
+                                tempLastname = text;
+                              }),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 220,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const SizedBox(
-                            width: double.infinity,
-                            child: Text("Password"),
-                          ),
-                          TextField(
-                            controller: _passwordController,
-                            keyboardAppearance: Brightness.dark,
-                            obscureText: true,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                hintText: 'Current Password',
-                                hintStyle: TextStyle(
-                                    color: ThemeConstant.textFieldTextColor),
-                                filled: true,
-                                fillColor: ThemeConstant.textFieldBgColor),
-                          ),
-                          TextField(
-                            controller: _newPasswordController,
-                            keyboardAppearance: Brightness.dark,
-                            obscureText: true,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                hintText: 'New Password',
-                                hintStyle: TextStyle(
-                                    color: ThemeConstant.textFieldTextColor),
-                                filled: true,
-                                fillColor: ThemeConstant.textFieldBgColor),
-                          ),
-                          TextField(
-                            controller: _confirmPasswordController,
-                            keyboardAppearance: Brightness.dark,
-                            obscureText: true,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                hintText: 'Confirm Password',
-                                hintStyle: TextStyle(
-                                    color: ThemeConstant.textFieldTextColor),
-                                filled: true,
-                                fillColor: ThemeConstant.textFieldBgColor),
-                          ),
-                        ],
+                      SizedBox(
+                        height: 220,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const SizedBox(
+                              width: double.infinity,
+                              child: Text("Password"),
+                            ),
+                            TextField(
+                              controller: _passwordController,
+                              keyboardAppearance: Brightness.dark,
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  hintText: 'Current Password',
+                                  hintStyle: TextStyle(
+                                      color: ThemeConstant.textFieldTextColor),
+                                  filled: true,
+                                  fillColor: ThemeConstant.textFieldBgColor),
+                            ),
+                            TextField(
+                              controller: _newPasswordController,
+                              keyboardAppearance: Brightness.dark,
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  hintText: 'New Password',
+                                  hintStyle: TextStyle(
+                                      color: ThemeConstant.textFieldTextColor),
+                                  filled: true,
+                                  fillColor: ThemeConstant.textFieldBgColor),
+                            ),
+                            TextField(
+                              controller: _confirmPasswordController,
+                              keyboardAppearance: Brightness.dark,
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  hintText: 'Confirm Password',
+                                  hintStyle: TextStyle(
+                                      color: ThemeConstant.textFieldTextColor),
+                                  filled: true,
+                                  fillColor: ThemeConstant.textFieldBgColor),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: RoundedLoadingButton(
-                    child: const Text(
-                      'Save',
-                      style: TextStyle(fontSize: 16, color: Colors.white),
-                    ),
-                    color: ThemeConstant.colorPrimaryLight,
-                    borderRadius: 10,
-                    controller: _profileLoadingButton,
-                    onPressed: updateProfile,
+                    ],
                   ),
-                )
-              ],
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: RoundedLoadingButton(
+                      child: const Text(
+                        'Save',
+                        style: TextStyle(fontSize: 16, color: Colors.white),
+                      ),
+                      color: ThemeConstant.colorPrimaryLight,
+                      borderRadius: 10,
+                      controller: _profileLoadingButton,
+                      onPressed: updateProfile,
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),

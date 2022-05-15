@@ -76,205 +76,215 @@ class _EditReminderState extends State<EditReminder> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: AppBarText(text: widget.title),
-        centerTitle: true,
-        leadingWidth: 100,
-        toolbarHeight: 60,
-        leading: GestureDetector(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 15),
-            child: Row(
-              children: [
-                Text(
-                  "Cancel",
-                  style: TextStyle(
-                      fontSize: 17, color: ThemeConstant.colorPrimaryLight),
-                )
-              ],
-            ),
-          ),
-          onTap: () {
-            Navigator.pop(context);
-          },
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              if (_titleController.text.isNotEmpty) {
-                context.read<ReminderProvider>().editReminder(
-                    _titleController.text,
-                    _detailsController.text,
-                    selectedDate.toIso8601String(),
-                    widget.reminderId,
-                    widget.reminderState,
-                    context);
-                if (widget.prevScreen == "Note") {
-                  context.read<NotesProvider>().editNote(context);
-                  context.read<ReminderProvider>().readReminderJson();
-                  context
-                      .read<NotesProvider>()
-                      .readNoteDetailJson(widget.noteId)
-                      .then((_) {
-                    widget.updateNote!();
-                    Navigator.pop(context);
-                  });
-                } else {
-                  context.read<ReminderProvider>().readReminderJson().then(
-                        (_) => Navigator.pop(context),
-                      );
-                }
-              } else {
-                var error = SnackBar(
-                  behavior: SnackBarBehavior.floating,
-                  margin:
-                      const EdgeInsets.only(bottom: 20, left: 15, right: 15),
-                  content: const Text("Title cannot be empty"),
-                  action: SnackBarAction(
-                    label: 'OK',
-                    onPressed: () {},
-                  ),
-                );
-                ScaffoldMessenger.of(context).showSnackBar(error);
-              }
-            },
-            child: Text(
-              "Save",
-              style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.normal,
-                color: ThemeConstant.colorPrimaryLight,
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus &&
+            currentFocus.focusedChild != null) {
+          FocusManager.instance.primaryFocus!.unfocus();
+        }
+      },
+      behavior: HitTestBehavior.translucent,
+      child: Scaffold(
+        appBar: AppBar(
+          title: AppBarText(text: widget.title),
+          centerTitle: true,
+          leadingWidth: 100,
+          toolbarHeight: 60,
+          leading: GestureDetector(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 15),
+              child: Row(
+                children: [
+                  Text(
+                    "Cancel",
+                    style: TextStyle(
+                        fontSize: 17, color: ThemeConstant.colorPrimaryLight),
+                  )
+                ],
               ),
             ),
-            style: ElevatedButton.styleFrom(
-              splashFactory: NoSplash.splashFactory,
-            ),
-          )
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(14),
-        controller: ModalScrollController.of(context),
-        child: Container(
-          color: ThemeConstant.colorPrimaryDark,
-          child: Column(
-            children: [
-              Column(
-                children: [
-                  Container(
+            onTap: () {
+              Navigator.pop(context);
+            },
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                if (_titleController.text.isNotEmpty) {
+                  context.read<ReminderProvider>().editReminder(
+                      _titleController.text,
+                      _detailsController.text,
+                      selectedDate.toIso8601String(),
+                      widget.reminderId,
+                      widget.reminderState,
+                      context);
+                  if (widget.prevScreen == "Note") {
+                    context.read<NotesProvider>().editNote(context);
+                    context.read<ReminderProvider>().readReminderJson();
+                    context
+                        .read<NotesProvider>()
+                        .readNoteDetailJson(widget.noteId)
+                        .then((_) {
+                      widget.updateNote!();
+                      Navigator.pop(context);
+                    });
+                  } else {
+                    context.read<ReminderProvider>().readReminderJson().then(
+                          (_) => Navigator.pop(context),
+                        );
+                  }
+                } else {
+                  var error = SnackBar(
+                    behavior: SnackBarBehavior.floating,
+                    margin:
+                        const EdgeInsets.only(bottom: 20, left: 15, right: 15),
+                    content: const Text("Title cannot be empty"),
+                    action: SnackBarAction(
+                      label: 'OK',
+                      onPressed: () {},
+                    ),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(error);
+                }
+              },
+              child: Text(
+                "Save",
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.normal,
+                  color: ThemeConstant.colorPrimaryLight,
+                ),
+              ),
+              style: ElevatedButton.styleFrom(
+                splashFactory: NoSplash.splashFactory,
+              ),
+            )
+          ],
+        ),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(14),
+          controller: ModalScrollController.of(context),
+          child: Container(
+            color: ThemeConstant.colorPrimaryDark,
+            child: Column(
+              children: [
+                Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 20),
+                      decoration: BoxDecoration(
+                        color: ThemeConstant.textFieldBgColor,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(12, 18, 12, 18),
+                        child: Column(
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 4),
+                              child: TextField(
+                                controller: _titleController,
+                                keyboardAppearance: Brightness.dark,
+                                decoration: InputDecoration.collapsed(
+                                  hintText: 'Title',
+                                  hintStyle: TextStyle(
+                                      color: ThemeConstant.textFieldTextColor),
+                                ),
+                              ),
+                            ),
+                            const Divider(
+                              color: Color(0xff434345),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(top: 6),
+                              child: TextField(
+                                controller: _detailsController,
+                                keyboardAppearance: Brightness.dark,
+                                keyboardType: TextInputType.multiline,
+                                textInputAction: TextInputAction.done,
+                                maxLines: 4,
+                                decoration: InputDecoration.collapsed(
+                                  hintText: 'Details',
+                                  hintStyle: TextStyle(
+                                      color: ThemeConstant.textFieldTextColor),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                GestureDetector(
+                  onTap: showDatePicker,
+                  child: Container(
                     margin: const EdgeInsets.only(bottom: 20),
+                    padding: const EdgeInsets.only(left: 12, right: 14),
+                    height: 50,
                     decoration: BoxDecoration(
                       color: ThemeConstant.textFieldBgColor,
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(12, 18, 12, 18),
-                      child: Column(
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.only(bottom: 4),
-                            child: TextField(
-                              controller: _titleController,
-                              keyboardAppearance: Brightness.dark,
-                              decoration: InputDecoration.collapsed(
-                                hintText: 'Title',
-                                hintStyle: TextStyle(
-                                    color: ThemeConstant.textFieldTextColor),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.only(right: 6),
+                              child: const Icon(
+                                CupertinoIcons.calendar,
                               ),
                             ),
-                          ),
-                          const Divider(
-                            color: Color(0xff434345),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.only(top: 6),
-                            child: TextField(
-                              controller: _detailsController,
-                              keyboardAppearance: Brightness.dark,
-                              keyboardType: TextInputType.multiline,
-                              textInputAction: TextInputAction.done,
-                              maxLines: 4,
-                              decoration: InputDecoration.collapsed(
-                                hintText: 'Details',
-                                hintStyle: TextStyle(
-                                    color: ThemeConstant.textFieldTextColor),
+                            const Text("Date & Time"),
+                          ],
+                        ),
+                        isDateSelected || widget.date != "0001-01-01T00:00:00Z"
+                            ? Text(
+                                DateFormat("dd-MM-yyyy HH:mm")
+                                    .format(selectedDate),
+                                style: TextStyle(
+                                    color: ThemeConstant.colorPrimaryLight),
+                              )
+                            : const Icon(
+                                Icons.arrow_forward_ios_rounded,
+                                size: 14,
                               ),
-                            ),
-                          ),
-                        ],
-                      ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-              GestureDetector(
-                onTap: showDatePicker,
-                child: Container(
-                  margin: const EdgeInsets.only(bottom: 20),
-                  padding: const EdgeInsets.only(left: 12, right: 14),
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: ThemeConstant.textFieldBgColor,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Row(
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.only(right: 6),
-                            child: const Icon(
-                              CupertinoIcons.calendar,
-                            ),
-                          ),
-                          const Text("Date & Time"),
-                        ],
-                      ),
-                      isDateSelected || widget.date != "0001-01-01T00:00:00Z"
-                          ? Text(
-                              DateFormat("dd-MM-yyyy HH:mm")
-                                  .format(selectedDate),
-                              style: TextStyle(
-                                  color: ThemeConstant.colorPrimaryLight),
-                            )
-                          : const Icon(
-                              Icons.arrow_forward_ios_rounded,
-                              size: 14,
-                            ),
-                    ],
-                  ),
                 ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 4),
-                width: double.infinity,
-                height: 48,
-                child: ElevatedButton(
-                  child: const Text("Delete"),
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.red,
-                  ),
-                  onPressed: () {
-                    context
-                        .read<ReminderProvider>()
-                        .deleteReminder(widget.reminderId, context);
-                    if (widget.prevScreen == "Note") {
+                Container(
+                  margin: const EdgeInsets.only(top: 4),
+                  width: double.infinity,
+                  height: 48,
+                  child: ElevatedButton(
+                    child: const Text("Delete"),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.red,
+                    ),
+                    onPressed: () {
                       context
-                          .read<NotesProvider>()
-                          .deleteReminderFromNote(widget.reminderId, context);
-                      context.read<NotesProvider>().editNote(context);
-                      widget.updateNote!();
-                      Navigator.pop(context);
-                    } else {
-                      Navigator.pop(context);
-                    }
-                  },
-                ),
-              )
-            ],
+                          .read<ReminderProvider>()
+                          .deleteReminder(widget.reminderId, context);
+                      if (widget.prevScreen == "Note") {
+                        context
+                            .read<NotesProvider>()
+                            .deleteReminderFromNote(widget.reminderId, context);
+                        context.read<NotesProvider>().editNote(context);
+                        widget.updateNote!();
+                        Navigator.pop(context);
+                      } else {
+                        Navigator.pop(context);
+                      }
+                    },
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

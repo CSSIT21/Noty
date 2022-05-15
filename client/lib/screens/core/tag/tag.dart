@@ -18,11 +18,6 @@ class TagFragment extends StatefulWidget {
 }
 
 class _TagFragmentState extends State<TagFragment> {
-  Color tagBgColor = const Color(0xff252525);
-  Color tagTextColor = const Color(0xff828282);
-  // void addNoteDetail(int noteIndex, String type) {
-  //   context.read<NotesProvider>().addNoteDetail(noteIndex, type);
-  // }
   @override
   void initState() {
     super.initState();
@@ -37,7 +32,8 @@ class _TagFragmentState extends State<TagFragment> {
         ? Stack(
             children: [
               SingleChildScrollView(
-                padding: const EdgeInsets.only(top: 94, bottom: 20),
+                padding: const EdgeInsets.only(
+                    top: 100, bottom: 20, left: 20, right: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -109,13 +105,18 @@ class _TagFragmentState extends State<TagFragment> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    margin: const EdgeInsets.only(bottom: 16, top: 20),
+                    width: double.infinity,
+                    padding: const EdgeInsets.only(
+                        bottom: 16, top: 20, left: 20, right: 20),
+                    color: ThemeConstant.appBarColor,
                     child:
                         const HeaderText(text: "All Tags", size: Size.medium),
                   ),
                   Container(
-                    height: 20,
-                    margin: const EdgeInsets.only(bottom: 16),
+                    height: 30,
+                    padding:
+                        const EdgeInsets.only(left: 20, right: 20, bottom: 10),
+                    color: ThemeConstant.appBarColor,
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       children: Provider.of<TagProvider>(context, listen: false)

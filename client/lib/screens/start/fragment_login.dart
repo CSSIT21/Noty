@@ -70,49 +70,84 @@ class _LoginFragmentState extends State<LoginFragment> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => false,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Image.asset(
-            "assets/images/logo.png",
-            width: 160,
-          ),
-          Container(
-            width: double.infinity,
-            margin: const EdgeInsets.only(top: 50),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(bottom: 14),
-                  child: const Text(
-                    "Login",
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
+      child: GestureDetector(
+        onTap: () {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+          if (!currentFocus.hasPrimaryFocus &&
+              currentFocus.focusedChild != null) {
+            FocusManager.instance.primaryFocus!.unfocus();
+          }
+        },
+        behavior: HitTestBehavior.translucent,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset(
+              "assets/images/logo.png",
+              width: 160,
+            ),
+            Container(
+              width: double.infinity,
+              margin: const EdgeInsets.only(top: 50),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 14),
+                    child: const Text(
+                      "Login",
+                      style:
+                          TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
+                    ),
                   ),
-                ),
-                ValueListenableBuilder(
-                    valueListenable: _passwordController,
-                    builder: (context, TextEditingValue value, __) {
-                      return Column(
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.only(bottom: 12),
-                            child: TextField(
-                              controller: _emailController,
+                  ValueListenableBuilder(
+                      valueListenable: _passwordController,
+                      builder: (context, TextEditingValue value, __) {
+                        return Column(
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 12),
+                              child: TextField(
+                                controller: _emailController,
+                                keyboardAppearance: Brightness.dark,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  hintText: 'Email',
+                                  hintStyle: TextStyle(
+                                      color: ThemeConstant.textFieldTextColor),
+                                  filled: true,
+                                  fillColor: ThemeConstant.textFieldBgColor,
+                                  prefixIcon: Icon(
+                                    Icons.mail_rounded,
+                                    color: ThemeConstant.colorPrimaryLight,
+                                    size: 20,
+                                  ),
+                                ),
+                                keyboardType: TextInputType.emailAddress,
+                                onChanged: (_) => setState(() {
+                                  errorText = '';
+                                }),
+                              ),
+                            ),
+                            TextField(
+                              controller: _passwordController,
                               keyboardAppearance: Brightness.dark,
+                              obscureText: true,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 ),
-                                hintText: 'Email',
+                                hintText: 'Password',
                                 hintStyle: TextStyle(
                                     color: ThemeConstant.textFieldTextColor),
                                 filled: true,
                                 fillColor: ThemeConstant.textFieldBgColor,
                                 prefixIcon: Icon(
-                                  Icons.mail_rounded,
+                                  CupertinoIcons.lock_fill,
                                   color: ThemeConstant.colorPrimaryLight,
                                   size: 20,
                                 ),
@@ -121,90 +156,67 @@ class _LoginFragmentState extends State<LoginFragment> {
                                 errorText = '';
                               }),
                             ),
-                          ),
-                          TextField(
-                            controller: _passwordController,
-                            keyboardAppearance: Brightness.dark,
-                            obscureText: true,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              hintText: 'Password',
-                              hintStyle: TextStyle(
-                                  color: ThemeConstant.textFieldTextColor),
-                              filled: true,
-                              fillColor: ThemeConstant.textFieldBgColor,
-                              prefixIcon: Icon(
-                                CupertinoIcons.lock_fill,
-                                color: ThemeConstant.colorPrimaryLight,
-                                size: 20,
-                              ),
-                            ),
-                            onChanged: (_) => setState(() {
-                              errorText = '';
-                            }),
-                          ),
-                          errorText.isNotEmpty
-                              ? Container(
-                                  margin: const EdgeInsets.only(top: 10),
-                                  child: Text(
-                                    errorText,
-                                    style: const TextStyle(color: Colors.red),
+                            errorText.isNotEmpty
+                                ? Container(
+                                    margin: const EdgeInsets.only(top: 10),
+                                    child: Text(
+                                      errorText,
+                                      style: const TextStyle(color: Colors.red),
+                                    ),
+                                  )
+                                : Container(),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const ForgotPasswordScreen(),
                                   ),
-                                )
-                              : Container(),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ForgotPasswordScreen(),
+                                );
+                              },
+                              child: Container(
+                                width: double.infinity,
+                                margin:
+                                    const EdgeInsets.only(bottom: 20, top: 10),
+                                child: Text(
+                                  "Forgot password?",
+                                  textAlign: TextAlign.end,
+                                  style: TextStyle(
+                                      color: ThemeConstant.colorPrimaryLight),
                                 ),
-                              );
-                            },
-                            child: Container(
-                              width: double.infinity,
-                              margin:
-                                  const EdgeInsets.only(bottom: 20, top: 10),
+                              ),
+                            ),
+                            RoundedLoadingButton(
                               child: Text(
-                                "Forgot password?",
-                                textAlign: TextAlign.end,
+                                'Sign In',
                                 style: TextStyle(
-                                    color: ThemeConstant.colorPrimaryLight),
+                                  fontSize: 16,
+                                  color: _passwordController
+                                              .value.text.isNotEmpty &&
+                                          _emailController.value.text.isNotEmpty
+                                      ? Colors.white
+                                      : Colors.grey[600],
+                                ),
                               ),
+                              color: ThemeConstant.colorPrimaryLight,
+                              borderRadius: 10,
+                              controller: _loginBtnController,
+                              onPressed:
+                                  _passwordController.value.text.isNotEmpty &&
+                                          _emailController.value.text.isNotEmpty
+                                      ? _loginCall
+                                      : null,
+                              disabledColor: ThemeConstant.textColorSecondary,
                             ),
-                          ),
-                          RoundedLoadingButton(
-                            child: Text(
-                              'Sign In',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: _passwordController
-                                            .value.text.isNotEmpty &&
-                                        _emailController.value.text.isNotEmpty
-                                    ? Colors.white
-                                    : Colors.grey[600],
-                              ),
-                            ),
-                            color: ThemeConstant.colorPrimaryLight,
-                            borderRadius: 10,
-                            controller: _loginBtnController,
-                            onPressed:
-                                _passwordController.value.text.isNotEmpty &&
-                                        _emailController.value.text.isNotEmpty
-                                    ? _loginCall
-                                    : null,
-                            disabledColor: ThemeConstant.textColorSecondary,
-                          ),
-                        ],
-                      );
-                    }),
-              ],
-            ),
-          )
-        ],
+                          ],
+                        );
+                      }),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

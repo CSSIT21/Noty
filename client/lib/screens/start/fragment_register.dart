@@ -66,62 +66,96 @@ class _RegisterFragmentState extends State<RegisterFragment> {
     double height = MediaQuery.of(context).size.height;
     double screenHeight = height - screenPadding.top - screenPadding.bottom;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const AppBarText(text: "Register"),
-        centerTitle: true,
-        leadingWidth: 100,
-        leading: const LeadingButton(
-          text: "Back",
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: ConstrainedBox(
-          constraints: BoxConstraints.tightFor(
-            height: isSubmit ? screenHeight + 50 : screenHeight,
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus &&
+            currentFocus.focusedChild != null) {
+          FocusManager.instance.primaryFocus!.unfocus();
+        }
+      },
+      behavior: HitTestBehavior.translucent,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const AppBarText(text: "Register"),
+          centerTitle: true,
+          leadingWidth: 100,
+          leading: const LeadingButton(
+            text: "Back",
           ),
-          child: Container(
-            width: double.infinity,
-            height: double.infinity,
-            padding: const EdgeInsets.fromLTRB(30, 30, 30, 50),
-            child: Form(
-              key: _formKey,
-              autovalidateMode: isSubmit
-                  ? AutovalidateMode.onUserInteraction
-                  : AutovalidateMode.disabled,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Column(
-                    children: [
-                      Container(
-                          margin: const EdgeInsets.only(bottom: 40),
-                          child: Text(
-                            "Create an account",
-                            style: TextStyle(
-                                color: ThemeConstant.colorPrimaryLight,
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold),
-                          )),
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 20),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.only(bottom: 6),
-                              width: double.infinity,
-                              child: const Text("Firstname-Lastname"),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(bottom: 8),
-                              child: TextFormField(
+        ),
+        body: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints.tightFor(
+              height: isSubmit ? screenHeight + 50 : screenHeight,
+            ),
+            child: Container(
+              width: double.infinity,
+              height: double.infinity,
+              padding: const EdgeInsets.fromLTRB(30, 30, 30, 50),
+              child: Form(
+                key: _formKey,
+                autovalidateMode: isSubmit
+                    ? AutovalidateMode.onUserInteraction
+                    : AutovalidateMode.disabled,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: [
+                        Container(
+                            margin: const EdgeInsets.only(bottom: 40),
+                            child: Text(
+                              "Create an account",
+                              style: TextStyle(
+                                  color: ThemeConstant.colorPrimaryLight,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold),
+                            )),
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 20),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 6),
+                                width: double.infinity,
+                                child: const Text("Firstname-Lastname"),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 8),
+                                child: TextFormField(
+                                  onSaved: (value) {
+                                    firstname = value;
+                                  },
+                                  keyboardAppearance: Brightness.dark,
+                                  decoration: InputDecoration(
+                                      hintText: "Firstname",
+                                      hintStyle: TextStyle(
+                                          color:
+                                              ThemeConstant.textFieldTextColor),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      filled: true,
+                                      fillColor:
+                                          ThemeConstant.textFieldBgColor),
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'This field cannot be empty';
+                                    }
+                                    return null;
+                                  },
+                                  onChanged: (_) => setState(() {}),
+                                ),
+                              ),
+                              TextFormField(
                                 onSaved: (value) {
-                                  firstname = value;
+                                  lastname = value;
                                 },
                                 keyboardAppearance: Brightness.dark,
                                 decoration: InputDecoration(
-                                    hintText: "Firstname",
+                                    hintText: "Lastname",
                                     hintStyle: TextStyle(
                                         color:
                                             ThemeConstant.textFieldTextColor),
@@ -136,92 +170,101 @@ class _RegisterFragmentState extends State<RegisterFragment> {
                                   }
                                   return null;
                                 },
-                                onChanged: (_) => setState(() {}),
                               ),
-                            ),
-                            TextFormField(
-                              onSaved: (value) {
-                                lastname = value;
-                              },
-                              keyboardAppearance: Brightness.dark,
-                              decoration: InputDecoration(
-                                  hintText: "Lastname",
-                                  hintStyle: TextStyle(
-                                      color: ThemeConstant.textFieldTextColor),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  filled: true,
-                                  fillColor: ThemeConstant.textFieldBgColor),
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'This field cannot be empty';
-                                }
-                                return null;
-                              },
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 20),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.only(bottom: 6),
-                              width: double.infinity,
-                              child: const Text("Email"),
-                            ),
-                            TextFormField(
-                              onSaved: (value) {
-                                email = value;
-                              },
-                              keyboardAppearance: Brightness.dark,
-                              decoration: InputDecoration(
-                                  hintText: "Email",
-                                  hintStyle: TextStyle(
-                                      color: ThemeConstant.textFieldTextColor),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  filled: true,
-                                  fillColor: ThemeConstant.textFieldBgColor),
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'This field cannot be empty';
-                                }
-                                if (!EmailValidator.validate(value)) {
-                                  return 'Email is invalid';
-                                }
-                                return null;
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.only(bottom: 6),
-                              width: double.infinity,
-                              child: const Text("Password"),
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(bottom: 8),
-                              child: TextFormField(
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 20),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 6),
+                                width: double.infinity,
+                                child: const Text("Email"),
+                              ),
+                              TextFormField(
                                 onSaved: (value) {
-                                  password = value;
+                                  email = value;
                                 },
                                 keyboardAppearance: Brightness.dark,
-                                obscureText: true,
+                                decoration: InputDecoration(
+                                    hintText: "Email",
+                                    hintStyle: TextStyle(
+                                        color:
+                                            ThemeConstant.textFieldTextColor),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    filled: true,
+                                    fillColor: ThemeConstant.textFieldBgColor),
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return 'This field cannot be empty';
+                                  }
+                                  if (!EmailValidator.validate(value)) {
+                                    return 'Email is invalid';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 6),
+                                width: double.infinity,
+                                child: const Text("Password"),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 8),
+                                child: TextFormField(
+                                  onSaved: (value) {
+                                    password = value;
+                                  },
+                                  keyboardAppearance: Brightness.dark,
+                                  obscureText: true,
+                                  autovalidateMode: isSubmit
+                                      ? AutovalidateMode.onUserInteraction
+                                      : AutovalidateMode.disabled,
+                                  decoration: InputDecoration(
+                                      hintText: "Password",
+                                      hintStyle: TextStyle(
+                                          color:
+                                              ThemeConstant.textFieldTextColor),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      filled: true,
+                                      fillColor:
+                                          ThemeConstant.textFieldBgColor),
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'This field cannot be empty';
+                                    }
+                                    if (value.length < 8) {
+                                      return 'Password must be at least 8 characters long';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                              TextFormField(
+                                onSaved: (value) {
+                                  confirmPassword = value;
+                                },
+                                keyboardAppearance: Brightness.dark,
                                 autovalidateMode: isSubmit
                                     ? AutovalidateMode.onUserInteraction
                                     : AutovalidateMode.disabled,
+                                obscureText: true,
                                 decoration: InputDecoration(
-                                    hintText: "Password",
+                                    hintText: "Confirm Password",
                                     hintStyle: TextStyle(
                                         color:
                                             ThemeConstant.textFieldTextColor),
@@ -234,100 +277,72 @@ class _RegisterFragmentState extends State<RegisterFragment> {
                                   if (value!.isEmpty) {
                                     return 'This field cannot be empty';
                                   }
-                                  if (value.length < 8) {
-                                    return 'Password must be at least 8 characters long';
-                                  }
                                   return null;
                                 },
                               ),
-                            ),
-                            TextFormField(
-                              onSaved: (value) {
-                                confirmPassword = value;
-                              },
-                              keyboardAppearance: Brightness.dark,
-                              autovalidateMode: isSubmit
-                                  ? AutovalidateMode.onUserInteraction
-                                  : AutovalidateMode.disabled,
-                              obscureText: true,
-                              decoration: InputDecoration(
-                                  hintText: "Confirm Password",
-                                  hintStyle: TextStyle(
-                                      color: ThemeConstant.textFieldTextColor),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  filled: true,
-                                  fillColor: ThemeConstant.textFieldBgColor),
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'This field cannot be empty';
-                                }
-                                return null;
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 7),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Checkbox(
-                              value: checked,
-                              onChanged: (value) {
-                                setState(() {
-                                  checked = !checked;
-                                });
-                              },
-                            ),
-                            const Text("I agree to "),
-                            Text(
-                              "terms ",
-                              style: TextStyle(
-                                  color: ThemeConstant.colorPrimaryLight),
-                            ),
-                            const Text("and "),
-                            Text("conditions",
-                                style: TextStyle(
-                                    color: ThemeConstant.colorPrimaryLight)),
-                          ],
-                        ),
-                        SizedBox(
-                          width: double.infinity,
-                          height: 50,
-                          child: RoundedLoadingButton(
-                            child: const Text(
-                              'Sign Up',
-                              style:
-                                  TextStyle(fontSize: 16, color: Colors.white),
-                            ),
-                            color: ThemeConstant.colorPrimaryLight,
-                            borderRadius: 10,
-                            controller: _registerBtnController,
-                            onPressed: () {
-                              setState(() {
-                                isSubmit = true;
-                              });
-                              if (_formKey.currentState!.validate()) {
-                                _formKey.currentState!.save();
-                                isSubmit = false;
-                                _registerCall();
-                              } else {
-                                _registerBtnController.reset();
-                              }
-                            },
+                            ],
                           ),
-                        )
+                        ),
                       ],
                     ),
-                  )
-                ],
+                    Container(
+                      margin: const EdgeInsets.only(top: 7),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Checkbox(
+                                value: checked,
+                                onChanged: (value) {
+                                  setState(() {
+                                    checked = !checked;
+                                  });
+                                },
+                              ),
+                              const Text("I agree to "),
+                              Text(
+                                "terms ",
+                                style: TextStyle(
+                                    color: ThemeConstant.colorPrimaryLight),
+                              ),
+                              const Text("and "),
+                              Text("conditions",
+                                  style: TextStyle(
+                                      color: ThemeConstant.colorPrimaryLight)),
+                            ],
+                          ),
+                          SizedBox(
+                            width: double.infinity,
+                            height: 50,
+                            child: RoundedLoadingButton(
+                              child: const Text(
+                                'Sign Up',
+                                style: TextStyle(
+                                    fontSize: 16, color: Colors.white),
+                              ),
+                              color: ThemeConstant.colorPrimaryLight,
+                              borderRadius: 10,
+                              controller: _registerBtnController,
+                              onPressed: () {
+                                setState(() {
+                                  isSubmit = true;
+                                });
+                                if (_formKey.currentState!.validate()) {
+                                  _formKey.currentState!.save();
+                                  isSubmit = false;
+                                  _registerCall();
+                                } else {
+                                  _registerBtnController.reset();
+                                }
+                              },
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ),

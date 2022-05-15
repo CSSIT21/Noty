@@ -192,7 +192,9 @@ class _CoreScreenState extends material.State<CoreScreen>
           },
         ),
         body: Container(
-          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+          padding: currentTitle != "Tags"
+              ? const EdgeInsets.fromLTRB(20, 0, 20, 0)
+              : null,
           child: material.TabBarView(
             physics: const material
                 .NeverScrollableScrollPhysics(), // Swipe navigation handling is not supported

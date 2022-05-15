@@ -30,6 +30,7 @@ class NotesProvider with ChangeNotifier, DiagnosticableTreeMixin {
   NoteDetailData noteDetails = NoteDetailData(
       id: "", updatedAt: "", title: "", details: [], tags: [], folderId: "");
   List<NoteData> folderNoteList = [];
+  int currentTextFieldIndex = -1;
 
   void setFoldersData(List<FolderData> data) {
     folders = data;
@@ -232,6 +233,16 @@ class NotesProvider with ChangeNotifier, DiagnosticableTreeMixin {
   void addNoteDetail(String noteId, String type) {
     noteDetails.details
         .add(NoteDetailDataDetails(type: type, data: DetailsData(content: "")));
+    notifyListeners();
+  }
+
+  void deleteNoteDetail(int index) {
+    noteDetails.details.removeAt(index);
+    notifyListeners();
+  }
+
+  void setCurrentTfIndex(int index) {
+    currentTextFieldIndex = index;
     notifyListeners();
   }
 
