@@ -176,6 +176,7 @@ class _EditReminderState extends State<EditReminder> {
                             margin: const EdgeInsets.only(bottom: 4),
                             child: TextField(
                               controller: _titleController,
+                              keyboardAppearance: Brightness.dark,
                               decoration: InputDecoration.collapsed(
                                 hintText: 'Title',
                                 hintStyle: TextStyle(
@@ -190,6 +191,7 @@ class _EditReminderState extends State<EditReminder> {
                             margin: const EdgeInsets.only(top: 6),
                             child: TextField(
                               controller: _detailsController,
+                              keyboardAppearance: Brightness.dark,
                               keyboardType: TextInputType.multiline,
                               textInputAction: TextInputAction.done,
                               maxLines: 4,

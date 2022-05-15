@@ -6,9 +6,9 @@ import 'package:noty_client/constants/theme.dart';
 import 'package:noty_client/models/response/account/account_response.dart';
 import 'package:noty_client/models/response/error/error_response.dart';
 import 'package:noty_client/screens/core/index.dart';
+import 'package:noty_client/screens/start/forgot_password.dart';
 import 'package:noty_client/services/account.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginFragment extends StatefulWidget {
   const LoginFragment({Key? key}) : super(key: key);
@@ -23,13 +23,6 @@ class _LoginFragmentState extends State<LoginFragment> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   String errorText = '';
-  late SharedPreferences prefs;
-
-  getSharedPreferences() async {
-    prefs = await SharedPreferences.getInstance();
-    // ignore: unused_local_variable
-    String? userData = prefs.getString('user');
-  }
 
   // Just a mock function to simulating network activity delay
   void _loginCall() async {
@@ -68,7 +61,6 @@ class _LoginFragmentState extends State<LoginFragment> {
 
   @override
   void initState() {
-    getSharedPreferences();
     super.initState();
   }
 
@@ -107,6 +99,7 @@ class _LoginFragmentState extends State<LoginFragment> {
                             margin: const EdgeInsets.only(bottom: 12),
                             child: TextField(
                               controller: _emailController,
+                              keyboardAppearance: Brightness.dark,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
@@ -129,6 +122,7 @@ class _LoginFragmentState extends State<LoginFragment> {
                           ),
                           TextField(
                             controller: _passwordController,
+                            keyboardAppearance: Brightness.dark,
                             obscureText: true,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(
@@ -158,14 +152,26 @@ class _LoginFragmentState extends State<LoginFragment> {
                                   ),
                                 )
                               : Container(),
-                          Container(
-                            width: double.infinity,
-                            margin: const EdgeInsets.only(bottom: 12, top: 10),
-                            child: Text(
-                              "Forgot password?",
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                  color: ThemeConstant.colorPrimaryLight),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ForgotPasswordScreen(),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              width: double.infinity,
+                              margin:
+                                  const EdgeInsets.only(bottom: 12, top: 10),
+                              child: Text(
+                                "Forgot password?",
+                                textAlign: TextAlign.end,
+                                style: TextStyle(
+                                    color: ThemeConstant.colorPrimaryLight),
+                              ),
                             ),
                           ),
                           RoundedLoadingButton(

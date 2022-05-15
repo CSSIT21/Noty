@@ -30,11 +30,12 @@ class _RegisterFragmentState extends State<RegisterFragment> {
   bool isSubmit = false;
 
   void _registerCall() async {
-    // _loginNavigate();
     if (password != confirmPassword) {
       showAlertDialog(context, "Password does not match");
+      _registerBtnController.reset();
     } else if (!checked) {
       showAlertDialog(context, "Please agree to terms and conditions");
+      _registerBtnController.reset();
     } else {
       var register = await AccountService.register(
           firstname!, lastname!, email!, password!);
@@ -51,7 +52,11 @@ class _RegisterFragmentState extends State<RegisterFragment> {
   void _loginNavigate() {
     Timer(const Duration(milliseconds: 1500), () {
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const CoreScreen()));
+        context,
+        MaterialPageRoute(
+          builder: (context) => const CoreScreen(),
+        ),
+      );
     });
   }
 
@@ -114,6 +119,7 @@ class _RegisterFragmentState extends State<RegisterFragment> {
                                 onSaved: (value) {
                                   firstname = value;
                                 },
+                                keyboardAppearance: Brightness.dark,
                                 decoration: InputDecoration(
                                     hintText: "Firstname",
                                     hintStyle: TextStyle(
@@ -137,6 +143,7 @@ class _RegisterFragmentState extends State<RegisterFragment> {
                               onSaved: (value) {
                                 lastname = value;
                               },
+                              keyboardAppearance: Brightness.dark,
                               decoration: InputDecoration(
                                   hintText: "Lastname",
                                   hintStyle: TextStyle(
@@ -170,6 +177,7 @@ class _RegisterFragmentState extends State<RegisterFragment> {
                               onSaved: (value) {
                                 email = value;
                               },
+                              keyboardAppearance: Brightness.dark,
                               decoration: InputDecoration(
                                   hintText: "Email",
                                   hintStyle: TextStyle(
@@ -207,8 +215,7 @@ class _RegisterFragmentState extends State<RegisterFragment> {
                                 onSaved: (value) {
                                   password = value;
                                 },
-                                // onChanged: (value) =>
-                                //     setState(() => password = value),
+                                keyboardAppearance: Brightness.dark,
                                 obscureText: true,
                                 autovalidateMode: isSubmit
                                     ? AutovalidateMode.onUserInteraction
@@ -238,6 +245,7 @@ class _RegisterFragmentState extends State<RegisterFragment> {
                               onSaved: (value) {
                                 confirmPassword = value;
                               },
+                              keyboardAppearance: Brightness.dark,
                               autovalidateMode: isSubmit
                                   ? AutovalidateMode.onUserInteraction
                                   : AutovalidateMode.disabled,
@@ -310,8 +318,9 @@ class _RegisterFragmentState extends State<RegisterFragment> {
                                 _formKey.currentState!.save();
                                 isSubmit = false;
                                 _registerCall();
+                              } else {
+                                _registerBtnController.reset();
                               }
-                              _registerBtnController.reset();
                             },
                           ),
                         )

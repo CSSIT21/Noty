@@ -259,6 +259,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                           TextField(
                             controller: _passwordController,
+                            keyboardAppearance: Brightness.dark,
                             obscureText: true,
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(
@@ -272,6 +273,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                           TextField(
                             controller: _newPasswordController,
+                            keyboardAppearance: Brightness.dark,
                             obscureText: true,
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(
@@ -285,6 +287,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                           TextField(
                             controller: _confirmPasswordController,
+                            keyboardAppearance: Brightness.dark,
                             obscureText: true,
                             decoration: InputDecoration(
                                 border: OutlineInputBorder(
