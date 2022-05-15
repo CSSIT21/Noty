@@ -92,12 +92,10 @@ class _CoreScreenState extends material.State<CoreScreen>
     _readJson();
 
     super.initState();
-    NotificationService.init();
+    NotificationService.init(initScheduled: true);
     listenNotifications();
     NotificationService.showNotification(
-        title: "Reminder",
-        body: "This is a notification from note page",
-        payload: "test");
+        title: "Reminder", body: "This is a notification from note page");
   }
 
   void listenNotifications() =>

@@ -27,10 +27,10 @@ class _ReminderFragmentState extends State<ReminderFragment> {
     context.read<ReminderProvider>().readReminderJson();
     tz.initializeTimeZones();
     NotificationService.showScheduledNotification(
-        title: "Reminder",
-        body: "This is a notification from reminder page",
-        payload: "test",
-        scheduledDate: DateTime.now().add(const Duration(seconds: 5)));
+        id: int.parse("001479B7"),
+        title: "Noty",
+        body: "This is a notification from reminder 2 page",
+        scheduledDate: DateTime.now().add(const Duration(seconds: 2)));
   }
 
   @override
