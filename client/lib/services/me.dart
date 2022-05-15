@@ -12,8 +12,7 @@ class ProfileService {
     try {
       Response response = await Dio().get(
           EnvironmentConstant.internalApiPrefix + "/me/info",
-          options: Options(
-              headers: {"Authorization": "Bearer " + userToken! ?? ""}));
+          options: Options(headers: {"Authorization": "Bearer " + userToken!}));
       MeResponse res = MeResponse.fromJson(response.data);
       return res;
     } on DioError catch (e) {
