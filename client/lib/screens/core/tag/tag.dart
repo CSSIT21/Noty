@@ -31,139 +31,151 @@ class _TagFragmentState extends State<TagFragment> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.only(top: 20, bottom: 20),
-      child: Provider.of<TagProvider>(context, listen: false)
-              .filterTagList
-              .isNotEmpty
-          ? Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  height: 20,
-                  margin: const EdgeInsets.only(bottom: 16),
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: Provider.of<TagProvider>(context, listen: false)
-                        .filterTagList
-                        .mapIndexed(
-                          (index, tag) => Container(
-                            margin: const EdgeInsets.only(right: 8),
-                            child: GestureDetector(
-                              behavior: HitTestBehavior.translucent,
-                              onTap: () async {
-                                for (var i = 0;
-                                    i <
+    return Provider.of<TagProvider>(context, listen: false)
+            .filterTagList
+            .isNotEmpty
+        ? Stack(
+            children: [
+              SingleChildScrollView(
+                padding: const EdgeInsets.only(top: 94, bottom: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      children: context
+                          .watch<TagProvider>()
+                          .tagList
+                          .mapIndexed(
+                            (index, tag) => CurvedCard(
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.only(bottom: 5, top: 5),
+                                width: double.infinity,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            20, 10, 20, 6),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "# ",
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: ThemeConstant
+                                                      .colorPrimaryLight),
+                                            ),
+                                            Text(
+                                              tag.name,
+                                              style:
+                                                  const TextStyle(fontSize: 16),
+                                            ),
+                                          ],
+                                        )),
+                                    Column(
+                                      children: dividerInsert(
+                                        tag.notes
+                                            .mapIndexed(
+                                              (index, note) => NoteListItem(
+                                                title: note.title,
+                                                date: note.updatedAt,
+                                                noteId: note.noteId,
+                                                previousScreen: "Tags",
+                                              ),
+                                            )
+                                            .toList(),
+                                        const Divider(
+                                          color: Color(0xff434345),
+                                          indent: 25,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              margin: 20,
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  ],
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 16, top: 20),
+                    child:
+                        const HeaderText(text: "All Tags", size: Size.medium),
+                  ),
+                  Container(
+                    height: 20,
+                    margin: const EdgeInsets.only(bottom: 16),
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: Provider.of<TagProvider>(context, listen: false)
+                          .filterTagList
+                          .mapIndexed(
+                            (index, tag) => Container(
+                              margin: const EdgeInsets.only(right: 8),
+                              child: GestureDetector(
+                                behavior: HitTestBehavior.translucent,
+                                onTap: () async {
+                                  for (var i = 0;
+                                      i <
+                                          Provider.of<TagProvider>(context,
+                                                  listen: false)
+                                              .filterTagList
+                                              .length;
+                                      i++) {
+                                    if (i != index) {
+                                      setState(() {
                                         Provider.of<TagProvider>(context,
                                                 listen: false)
-                                            .filterTagList
-                                            .length;
-                                    i++) {
-                                  if (i != index) {
-                                    setState(() {
-                                      Provider.of<TagProvider>(context,
-                                              listen: false)
-                                          .filterTagList[i]
-                                          .selected = false;
-                                    });
-                                  } else if (i == index) {
-                                    setState(() {
-                                      Provider.of<TagProvider>(context,
-                                              listen: false)
-                                          .filterTagList[i]
-                                          .selected = !tag.selected;
-                                    });
-                                    if (tag.selected) {
-                                      await context
-                                          .read<TagProvider>()
-                                          .searchTag(tag.name);
-                                    } else {
-                                      await context
-                                          .read<TagProvider>()
-                                          .readTagJson();
+                                            .filterTagList[i]
+                                            .selected = false;
+                                      });
+                                    } else if (i == index) {
+                                      setState(() {
+                                        Provider.of<TagProvider>(context,
+                                                listen: false)
+                                            .filterTagList[i]
+                                            .selected = !tag.selected;
+                                      });
+                                      if (tag.selected) {
+                                        await context
+                                            .read<TagProvider>()
+                                            .searchTag(tag.name);
+                                      } else {
+                                        await context
+                                            .read<TagProvider>()
+                                            .readTagJson();
+                                      }
                                     }
                                   }
-                                }
-                              },
-                              child: TagLabel(
-                                title: tag.name,
-                                iconFilled: false,
-                                isSelected: tag.selected,
+                                },
+                                child: TagLabel(
+                                  title: tag.name,
+                                  iconFilled: false,
+                                  isSelected: tag.selected,
+                                ),
                               ),
                             ),
-                          ),
-                        )
-                        .toList(),
+                          )
+                          .toList(),
+                    ),
                   ),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(bottom: 16),
-                  child: const HeaderText(text: "All Tags", size: Size.medium),
-                ),
-                Column(
-                  children: context
-                      .watch<TagProvider>()
-                      .tagList
-                      .mapIndexed(
-                        (index, tag) => CurvedCard(
-                          child: Container(
-                            padding: const EdgeInsets.only(bottom: 5, top: 5),
-                            width: double.infinity,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        20, 10, 20, 6),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "# ",
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold,
-                                              color: ThemeConstant
-                                                  .colorPrimaryLight),
-                                        ),
-                                        Text(
-                                          tag.name,
-                                          style: const TextStyle(fontSize: 16),
-                                        ),
-                                      ],
-                                    )),
-                                Column(
-                                  children: dividerInsert(
-                                    tag.notes
-                                        .mapIndexed(
-                                          (index, note) => NoteListItem(
-                                            title: note.title,
-                                            date: note.updatedAt,
-                                            noteId: note.noteId,
-                                            previousScreen: "Tags",
-                                          ),
-                                        )
-                                        .toList(),
-                                    const Divider(
-                                      color: Color(0xff434345),
-                                      indent: 25,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          margin: 20,
-                        ),
-                      )
-                      .toList(),
-                ),
-              ],
-            )
-          : const Center(
-              child: Text("No tags"),
-            ),
-    );
+                ],
+              ),
+            ],
+          )
+        : const Center(
+            child: Text("No tags"),
+          );
   }
 }

@@ -38,14 +38,11 @@ class _ReminderFragmentState extends State<ReminderFragment> {
     double screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.only(top: 20, bottom: 20, right: 5),
-        child: context
-                    .watch<ReminderProvider>()
-                    .independentReminder
-                    .isNotEmpty ||
-                context.watch<ReminderProvider>().noteReminders.isNotEmpty
-            ? Column(
+      body: context.watch<ReminderProvider>().independentReminder.isNotEmpty ||
+              context.watch<ReminderProvider>().noteReminders.isNotEmpty
+          ? SingleChildScrollView(
+              padding: const EdgeInsets.only(top: 20, bottom: 20, right: 5),
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -310,11 +307,11 @@ class _ReminderFragmentState extends State<ReminderFragment> {
                         .toList(),
                   ),
                 ],
-              )
-            : const Center(
-                child: Text("No reminders"),
               ),
-      ),
+            )
+          : const Center(
+              child: Text("No reminders"),
+            ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => showBarModalBottomSheet(
           context: context,

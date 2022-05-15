@@ -42,6 +42,8 @@ class _LoginFragmentState extends State<LoginFragment> {
     } else if (login is LoginResponse) {
       _loginBtnController.success();
       _loginNavigate();
+    } else {
+      _loginBtnController.reset();
     }
   }
 
@@ -74,7 +76,7 @@ class _LoginFragmentState extends State<LoginFragment> {
         children: [
           Image.asset(
             "assets/images/logo.png",
-            width: 200,
+            width: 160,
           ),
           Container(
             width: double.infinity,
@@ -165,7 +167,7 @@ class _LoginFragmentState extends State<LoginFragment> {
                             child: Container(
                               width: double.infinity,
                               margin:
-                                  const EdgeInsets.only(bottom: 12, top: 10),
+                                  const EdgeInsets.only(bottom: 20, top: 10),
                               child: Text(
                                 "Forgot password?",
                                 textAlign: TextAlign.end,
