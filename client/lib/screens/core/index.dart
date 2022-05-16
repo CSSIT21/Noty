@@ -94,18 +94,12 @@ class _CoreScreenState extends material.State<CoreScreen>
     super.initState();
     NotificationService.init(initScheduled: true);
     listenNotifications();
-    NotificationService.showNotification(
-        title: "Reminder", body: "This is a notification from note page");
   }
 
   void listenNotifications() =>
       NotificationService.onNotifications.stream.listen(onClickedNotification);
 
-  void onClickedNotification(String? payload) {
-    // setState(() {
-    //   _tabController.index = 1;
-    // });
-  }
+  void onClickedNotification(String? payload) {}
 
   @override
   material.Widget build(material.BuildContext context) {

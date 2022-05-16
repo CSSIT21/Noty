@@ -26,11 +26,76 @@ class _ReminderFragmentState extends State<ReminderFragment> {
     super.initState();
     context.read<ReminderProvider>().readReminderJson();
     tz.initializeTimeZones();
-    NotificationService.showScheduledNotification(
-        id: 1,
-        title: "Noty",
-        body: "This is a notification from reminder 2 page",
-        scheduledDate: DateTime.now().add(const Duration(seconds: 2)));
+    for (var i = 0;
+        i <
+            Provider.of<ReminderProvider>(context, listen: false)
+                .independentReminder
+                .length;
+        i++) {
+      if (DateTime.parse(Provider.of<ReminderProvider>(context, listen: false)
+                  .independentReminder[i]
+                  .remindDate)
+              .compareTo(DateTime.now()) >
+          0) {
+        NotificationService.showScheduledNotification(
+          id: int.parse(
+              Provider.of<ReminderProvider>(context, listen: false)
+                  .independentReminder[i]
+                  .reminderId
+                  .substring(8, 15),
+              radix: 16),
+          title: "Noty",
+          body: Provider.of<ReminderProvider>(context, listen: false)
+              .independentReminder[i]
+              .title,
+          scheduledDate: DateTime.parse(
+              Provider.of<ReminderProvider>(context, listen: false)
+                  .independentReminder[i]
+                  .remindDate),
+        );
+      }
+    }
+    for (var i = 0;
+        i <
+            Provider.of<ReminderProvider>(context, listen: false)
+                .noteReminders
+                .length;
+        i++) {
+      for (var j = 0;
+          j <
+              Provider.of<ReminderProvider>(context, listen: false)
+                  .noteReminders[i]
+                  .reminders
+                  .length;
+          j++) {
+        if (DateTime.parse(Provider.of<ReminderProvider>(context, listen: false)
+                    .noteReminders[i]
+                    .reminders[j]
+                    .remindDate)
+                .compareTo(DateTime.now()) >
+            0) {
+          NotificationService.showScheduledNotification(
+            id: int.parse(
+                Provider.of<ReminderProvider>(context, listen: false)
+                    .noteReminders[i]
+                    .reminders[j]
+                    .id
+                    .substring(8, 15),
+                radix: 16),
+            title: "Noty",
+            body: Provider.of<ReminderProvider>(context, listen: false)
+                .noteReminders[i]
+                .title,
+            scheduledDate: DateTime.parse(
+                    Provider.of<ReminderProvider>(context, listen: false)
+                        .noteReminders[i]
+                        .reminders[j]
+                        .remindDate)
+                .add(const Duration(seconds: 2)),
+          );
+        }
+      }
+    }
   }
 
   @override
