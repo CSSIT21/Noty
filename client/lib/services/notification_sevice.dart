@@ -1,5 +1,4 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:noty_client/utils/download_file.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:timezone/timezone.dart' as tz;
 
@@ -8,16 +7,6 @@ class NotificationService {
   static final onNotifications = BehaviorSubject<String?>();
 
   static Future _notificationDetails() async {
-    // final largeIconPath = await DownloadFile.downloadFile(
-    //     "https://chuukohin-pic.mixkoap.com/sibbil.png", "large_icon.png");
-    // final bigPicturePath = await DownloadFile.downloadFile(
-    //     "https://chuukohin-pic.mixkoap.com/sibbil.png", "big_picture.png");
-
-    // final styleInformation = BigPictureStyleInformation(
-    //   FilePathAndroidBitmap(bigPicturePath),
-    //   largeIcon: FilePathAndroidBitmap(largeIconPath),
-    // );
-
     return const NotificationDetails(
         android: AndroidNotificationDetails(
           'channel id',
