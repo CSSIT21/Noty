@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:noty_client/constants/manifest.dart';
 import 'package:noty_client/screens/core/note/note_view.dart';
 import 'package:noty_client/screens/core/reminder/edit_reminder.dart';
 import 'package:noty_client/screens/core/reminder/new_reminder.dart';
@@ -45,7 +46,7 @@ class _ReminderFragmentState extends State<ReminderFragment> {
                     .reminderId
                     .substring(8, 15),
                 radix: 16),
-            title: "Noty",
+            title: ManifestConstant.notificationTitle,
             body: Provider.of<ReminderProvider>(context, listen: false)
                 .independentReminder[i]
                 .title,
@@ -82,7 +83,7 @@ class _ReminderFragmentState extends State<ReminderFragment> {
                     .id
                     .substring(8, 15),
                 radix: 16),
-            title: "Noty",
+            title: ManifestConstant.notificationTitle,
             body: Provider.of<ReminderProvider>(context, listen: false)
                 .noteReminders[i]
                 .title,
