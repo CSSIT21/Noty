@@ -42,6 +42,8 @@ class _LoginFragmentState extends State<LoginFragment> {
     } else if (login is LoginResponse) {
       _loginBtnController.success();
       _loginNavigate();
+      _emailController.clear();
+      _passwordController.clear();
     } else {
       _loginBtnController.reset();
     }
@@ -167,6 +169,8 @@ class _LoginFragmentState extends State<LoginFragment> {
                                 : Container(),
                             GestureDetector(
                               onTap: () {
+                                _emailController.clear();
+                                _passwordController.clear();
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(

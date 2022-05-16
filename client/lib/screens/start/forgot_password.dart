@@ -1,9 +1,13 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:noty_client/constants/theme.dart';
+import 'package:noty_client/models/response/info_response.dart';
 import 'package:noty_client/screens/start/pin_input.dart';
+import 'package:noty_client/services/account.dart';
 import 'package:noty_client/services/providers/providers.dart';
 import 'package:noty_client/widgets/leading_button.dart';
 import 'package:provider/provider.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({Key? key}) : super(key: key);
@@ -14,11 +18,55 @@ class ForgotPasswordScreen extends StatefulWidget {
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final _emailController = TextEditingController();
+  final RoundedLoadingButtonController _loadingButtonController =
+      RoundedLoadingButtonController();
+  String errorText = '';
+
+  void _sendEmailRequest() async {
+    context.read<ProfileProvider>().setResetEmail(_emailController.text);
+    if (_emailController.text.isNotEmpty &&
+        EmailValidator.validate(_emailController.text)) {
+      var reset =
+          await AccountService.resetPasswordEmail(_emailController.text);
+      if (reset is InfoResponse) {
+        _loadingButtonController.success();
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const PinInputScreen()));
+        _loadingButtonController.reset();
+        _emailController.clear();
+      } else {
+        setState(() {
+          errorText = 'Information validation failed';
+        });
+        _loadingButtonController.reset();
+      }
+    } else if (_emailController.text.isEmpty) {
+      setState(() {
+        errorText = 'Email is required';
+      });
+      _loadingButtonController.reset();
+    } else if (!EmailValidator.validate(_emailController.text)) {
+      setState(() {
+        errorText = 'Email is invalid';
+      });
+      _loadingButtonController.reset();
+    } else {
+      setState(() {
+        errorText = "I don't know";
+      });
+      _loadingButtonController.reset();
+    }
+  }
 
   @override
   void dispose() {
     _emailController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -101,25 +149,35 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       ),
                     ),
                     keyboardAppearance: Brightness.dark,
+                    onChanged: (_) {
+                      setState(() {
+                        errorText = '';
+                      });
+                    },
                   ),
+                  Container(
+                    width: double.infinity,
+                    margin: const EdgeInsets.only(top: 10),
+                    child: Text(
+                      errorText,
+                      style: const TextStyle(color: Colors.red),
+                      textAlign: TextAlign.end,
+                    ),
+                  )
                 ],
               ),
-              Container(
-                margin: const EdgeInsets.only(top: 4),
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    child: const Text("Send an email"),
-                    onPressed: () {
-                      context
-                          .read<ProfileProvider>()
-                          .setResetEmail(_emailController.text);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const PinInputScreen()));
-                    }),
-              )
+              RoundedLoadingButton(
+                child: const Text(
+                  'Send an email',
+                ),
+                color: ThemeConstant.colorPrimaryLight,
+                borderRadius: 10,
+                controller: _loadingButtonController,
+                onPressed: _emailController.value.text.isNotEmpty
+                    ? _sendEmailRequest
+                    : null,
+                disabledColor: ThemeConstant.textColorSecondary,
+              ),
             ],
           ),
         ),

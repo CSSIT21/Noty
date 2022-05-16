@@ -1,13 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:noty_client/constants/theme.dart';
+import 'package:noty_client/models/response/error/error_response.dart';
+import 'package:noty_client/models/response/info_response.dart';
 import 'package:noty_client/screens/start/change_password.dart';
+import 'package:noty_client/services/account.dart';
 import 'package:noty_client/services/providers/providers.dart';
 import 'package:noty_client/types/widget/placement.dart';
 import 'package:noty_client/widgets/leading_button.dart';
 import 'package:noty_client/widgets/typography/header_text.dart';
 import 'package:provider/provider.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'dart:async';
 
 class PinInputScreen extends StatefulWidget {
   const PinInputScreen({Key? key}) : super(key: key);
@@ -18,6 +22,74 @@ class PinInputScreen extends StatefulWidget {
 
 class _PinInputScreenState extends State<PinInputScreen> {
   final textController = TextEditingController();
+  late Timer _timer;
+  int _start = 60;
+  bool isSend = false;
+
+  void startTimer() {
+    const oneSec = Duration(seconds: 1);
+    _timer = Timer.periodic(
+      oneSec,
+      (Timer timer) {
+        if (_start == 0) {
+          setState(() {
+            isSend = false;
+            timer.cancel();
+          });
+        } else {
+          setState(() {
+            _start--;
+          });
+        }
+      },
+    );
+  }
+
+  void _sendPin() async {
+    if (textController.text.isNotEmpty) {
+      var pinService = await AccountService.resetPasswordPin(
+          Provider.of<ProfileProvider>(context, listen: false).email,
+          textController.text);
+      if (pinService is InfoResponse) {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const ChangePassword()));
+        textController.clear();
+      } else if (pinService is ErrorResponse) {
+        var error = SnackBar(
+          behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.only(bottom: 20, left: 15, right: 15),
+          content: const Text("Pin is incorrect"),
+          action: SnackBarAction(
+            label: 'OK',
+            onPressed: () {},
+          ),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(error);
+      }
+    } else {
+      var error = SnackBar(
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.only(bottom: 20, left: 15, right: 15),
+        content: const Text("Pin cannot be empty"),
+        action: SnackBarAction(
+          label: 'OK',
+          onPressed: () {},
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(error);
+    }
+  }
+
+  @override
+  void dispose() {
+    try {
+      _timer.cancel();
+    } catch (e) {
+      print(e);
+    }
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,9 +188,30 @@ class _PinInputScreenState extends State<PinInputScreen> {
                       margin: const EdgeInsets.only(right: 6),
                       child: const Text("Didn't recieve the code?"),
                     ),
-                    Text(
-                      "RESEND",
-                      style: TextStyle(color: ThemeConstant.colorPrimaryLight),
+                    GestureDetector(
+                      onTap: !isSend
+                          ? () async {
+                              await AccountService.resetPasswordEmail(
+                                  Provider.of<ProfileProvider>(context,
+                                          listen: false)
+                                      .email);
+                              setState(() {
+                                isSend = true;
+                              });
+                              startTimer();
+                            }
+                          : null,
+                      child: !isSend
+                          ? Text(
+                              "RESEND",
+                              style: TextStyle(
+                                  color: ThemeConstant.colorPrimaryLight),
+                            )
+                          : Text(
+                              "$_start",
+                              style: TextStyle(
+                                  color: ThemeConstant.colorPrimaryLight),
+                            ),
                     ),
                   ],
                 ),
@@ -128,19 +221,14 @@ class _PinInputScreenState extends State<PinInputScreen> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    child: const Text(
-                      "Continue",
-                      style: TextStyle(
-                        fontSize: 16,
-                      ),
+                  child: const Text(
+                    "Continue",
+                    style: TextStyle(
+                      fontSize: 16,
                     ),
-                    onPressed: () {
-                      textController.clear();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const ChangePassword()));
-                    }),
+                  ),
+                  onPressed: _sendPin,
+                ),
               )
             ],
           ),
