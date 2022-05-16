@@ -16,6 +16,7 @@ import 'package:noty_client/services/notification_sevice.dart';
 import 'package:noty_client/services/providers/providers.dart';
 import 'package:noty_client/widgets/typography/appbar_text.dart';
 import 'package:provider/provider.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
 
 import '../../services/notes_sevice.dart';
 
@@ -92,6 +93,7 @@ class _CoreScreenState extends material.State<CoreScreen>
     super.initState();
     NotificationService.init(initScheduled: true);
     listenNotifications();
+    tz.initializeTimeZones();
   }
 
   void listenNotifications() =>

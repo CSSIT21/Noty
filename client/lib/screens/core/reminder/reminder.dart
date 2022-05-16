@@ -13,7 +13,6 @@ import 'package:noty_client/utils/parse_date.dart';
 import 'package:noty_client/widgets/surface/curved_card.dart';
 import 'package:noty_client/widgets/typography/content_text.dart';
 import 'package:noty_client/widgets/typography/header_text.dart';
-import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:provider/provider.dart';
 
 class ReminderFragment extends StatefulWidget {
@@ -24,81 +23,11 @@ class ReminderFragment extends StatefulWidget {
 }
 
 class _ReminderFragmentState extends State<ReminderFragment> {
-  void setLocalReminder() {
-    for (var i = 0;
-        i <
-            Provider.of<ReminderProvider>(context, listen: false)
-                .independentReminder
-                .length;
-        i++) {
-      if (compareDate(parseDate(
-          Provider.of<ReminderProvider>(context, listen: false)
-              .independentReminder[i]
-              .remindDate))) {
-        NotificationService.showScheduledNotification(
-            id: int.parse(
-                Provider.of<ReminderProvider>(context, listen: false)
-                    .independentReminder[i]
-                    .reminderId
-                    .substring(8, 15),
-                radix: 16),
-            title: ManifestConstant.notificationTitle,
-            body: Provider.of<ReminderProvider>(context, listen: false)
-                .independentReminder[i]
-                .title,
-            scheduledDate: parseDate(
-                Provider.of<ReminderProvider>(context, listen: false)
-                    .independentReminder[i]
-                    .remindDate));
-      }
-    }
-    for (var j = 0;
-        j <
-            Provider.of<ReminderProvider>(context, listen: false)
-                .noteReminders
-                .length;
-        j++) {
-      for (var k = 0;
-          k <
-              Provider.of<ReminderProvider>(context, listen: false)
-                  .noteReminders[j]
-                  .reminders
-                  .length;
-          k++) {
-        if (compareDate(parseDate(
-            Provider.of<ReminderProvider>(context, listen: false)
-                .noteReminders[j]
-                .reminders[k]
-                .remindDate))) {
-          NotificationService.showScheduledNotification(
-            id: int.parse(
-                Provider.of<ReminderProvider>(context, listen: false)
-                    .noteReminders[j]
-                    .reminders[k]
-                    .id
-                    .substring(8, 15),
-                radix: 16),
-            title: ManifestConstant.notificationTitle,
-            body: Provider.of<ReminderProvider>(context, listen: false)
-                .noteReminders[j]
-                .title,
-            scheduledDate: parseDate(
-                Provider.of<ReminderProvider>(context, listen: false)
-                    .noteReminders[j]
-                    .reminders[k]
-                    .remindDate),
-          );
-        }
-      }
-    }
-  }
-
   @override
   void initState() {
     super.initState();
     context.read<ReminderProvider>().readReminderJson();
-    tz.initializeTimeZones();
-    setLocalReminder();
+    context.read<ReminderProvider>().setLocalReminder();
   }
 
   @override
