@@ -8,6 +8,7 @@ import 'package:noty_client/screens/core/reminder/new_reminder.dart';
 import 'package:noty_client/services/notification_sevice.dart';
 import 'package:noty_client/services/providers/providers.dart';
 import 'package:noty_client/types/widget/placement.dart';
+import 'package:noty_client/utils/compare_date.dart';
 import 'package:noty_client/utils/parse_date.dart';
 import 'package:noty_client/widgets/surface/curved_card.dart';
 import 'package:noty_client/widgets/typography/content_text.dart';
@@ -30,26 +31,25 @@ class _ReminderFragmentState extends State<ReminderFragment> {
                 .independentReminder
                 .length;
         i++) {
-      if (DateTime.parse(Provider.of<ReminderProvider>(context, listen: false)
-                  .independentReminder[i]
-                  .remindDate)
-              .millisecondsSinceEpoch >
-          (DateTime.now()).millisecondsSinceEpoch) {
-        // NotificationService.showScheduledNotification(
-        //     id: int.parse(
-        //         Provider.of<ReminderProvider>(context, listen: false)
-        //             .independentReminder[i]
-        //             .reminderId
-        //             .substring(8, 15),
-        //         radix: 16),
-        //     title: ManifestConstant.notificationTitle,
-        //     body: Provider.of<ReminderProvider>(context, listen: false)
-        //         .independentReminder[i]
-        //         .title,
-        //     scheduledDate: parseDate(
-        //         Provider.of<ReminderProvider>(context, listen: false)
-        //             .independentReminder[i]
-        //             .remindDate));
+      if (compareDate(parseDate(
+          Provider.of<ReminderProvider>(context, listen: false)
+              .independentReminder[i]
+              .remindDate))) {
+        NotificationService.showScheduledNotification(
+            id: int.parse(
+                Provider.of<ReminderProvider>(context, listen: false)
+                    .independentReminder[i]
+                    .reminderId
+                    .substring(8, 15),
+                radix: 16),
+            title: ManifestConstant.notificationTitle,
+            body: Provider.of<ReminderProvider>(context, listen: false)
+                .independentReminder[i]
+                .title,
+            scheduledDate: parseDate(
+                Provider.of<ReminderProvider>(context, listen: false)
+                    .independentReminder[i]
+                    .remindDate));
       }
     }
     for (var j = 0;
@@ -65,30 +65,29 @@ class _ReminderFragmentState extends State<ReminderFragment> {
                   .reminders
                   .length;
           k++) {
-        if (DateTime.parse(Provider.of<ReminderProvider>(context, listen: false)
+        if (compareDate(parseDate(
+            Provider.of<ReminderProvider>(context, listen: false)
+                .noteReminders[j]
+                .reminders[k]
+                .remindDate))) {
+          NotificationService.showScheduledNotification(
+            id: int.parse(
+                Provider.of<ReminderProvider>(context, listen: false)
                     .noteReminders[j]
                     .reminders[k]
-                    .remindDate)
-                .millisecondsSinceEpoch >
-            (DateTime.now()).millisecondsSinceEpoch) {
-          // NotificationService.showScheduledNotification(
-          //   id: int.parse(
-          //       Provider.of<ReminderProvider>(context, listen: false)
-          //           .noteReminders[j]
-          //           .reminders[k]
-          //           .id
-          //           .substring(8, 15),
-          //       radix: 16),
-          //   title: ManifestConstant.notificationTitle,
-          //   body: Provider.of<ReminderProvider>(context, listen: false)
-          //       .noteReminders[j]
-          //       .title,
-          //   scheduledDate: parseDate(
-          //       Provider.of<ReminderProvider>(context, listen: false)
-          //           .noteReminders[j]
-          //           .reminders[k]
-          //           .remindDate),
-          // );
+                    .id
+                    .substring(8, 15),
+                radix: 16),
+            title: ManifestConstant.notificationTitle,
+            body: Provider.of<ReminderProvider>(context, listen: false)
+                .noteReminders[j]
+                .title,
+            scheduledDate: parseDate(
+                Provider.of<ReminderProvider>(context, listen: false)
+                    .noteReminders[j]
+                    .reminders[k]
+                    .remindDate),
+          );
         }
       }
     }
