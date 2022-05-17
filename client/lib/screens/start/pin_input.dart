@@ -84,9 +84,8 @@ class _PinInputScreenState extends State<PinInputScreen> {
   void dispose() {
     try {
       _timer.cancel();
-    } catch (e) {
-      print(e);
-    }
+      // ignore: empty_catches
+    } catch (e) {}
 
     super.dispose();
   }

@@ -223,6 +223,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             ),
                             TextFormField(
                               initialValue: meData.firstname,
+                              keyboardAppearance: Brightness.dark,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
@@ -240,6 +241,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             ),
                             TextFormField(
                               initialValue: meData.lastname,
+                              keyboardAppearance: Brightness.dark,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10),
