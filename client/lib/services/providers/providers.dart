@@ -469,6 +469,7 @@ class ReminderProvider with ChangeNotifier, DiagnosticableTreeMixin {
         }
       }
     }
+    notifyListeners();
   }
 }
 

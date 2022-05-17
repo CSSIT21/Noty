@@ -22,8 +22,9 @@ class _ReminderFragmentState extends State<ReminderFragment> {
   @override
   void initState() {
     super.initState();
-    context.read<ReminderProvider>().readReminderJson();
-    context.read<ReminderProvider>().setLocalReminder();
+    context.read<ReminderProvider>().readReminderJson().then((_) {
+      context.read<ReminderProvider>().setLocalReminder();
+    });
   }
 
   @override
