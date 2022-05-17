@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:noty_client/constants/manifest.dart';
 import 'package:noty_client/models/response/error/error_response.dart';
 import 'package:noty_client/models/response/folder/note_list.dart';
 import 'package:noty_client/models/response/info_response.dart';
@@ -21,8 +22,11 @@ import 'package:noty_client/models/response/tag/tag_response.dart';
 import 'package:noty_client/services/folder_service.dart';
 import 'package:noty_client/services/me.dart';
 import 'package:noty_client/services/notes_sevice.dart';
+import 'package:noty_client/services/notification_sevice.dart';
 import 'package:noty_client/services/reminder_service.dart';
 import 'package:noty_client/services/tag_service.dart';
+import 'package:noty_client/utils/compare_date.dart';
+import 'package:noty_client/utils/parse_date.dart';
 
 class NotesProvider with ChangeNotifier, DiagnosticableTreeMixin {
   List<FolderData> folders = [];
@@ -30,6 +34,7 @@ class NotesProvider with ChangeNotifier, DiagnosticableTreeMixin {
   NoteDetailData noteDetails = NoteDetailData(
       id: "", updatedAt: "", title: "", details: [], tags: [], folderId: "");
   List<NoteData> folderNoteList = [];
+  int currentTextFieldIndex = -1;
 
   void setFoldersData(List<FolderData> data) {
     folders = data;
@@ -235,6 +240,16 @@ class NotesProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
+  void deleteNoteDetail(int index) {
+    noteDetails.details.removeAt(index);
+    notifyListeners();
+  }
+
+  void setCurrentTfIndex(int index) {
+    currentTextFieldIndex = index;
+    notifyListeners();
+  }
+
   void addNoteDetailReminder(String noteId, String reminderId) {
     noteDetails.details.add(NoteDetailDataDetails(
         type: "reminder", data: DetailsData(content: reminderId)));
@@ -261,6 +276,8 @@ class ProfileProvider with ChangeNotifier, DiagnosticableTreeMixin {
       reminders: 0,
       tags: 0);
 
+  String email = '';
+
   void setMeData(MeData data) {
     meData = data;
     notifyListeners();
@@ -281,6 +298,11 @@ class ProfileProvider with ChangeNotifier, DiagnosticableTreeMixin {
 
   void setLastname(String text) {
     meData.lastname = text;
+    notifyListeners();
+  }
+
+  void setResetEmail(String text) {
+    email = text;
     notifyListeners();
   }
 }
@@ -316,7 +338,9 @@ class ReminderProvider with ChangeNotifier, DiagnosticableTreeMixin {
     var response =
         await ReminderService.addReminder(title, description, remindDate);
     if (response is AddReminderResponse) {
-      readReminderJson();
+      readReminderJson().then((_) => {
+            setLocalReminder(),
+          });
       return response.data.reminderId;
     } else if (response is ErrorResponse) {
       var error = SnackBar(
@@ -342,7 +366,9 @@ class ReminderProvider with ChangeNotifier, DiagnosticableTreeMixin {
     var response = await ReminderService.editReminder(
         title, description, reminderId, remindDate, success);
     if (response is InfoResponse) {
-      readReminderJson();
+      readReminderJson().then((_) => {
+            setLocalReminder(),
+          });
     } else if (response is ErrorResponse) {
       var error = SnackBar(
         behavior: SnackBarBehavior.floating,
@@ -361,7 +387,9 @@ class ReminderProvider with ChangeNotifier, DiagnosticableTreeMixin {
   void deleteReminder(String reminderId, BuildContext context) async {
     var response = await ReminderService.deleteReminder(reminderId);
     if (response is InfoResponse) {
-      readReminderJson();
+      readReminderJson().then((_) => {
+            setLocalReminder(),
+          });
     } else if (response is ErrorResponse) {
       var error = SnackBar(
         behavior: SnackBarBehavior.floating,
@@ -381,7 +409,9 @@ class ReminderProvider with ChangeNotifier, DiagnosticableTreeMixin {
       String reminderId, bool success, BuildContext context) async {
     var response = await ReminderService.updateReminder(reminderId, success);
     if (response is InfoResponse) {
-      readReminderJson();
+      readReminderJson().then((_) => {
+            setLocalReminder(),
+          });
     } else if (response is ErrorResponse) {
       var error = SnackBar(
         behavior: SnackBarBehavior.floating,
@@ -413,6 +443,35 @@ class ReminderProvider with ChangeNotifier, DiagnosticableTreeMixin {
         ),
       );
       ScaffoldMessenger.of(context).showSnackBar(error);
+    }
+    notifyListeners();
+  }
+
+  void setLocalReminder() {
+    for (var i = 0; i < independentReminder.length; i++) {
+      if (compareDate(parseDate(independentReminder[i].remindDate)) &&
+          !independentReminder[i].success) {
+        NotificationService.showScheduledNotification(
+            id: int.parse(independentReminder[i].reminderId.substring(8, 15),
+                radix: 16),
+            title: ManifestConstant.notificationTitle,
+            body: independentReminder[i].title,
+            scheduledDate: parseDate(independentReminder[i].remindDate));
+      }
+    }
+    for (var j = 0; j < noteReminders.length; j++) {
+      for (var k = 0; k < noteReminders[j].reminders.length; k++) {
+        if (compareDate(parseDate(noteReminders[j].reminders[k].remindDate)) &&
+            !noteReminders[j].reminders[k].success) {
+          NotificationService.showScheduledNotification(
+            id: int.parse(noteReminders[j].reminders[k].id.substring(8, 15),
+                radix: 16),
+            title: ManifestConstant.notificationTitle,
+            body: noteReminders[j].title,
+            scheduledDate: parseDate(noteReminders[j].reminders[k].remindDate),
+          );
+        }
+      }
     }
     notifyListeners();
   }

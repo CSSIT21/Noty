@@ -1,5 +1,6 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 class NotificationService {
   static final _notifications = FlutterLocalNotificationsPlugin();
@@ -11,6 +12,7 @@ class NotificationService {
           'channel id',
           'channel name',
           importance: Importance.max,
+          // styleInformation: styleInformation,
         ),
         iOS: IOSNotificationDetails());
   }
@@ -32,8 +34,25 @@ class NotificationService {
     int id = 0,
     String? title,
     String? body,
-    String? payload,
   }) async =>
-      _notifications.show(id, title, body, await _notificationDetails(),
-          payload: payload);
+      _notifications.show(id, title, body, await _notificationDetails());
+
+  static void showScheduledNotification({
+    int id = 0,
+    String? title,
+    String? body,
+    String? payload,
+    required DateTime scheduledDate,
+  }) async =>
+      _notifications.zonedSchedule(
+        id,
+        title,
+        body,
+        tz.TZDateTime.from(scheduledDate, tz.local),
+        await _notificationDetails(),
+        androidAllowWhileIdle: true,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+      );
+  static void cancel(int id) => _notifications.cancel(id);
 }

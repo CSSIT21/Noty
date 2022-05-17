@@ -16,6 +16,7 @@ import 'package:noty_client/services/notification_sevice.dart';
 import 'package:noty_client/services/providers/providers.dart';
 import 'package:noty_client/widgets/typography/appbar_text.dart';
 import 'package:provider/provider.dart';
+import 'package:timezone/data/latest_all.dart' as tz;
 
 import '../../services/notes_sevice.dart';
 
@@ -37,7 +38,6 @@ class _CoreScreenState extends material.State<CoreScreen>
     CupertinoIcons.person_fill,
   ];
   late String currentTitle;
-  late TextEditingController _textController;
 
   void changeTitle() {
     setState(() {
@@ -88,22 +88,18 @@ class _CoreScreenState extends material.State<CoreScreen>
       vsync: this,
     );
     _tabController.addListener(changeTitle);
-    _textController = TextEditingController(text: '');
     _readJson();
 
     super.initState();
-    NotificationService.init();
+    NotificationService.init(initScheduled: true);
     listenNotifications();
+    tz.initializeTimeZones();
   }
 
   void listenNotifications() =>
       NotificationService.onNotifications.stream.listen(onClickedNotification);
 
-  void onClickedNotification(String? payload) {
-    // setState(() {
-    //   _tabController.index = 1;
-    // });
-  }
+  void onClickedNotification(String? payload) {}
 
   @override
   material.Widget build(material.BuildContext context) {
@@ -143,23 +139,6 @@ class _CoreScreenState extends material.State<CoreScreen>
                 ],
               )
             : material.AppBar(
-                // toolbarHeight: 85,
-                // title: SizedBox(
-                //   height: 65,
-                //   child: material.Column(
-                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //     children: [
-                //       AppBarText(text: currentTitle),
-                //       CupertinoSearchTextField(
-                //         controller: _textController,
-                //         style: TextStyle(
-                //             color: ThemeConstant.textColorPrimary,
-                //             fontSize: 14),
-                //         itemColor: ThemeConstant.colorPrimaryLight,
-                //       ),
-                //     ],
-                //   ),
-                // ),
                 title: AppBarText(text: currentTitle),
                 centerTitle: true,
                 automaticallyImplyLeading: false,
@@ -190,7 +169,9 @@ class _CoreScreenState extends material.State<CoreScreen>
           },
         ),
         body: Container(
-          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+          padding: currentTitle != "Tags"
+              ? const EdgeInsets.fromLTRB(20, 0, 20, 0)
+              : null,
           child: material.TabBarView(
             physics: const material
                 .NeverScrollableScrollPhysics(), // Swipe navigation handling is not supported

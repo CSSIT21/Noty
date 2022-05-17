@@ -22,6 +22,7 @@ func Init(router fiber.Router) {
 	account.Post("register", accountRegister.RegisterHandler)
 	account.Post("reset/send", accountReset.SendHandler)
 	account.Post("reset/verify", accountReset.VerifyHandler)
+	account.Post("reset/password", accountReset.ResetHandler)
 
 	// * Reminder
 	reminderHandler := router.Group("reminder/", middlewares.Jwt)
