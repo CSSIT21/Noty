@@ -338,8 +338,9 @@ class ReminderProvider with ChangeNotifier, DiagnosticableTreeMixin {
     var response =
         await ReminderService.addReminder(title, description, remindDate);
     if (response is AddReminderResponse) {
-      readReminderJson();
-      setLocalReminder();
+      readReminderJson().then((_) => {
+            setLocalReminder(),
+          });
       return response.data.reminderId;
     } else if (response is ErrorResponse) {
       var error = SnackBar(
@@ -365,8 +366,9 @@ class ReminderProvider with ChangeNotifier, DiagnosticableTreeMixin {
     var response = await ReminderService.editReminder(
         title, description, reminderId, remindDate, success);
     if (response is InfoResponse) {
-      readReminderJson();
-      setLocalReminder();
+      readReminderJson().then((_) => {
+            setLocalReminder(),
+          });
     } else if (response is ErrorResponse) {
       var error = SnackBar(
         behavior: SnackBarBehavior.floating,
@@ -385,8 +387,9 @@ class ReminderProvider with ChangeNotifier, DiagnosticableTreeMixin {
   void deleteReminder(String reminderId, BuildContext context) async {
     var response = await ReminderService.deleteReminder(reminderId);
     if (response is InfoResponse) {
-      readReminderJson();
-      setLocalReminder();
+      readReminderJson().then((_) => {
+            setLocalReminder(),
+          });
     } else if (response is ErrorResponse) {
       var error = SnackBar(
         behavior: SnackBarBehavior.floating,
@@ -406,8 +409,9 @@ class ReminderProvider with ChangeNotifier, DiagnosticableTreeMixin {
       String reminderId, bool success, BuildContext context) async {
     var response = await ReminderService.updateReminder(reminderId, success);
     if (response is InfoResponse) {
-      readReminderJson();
-      setLocalReminder();
+      readReminderJson().then((_) => {
+            setLocalReminder(),
+          });
     } else if (response is ErrorResponse) {
       var error = SnackBar(
         behavior: SnackBarBehavior.floating,

@@ -104,7 +104,6 @@ class _NewReminderState extends State<NewReminder> {
                     context.read<NotesProvider>().editNote(context);
                     context.read<ReminderProvider>().readReminderJson();
                     widget.updateNote!();
-                    context.read<ReminderProvider>().setLocalReminder();
                     context
                         .read<NotesProvider>()
                         .readNoteDetailJson(widget.noteId)
@@ -112,7 +111,6 @@ class _NewReminderState extends State<NewReminder> {
                           (_) => Navigator.pop(context),
                         );
                   } else {
-                    context.read<ReminderProvider>().setLocalReminder();
                     Navigator.pop(context);
                   }
                 } else {
