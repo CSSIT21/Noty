@@ -42,8 +42,6 @@ class _LoginFragmentState extends State<LoginFragment> {
     } else if (login is LoginResponse) {
       _loginBtnController.success();
       _loginNavigate();
-      _emailController.clear();
-      _passwordController.clear();
     } else {
       _loginBtnController.reset();
     }
@@ -53,6 +51,8 @@ class _LoginFragmentState extends State<LoginFragment> {
     Timer(const Duration(milliseconds: 1500), () {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => const CoreScreen()));
+      _emailController.clear();
+      _passwordController.clear();
     });
   }
 
