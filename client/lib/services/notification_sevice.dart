@@ -18,7 +18,7 @@ class NotificationService {
   }
 
   static Future init({bool initScheduled = false}) async {
-    const android = AndroidInitializationSettings("@mipmap/ic_lancher");
+    const android = AndroidInitializationSettings("@mipmap/ic_launcher");
     const iOS = IOSInitializationSettings();
     const settings = InitializationSettings(android: android, iOS: iOS);
 
