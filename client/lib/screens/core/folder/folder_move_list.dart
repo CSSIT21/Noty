@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 class FolderMoveList extends StatefulWidget {
   final String title;
-  final String? currentFolderId;
+  final String currentFolderId;
   final String folderId;
   const FolderMoveList(
       {Key? key,

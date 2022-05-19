@@ -85,6 +85,7 @@ class _NoteSectionState extends State<NoteSection> {
                         date: note.updatedAt,
                         noteId: note.noteId,
                         previousScreen: "All Notes",
+                        folderId: "",
                       ),
                     ),
                   )

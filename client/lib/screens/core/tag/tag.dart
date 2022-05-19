@@ -81,6 +81,7 @@ class _TagFragmentState extends State<TagFragment> {
                                                 date: note.updatedAt,
                                                 noteId: note.noteId,
                                                 previousScreen: "Tags",
+                                                folderId: "",
                                               ),
                                             )
                                             .toList(),
