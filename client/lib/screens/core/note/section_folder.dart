@@ -57,7 +57,7 @@ class _FolderSectionState extends State<FolderSection> {
                             motion: const StretchMotion(),
                             children: [
                               SlidableAction(
-                                onPressed: (BuildContext context) {
+                                onPressed: (BuildContext cont) {
                                   context
                                       .read<NotesProvider>()
                                       .deleteFolder(folder.folderId, context);
