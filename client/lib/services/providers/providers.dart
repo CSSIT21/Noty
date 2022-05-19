@@ -467,7 +467,7 @@ class ReminderProvider with ChangeNotifier, DiagnosticableTreeMixin {
             id: int.parse(noteReminders[j].reminders[k].id.substring(8, 15),
                 radix: 16),
             title: ManifestConstant.notificationTitle,
-            body: noteReminders[j].title,
+            body: noteReminders[j].reminders[k].title,
             scheduledDate: parseDate(noteReminders[j].reminders[k].remindDate),
           );
         }
