@@ -269,7 +269,7 @@ class ProfileProvider with ChangeNotifier, DiagnosticableTreeMixin {
       email: "",
       firstname: "",
       lastname: "",
-      pictureId: "",
+      avatarUrl: "",
       userId: "",
       notes: 0,
       folders: 0,
@@ -283,7 +283,7 @@ class ProfileProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  void readMeJson() async {
+  Future<void> readMeJson() async {
     var meResponse = await ProfileService.getProfile();
     if (meResponse is MeResponse) {
       setMeData(meResponse.data);

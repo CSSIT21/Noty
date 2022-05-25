@@ -2,7 +2,7 @@ class MeData {
   String email;
   String firstname;
   String lastname;
-  String pictureId;
+  String avatarUrl;
   String userId;
   int notes;
   int folders;
@@ -13,7 +13,7 @@ class MeData {
       {required this.email,
       required this.firstname,
       required this.lastname,
-      required this.pictureId,
+      required this.avatarUrl,
       required this.userId,
       required this.notes,
       required this.folders,
@@ -25,7 +25,7 @@ class MeData {
         email: json["email"],
         firstname: json["firstname"],
         lastname: json["lastname"],
-        pictureId: json["picture_id"] ?? "",
+        avatarUrl: json["avatar_url"] ?? "",
         userId: json["user_id"],
         notes: json["notes"],
         folders: json["folders"],
