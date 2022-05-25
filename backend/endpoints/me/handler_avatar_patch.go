@@ -3,6 +3,8 @@ package me
 import (
 	"fmt"
 	"image"
+	"image/jpeg"
+	_ "image/png"
 	"os"
 	"path"
 	"path/filepath"
@@ -36,9 +38,6 @@ func MeAvatarPostHandler(c *fiber.Ctx) error {
 	// * Parse user JWT token
 	token := c.Locals("user").(*jwt.Token)
 	claims := token.Claims.(*common.UserClaim)
-
-	// * Parse form parameters
-	ext := c.FormValue("ext")
 
 	// * Parse multipart file parameter
 	fileHeader, err := c.FormFile("image")
@@ -105,6 +104,13 @@ func MeAvatarPostHandler(c *fiber.Ctx) error {
 		}
 	}
 	defer savingFile.Close()
+
+	if err := jpeg.Encode(savingFile, img, nil); err != nil {
+		return &responder.GenericError{
+			Message: "Unable to save an image file",
+			Err:     err,
+		}
+	}
 
 	// * Update user record
 	if _, err := mgm.Coll(new(models.User)).UpdateByID(
