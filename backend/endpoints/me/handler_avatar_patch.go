@@ -2,6 +2,7 @@ package me
 
 import (
 	"fmt"
+	"image"
 	"os"
 	"path"
 	"path/filepath"
@@ -16,6 +17,7 @@ import (
 	"noty-backend/loaders/storage"
 	"noty-backend/types/common"
 	"noty-backend/types/responder"
+	"noty-backend/utils/text"
 )
 
 // MeAvatarPostHandler
@@ -39,10 +41,28 @@ func MeAvatarPostHandler(c *fiber.Ctx) error {
 	ext := c.FormValue("ext")
 
 	// * Parse multipart file parameter
-	file, err := c.FormFile("image")
+	fileHeader, err := c.FormFile("image")
 	if err != nil {
 		return &responder.GenericError{
 			Message: "Unable to parse image file",
+			Err:     err,
+		}
+	}
+
+	// * Open multipart to file
+	file, err := fileHeader.Open()
+	if err != nil {
+		return &responder.GenericError{
+			Message: "Unable to parse image file",
+			Err:     err,
+		}
+	}
+
+	// * Decode image
+	img, _, err := image.Decode(file)
+	if err != nil {
+		return &responder.GenericError{
+			Message: "Unable to decode image",
 			Err:     err,
 		}
 	}
@@ -55,6 +75,7 @@ func MeAvatarPostHandler(c *fiber.Ctx) error {
 
 	// * Assign file path
 	filePath := path.Join(storage.RootDir, *claims.UserId)
+	fileSalt := *text.GenerateString(text.GenerateStringSet.Num, 6)
 
 	// * Check for existing avatar image for the user
 	matches, err := filepath.Glob(filePath + ".*")
@@ -75,20 +96,22 @@ func MeAvatarPostHandler(c *fiber.Ctx) error {
 		}
 	}
 
-	// Save image to file
-	if err = c.SaveFile(file, filePath+"."+ext); err != nil {
+	// * Save image to file
+	savingFile, err := os.Create(filePath + "." + fileSalt + ".jpeg")
+	if err != nil {
 		return &responder.GenericError{
-			Message: "Unable to save avatar image",
+			Message: "Unable to create an image file",
 			Err:     err,
 		}
 	}
+	defer savingFile.Close()
 
 	// * Update user record
 	if _, err := mgm.Coll(new(models.User)).UpdateByID(
 		mgm.Ctx(),
 		userId,
 		bson.M{"$set": bson.M{
-			"avatar_url": fmt.Sprintf("/static/%s.%s", *claims.UserId, ext),
+			"avatar_url": fmt.Sprintf("/static/%s.%s.jpeg", filePath, fileSalt),
 		}},
 	); err != nil {
 		return &responder.GenericError{

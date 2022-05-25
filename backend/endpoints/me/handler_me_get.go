@@ -41,7 +41,7 @@ func MeGetHandler(c *fiber.Ctx) error {
 		}
 	}
 
-	var avatarUrl string = ""
+	var avatarUrl string
 	if user.AvatarUrl != nil {
 		avatarUrl = *user.AvatarUrl
 	}
