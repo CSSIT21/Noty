@@ -117,7 +117,7 @@ func MeAvatarPostHandler(c *fiber.Ctx) error {
 		mgm.Ctx(),
 		userId,
 		bson.M{"$set": bson.M{
-			"avatar_url": fmt.Sprintf("/static/%s.%s.jpeg", filePath, fileSalt),
+			"avatar_url": fmt.Sprintf("/static/%s.%s.jpeg", *claims.UserId, fileSalt),
 		}},
 	); err != nil {
 		return &responder.GenericError{
