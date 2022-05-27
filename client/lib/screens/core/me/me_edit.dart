@@ -43,7 +43,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       setState(() {
         imagefile = File(pickedFile.path);
       });
-
       await ProfileService.changeImage(imagefile!).then((_) {
         context.read<ProfileProvider>().readMeJson();
         setState(() {});

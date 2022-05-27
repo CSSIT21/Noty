@@ -2,14 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:noty_client/constants/environment.dart';
 import 'package:noty_client/models/response/me/me_infomation.dart';
-
 import 'package:noty_client/screens/core/me/me_detail.dart';
 import 'package:noty_client/screens/core/me/me_overview.dart';
 import 'package:noty_client/screens/start/login.dart';
 import 'package:noty_client/services/providers/providers.dart';
-import 'package:noty_client/types/widget/placement.dart';
 import 'package:noty_client/widgets/surface/curved_card.dart';
-import 'package:noty_client/widgets/typography/header_text.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -67,10 +64,15 @@ class _MeFragementState extends State<MeFragement> {
                 ),
               )),
           Container(
-              margin: const EdgeInsets.only(bottom: 20),
-              child: HeaderText(
-                  text: meData.firstname + " " + meData.lastname,
-                  size: Size.medium)),
+            margin: const EdgeInsets.only(bottom: 20),
+            child: Text(
+              meData.firstname + " " + meData.lastname,
+              style: const TextStyle(
+                fontSize: 24,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
           CurvedCard(
             child: Container(
               padding: const EdgeInsets.only(top: 8, bottom: 8),
