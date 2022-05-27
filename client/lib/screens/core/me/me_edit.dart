@@ -45,15 +45,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       });
       await ProfileService.changeImage(imagefile!).then((_) {
         context.read<ProfileProvider>().readMeJson();
-        setState(() {});
       });
     }
-  }
-
-  handleBack() {
-    context.read<ProfileProvider>().readMeJson().then((_) {
-      Navigator.pop(context);
-    });
   }
 
   @override
@@ -172,9 +165,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           ),
           centerTitle: true,
           leadingWidth: 100,
-          leading: LeadingButton(
+          leading: const LeadingButton(
             text: "Back",
-            onPressed: handleBack,
           ),
         ),
         body: SingleChildScrollView(
