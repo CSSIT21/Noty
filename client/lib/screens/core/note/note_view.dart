@@ -34,7 +34,6 @@ class NoteDetailScreen extends StatefulWidget {
 class _NoteDetailScreenState extends State<NoteDetailScreen>
     with TickerProviderStateMixin {
   List<Widget> details = [];
-  bool loading = false;
 
   Future<Widget> getReminderList(int i) async {
     if (Provider.of<NotesProvider>(context, listen: false)
@@ -307,9 +306,6 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
               ),
             ),
             onTap: () {
-              setState(() {
-                loading = true;
-              });
               showLoading(context);
               context.read<NotesProvider>().editNote(context).then((_) {
                 context.read<NotesProvider>().readJsonData().then((_) {
@@ -317,10 +313,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
                     updateFolderList(context),
                     context.read<NotesProvider>().readJsonData(),
                     context.read<ReminderProvider>().readReminderJson()
-                  ]).then((value) {
-                    setState(() {
-                      loading = false;
-                    });
+                  ]).then((_) {
                     Navigator.pop(context);
                     Navigator.pop(context);
                     context.read<NotesProvider>().clearNoteDetail();

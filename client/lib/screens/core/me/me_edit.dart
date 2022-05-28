@@ -8,6 +8,7 @@ import 'package:noty_client/models/response/me/me_infomation.dart';
 import 'package:noty_client/services/me.dart';
 import 'package:noty_client/services/providers/providers.dart';
 import 'package:noty_client/widgets/leading_button.dart';
+import 'package:noty_client/widgets/loading_animation.dart';
 import 'package:noty_client/widgets/typography/appbar_text.dart';
 import 'package:provider/provider.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
@@ -43,8 +44,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       setState(() {
         imagefile = File(pickedFile.path);
       });
+      showLoading(context);
       await ProfileService.changeImage(imagefile!).then((_) {
-        context.read<ProfileProvider>().readMeJson();
+        Future.wait([
+          context.read<ProfileProvider>().readMeJson(),
+        ]).then((_) {
+          Navigator.pop(context);
+        });
       });
     }
   }
