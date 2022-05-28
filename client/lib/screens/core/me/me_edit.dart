@@ -132,6 +132,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           _profileLoadingButton.success();
           Navigator.pop(context);
         }
+      } else if (tempFirstname.isEmpty || tempLastname.isEmpty) {
+        _profileLoadingButton.reset();
+        var error = SnackBar(
+          behavior: SnackBarBehavior.floating,
+          margin:
+              EdgeInsets.only(bottom: screenHeight - 120, left: 15, right: 15),
+          content: const Text("Error. Please check your name"),
+          action: SnackBarAction(
+            label: 'OK',
+            onPressed: () {},
+          ),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(error);
       } else {
         _profileLoadingButton.reset();
         var error = SnackBar(
