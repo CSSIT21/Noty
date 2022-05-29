@@ -184,8 +184,32 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           ),
           centerTitle: true,
           leadingWidth: 100,
-          leading: const LeadingButton(
-            text: "Back",
+          leading: GestureDetector(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 15),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.arrow_back_ios,
+                    color: ThemeConstant.colorPrimaryLight,
+                  ),
+                  SizedBox(
+                    width: 60,
+                    child: Text(
+                      "Back",
+                      style: TextStyle(
+                          fontSize: 17, color: ThemeConstant.colorPrimaryLight),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  )
+                ],
+              ),
+            ),
+            onTap: () {
+              context.read<ProfileProvider>().readMeJson().then(
+                    (_) => Navigator.pop(context),
+                  );
+            },
           ),
         ),
         body: SingleChildScrollView(
