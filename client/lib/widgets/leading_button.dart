@@ -33,8 +33,9 @@ class LeadingButton extends StatelessWidget {
       onTap: () {
         if (onPressed != null) {
           onPressed!();
+        } else {
+          Navigator.pop(context);
         }
-        Navigator.pop(context);
       },
     );
   }

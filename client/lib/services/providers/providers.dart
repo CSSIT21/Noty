@@ -269,7 +269,7 @@ class ProfileProvider with ChangeNotifier, DiagnosticableTreeMixin {
       email: "",
       firstname: "",
       lastname: "",
-      pictureId: "",
+      avatarUrl: "",
       userId: "",
       notes: 0,
       folders: 0,
@@ -283,7 +283,7 @@ class ProfileProvider with ChangeNotifier, DiagnosticableTreeMixin {
     notifyListeners();
   }
 
-  void readMeJson() async {
+  Future<void> readMeJson() async {
     var meResponse = await ProfileService.getProfile();
     if (meResponse is MeResponse) {
       setMeData(meResponse.data);
@@ -467,7 +467,7 @@ class ReminderProvider with ChangeNotifier, DiagnosticableTreeMixin {
             id: int.parse(noteReminders[j].reminders[k].id.substring(8, 15),
                 radix: 16),
             title: ManifestConstant.notificationTitle,
-            body: noteReminders[j].title,
+            body: noteReminders[j].reminders[k].title,
             scheduledDate: parseDate(noteReminders[j].reminders[k].remindDate),
           );
         }

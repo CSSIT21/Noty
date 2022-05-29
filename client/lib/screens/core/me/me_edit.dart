@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:noty_client/constants/environment.dart';
 import 'package:noty_client/constants/theme.dart';
 import 'package:noty_client/models/response/error/error_response.dart';
 import 'package:noty_client/models/response/info_response.dart';
@@ -7,9 +8,11 @@ import 'package:noty_client/models/response/me/me_infomation.dart';
 import 'package:noty_client/services/me.dart';
 import 'package:noty_client/services/providers/providers.dart';
 import 'package:noty_client/widgets/leading_button.dart';
+import 'package:noty_client/widgets/loading_animation.dart';
 import 'package:noty_client/widgets/typography/appbar_text.dart';
 import 'package:provider/provider.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditProfileScreen extends StatefulWidget {
   final String firstname;
@@ -29,9 +32,28 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final RoundedLoadingButtonController _profileLoadingButton =
       RoundedLoadingButtonController();
 
-  late File imagefile;
+  // ignore: avoid_init_to_null
+  File? imagefile = null;
   String tempFirstname = '';
   String tempLastname = '';
+  final ImagePicker _picker = ImagePicker();
+
+  _getFromGallery() async {
+    XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        imagefile = File(pickedFile.path);
+      });
+      showLoading(context);
+      await ProfileService.changeImage(imagefile!).then((_) {
+        Future.wait([
+          context.read<ProfileProvider>().readMeJson(),
+        ]).then((_) {
+          Navigator.pop(context);
+        });
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -116,6 +138,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           _profileLoadingButton.success();
           Navigator.pop(context);
         }
+      } else if (tempFirstname.isEmpty || tempLastname.isEmpty) {
+        _profileLoadingButton.reset();
+        var error = SnackBar(
+          behavior: SnackBarBehavior.floating,
+          margin:
+              EdgeInsets.only(bottom: screenHeight - 120, left: 15, right: 15),
+          content: const Text("Error. Please check your name"),
+          action: SnackBarAction(
+            label: 'OK',
+            onPressed: () {},
+          ),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(error);
       } else {
         _profileLoadingButton.reset();
         var error = SnackBar(
@@ -177,10 +212,34 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             width: 125,
                             child: Stack(
                               children: [
-                                Image.asset(
-                                  "assets/images/profile.png",
-                                  width: 150,
-                                ),
+                                imagefile == null
+                                    ? Image.network(
+                                        EnvironmentConstant.internalPrefix +
+                                            Provider.of<ProfileProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .meData
+                                                .avatarUrl,
+                                        errorBuilder:
+                                            (context, error, stackTrace) =>
+                                                Image.asset(
+                                          "assets/images/profile-placeholder.png",
+                                          width: 125,
+                                          fit: BoxFit.cover,
+                                          alignment: Alignment.center,
+                                        ),
+                                        width: 125,
+                                        height: 125,
+                                        fit: BoxFit.cover,
+                                        alignment: Alignment.center,
+                                      )
+                                    : Image.file(
+                                        imagefile!,
+                                        width: 125,
+                                        height: 125,
+                                        fit: BoxFit.cover,
+                                        alignment: Alignment.center,
+                                      ),
                                 Align(
                                   alignment: Alignment.bottomCenter,
                                   child: Container(
@@ -199,13 +258,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   ),
                                 ),
                                 Positioned.fill(
-                                    child: Material(
-                                        color: Colors.transparent,
-                                        child: InkWell(
-                                          splashColor: const Color(0xff24577a)
-                                              .withOpacity(0.5),
-                                          onTap: () {},
-                                        ))),
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                      splashColor: ThemeConstant
+                                          .colorPrimaryLight
+                                          .withOpacity(0.5),
+                                      onTap: () {
+                                        _getFromGallery();
+                                      },
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           ),

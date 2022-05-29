@@ -42,6 +42,7 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
         .watch<NotesProvider>()
         .folders
         .singleWhere((folder) => folder.folderId == widget.folderId);
+
     return Scaffold(
       appBar: AppBar(
         title: SizedBox(
@@ -98,19 +99,17 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
                                     motion: const StretchMotion(),
                                     children: [
                                       SlidableAction(
-                                        onPressed:
-                                            (BuildContext context) async {
-                                          var folderId =
+                                        onPressed: (BuildContext cont) async {
+                                          var value =
                                               await NoteService.getNoteDetail(
                                                   note.noteId);
-                                          if (folderId is NoteDetailResponse) {
+                                          if (value is NoteDetailResponse) {
                                             showBarModalBottomSheet(
                                               context: context,
                                               builder: (context) =>
                                                   FolderMoveDialog(
-                                                folderId:
-                                                    folderId.data.folderId,
-                                                noteId: note.noteId,
+                                                folderId: value.data.folderId,
+                                                noteId: value.data.id,
                                               ),
                                               expand: true,
                                             );
@@ -122,16 +121,19 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
                                         icon: CupertinoIcons.folder_fill,
                                       ),
                                       SlidableAction(
-                                        onPressed: (BuildContext context) {
+                                        onPressed: (BuildContext cont) {
                                           context
                                               .read<NotesProvider>()
                                               .deleteNote(note.noteId, context)
-                                              .then(
-                                                (value) => context
-                                                    .read<NotesProvider>()
-                                                    .readFolderNoteListJson(
-                                                        folder.folderId),
-                                              );
+                                              .then((_) {
+                                            context
+                                                .read<NotesProvider>()
+                                                .readFolderNoteListJson(
+                                                    folder.folderId);
+                                            context
+                                                .read<NotesProvider>()
+                                                .readJsonData();
+                                          });
                                         },
                                         backgroundColor: Colors.red,
                                         foregroundColor: Colors.white,
@@ -152,6 +154,7 @@ class _FolderDetailScreenState extends State<FolderDetailScreen> {
                           const Divider(
                             color: Color(0xff434345),
                             indent: 25,
+                            height: 1,
                           ),
                         ),
                       ),

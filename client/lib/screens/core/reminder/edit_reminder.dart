@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:noty_client/constants/theme.dart';
+import 'package:noty_client/services/notification_sevice.dart';
 import 'package:noty_client/services/providers/providers.dart';
 import 'package:noty_client/widgets/typography/appbar_text.dart';
 import 'package:provider/provider.dart';
@@ -273,6 +274,10 @@ class _EditReminderState extends State<EditReminder> {
                       context
                           .read<ReminderProvider>()
                           .deleteReminder(widget.reminderId, context);
+                      NotificationService.cancel(
+                        int.parse(widget.reminderId.substring(8, 15),
+                            radix: 16),
+                      );
                       if (widget.prevScreen == "Note") {
                         context
                             .read<NotesProvider>()

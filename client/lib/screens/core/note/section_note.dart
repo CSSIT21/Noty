@@ -47,7 +47,7 @@ class _NoteSectionState extends State<NoteSection> {
                         children: [
                           context.watch<NotesProvider>().folders.isNotEmpty
                               ? SlidableAction(
-                                  onPressed: (BuildContext context) async {
+                                  onPressed: (BuildContext cont) async {
                                     var folderId =
                                         await NoteService.getNoteDetail(
                                             note.noteId);
@@ -69,7 +69,7 @@ class _NoteSectionState extends State<NoteSection> {
                                 )
                               : Container(),
                           SlidableAction(
-                            onPressed: (BuildContext context) {
+                            onPressed: (BuildContext cont) {
                               context
                                   .read<NotesProvider>()
                                   .deleteNote(note.noteId, context);
@@ -85,6 +85,7 @@ class _NoteSectionState extends State<NoteSection> {
                         date: note.updatedAt,
                         noteId: note.noteId,
                         previousScreen: "All Notes",
+                        folderId: "",
                       ),
                     ),
                   )

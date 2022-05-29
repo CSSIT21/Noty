@@ -92,14 +92,8 @@ class _CoreScreenState extends material.State<CoreScreen>
 
     super.initState();
     NotificationService.init(initScheduled: true);
-    listenNotifications();
     tz.initializeTimeZones();
   }
-
-  void listenNotifications() =>
-      NotificationService.onNotifications.stream.listen(onClickedNotification);
-
-  void onClickedNotification(String? payload) {}
 
   @override
   material.Widget build(material.BuildContext context) {

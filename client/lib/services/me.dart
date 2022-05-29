@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:noty_client/constants/environment.dart';
 import 'package:noty_client/models/response/error/error_response.dart';
@@ -52,6 +54,29 @@ class ProfileService {
       Response response = await Dio().patch(
           EnvironmentConstant.internalApiPrefix + "/me/edit/password",
           data: {"new_password": newPass, "current_password": currentPass},
+          options: Options(headers: {"Authorization": "Bearer " + userToken!}));
+      InfoResponse res = InfoResponse.fromJson(response.data);
+      return res;
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 400 || e.response?.statusCode == 401) {
+        ErrorResponse error = ErrorResponse.fromJson(e.response?.data);
+        return error;
+      }
+    }
+    return "";
+  }
+
+  static Future<dynamic> changeImage(File file) async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? userToken = prefs.getString('user');
+    String fileName = file.path.split('/').last;
+    FormData formData = FormData.fromMap({
+      "image": await MultipartFile.fromFile(file.path, filename: fileName),
+    });
+    try {
+      Response response = await Dio().patch(
+          EnvironmentConstant.internalApiPrefix + "/me/avatar",
+          data: formData,
           options: Options(headers: {"Authorization": "Bearer " + userToken!}));
       InfoResponse res = InfoResponse.fromJson(response.data);
       return res;

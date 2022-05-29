@@ -1,14 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:noty_client/constants/environment.dart';
 import 'package:noty_client/models/response/me/me_infomation.dart';
-
 import 'package:noty_client/screens/core/me/me_detail.dart';
 import 'package:noty_client/screens/core/me/me_overview.dart';
 import 'package:noty_client/screens/start/login.dart';
 import 'package:noty_client/services/providers/providers.dart';
-import 'package:noty_client/types/widget/placement.dart';
 import 'package:noty_client/widgets/surface/curved_card.dart';
-import 'package:noty_client/widgets/typography/header_text.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -44,17 +42,37 @@ class _MeFragementState extends State<MeFragement> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            margin: const EdgeInsets.only(bottom: 12),
-            child: Image.asset(
-              "assets/images/profile.png",
-              width: 150,
+              margin: const EdgeInsets.only(bottom: 16),
+              height: 125,
+              width: 125,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(120),
+                child: Image.network(
+                  EnvironmentConstant.internalPrefix +
+                      context.watch<ProfileProvider>().meData.avatarUrl,
+                  errorBuilder: (context, error, stackTrace) => Image.asset(
+                    "assets/images/profile-placeholder.png",
+                    width: 125,
+                    height: 125,
+                    fit: BoxFit.cover,
+                    alignment: Alignment.center,
+                  ),
+                  width: 125,
+                  height: 125,
+                  fit: BoxFit.cover,
+                  alignment: Alignment.center,
+                ),
+              )),
+          Container(
+            margin: const EdgeInsets.only(bottom: 20),
+            child: Text(
+              meData.firstname + " " + meData.lastname,
+              style: const TextStyle(
+                fontSize: 24,
+              ),
+              textAlign: TextAlign.center,
             ),
           ),
-          Container(
-              margin: const EdgeInsets.only(bottom: 20),
-              child: HeaderText(
-                  text: meData.firstname + " " + meData.lastname,
-                  size: Size.medium)),
           CurvedCard(
             child: Container(
               padding: const EdgeInsets.only(top: 8, bottom: 8),

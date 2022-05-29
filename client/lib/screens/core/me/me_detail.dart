@@ -12,7 +12,17 @@ class MeDetail extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [Text(title), Text(content)],
+        children: [
+          Text(title),
+          SizedBox(
+            width: 200,
+            child: Text(
+              content,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.end,
+            ),
+          )
+        ],
       ),
     );
   }
