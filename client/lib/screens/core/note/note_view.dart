@@ -244,6 +244,40 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
     });
   }
 
+  saveNote(BuildContext context) {
+    context.read<NotesProvider>().editNote(context).then((_) {
+      updateFolderList(context);
+      context.read<NotesProvider>().readJsonData();
+      context.read<ReminderProvider>().readReminderJson();
+    });
+  }
+
+  saveNoteAndBack(BuildContext context) {
+    showLoading(context);
+    context.read<NotesProvider>().editNote(context).then((_) {
+      Future.wait([
+        updateFolderList(context),
+        context.read<NotesProvider>().readJsonData(),
+        context.read<ReminderProvider>().readReminderJson()
+      ]).then((_) {
+        Navigator.pop(context);
+        Navigator.pop(context);
+        context.read<NotesProvider>().clearNoteDetail();
+        setState(() {
+          details = [];
+        });
+      });
+    });
+  }
+
+  Future<void> updateFolderList(BuildContext context) async {
+    if (widget.folderId != null) {
+      await context
+          .read<NotesProvider>()
+          .readFolderNoteListJson(widget.folderId ?? "");
+    }
+  }
+
   @override
   void initState() {
     context.read<NotesProvider>().readNoteDetailJson(widget.noteId);
@@ -273,6 +307,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
             currentFocus.focusedChild != null) {
           FocusManager.instance.primaryFocus!.unfocus();
         }
+        saveNote(context);
       },
       behavior: HitTestBehavior.translucent,
       child: Scaffold(
@@ -306,23 +341,7 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
               ),
             ),
             onTap: () {
-              showLoading(context);
-              context.read<NotesProvider>().editNote(context).then((_) {
-                context.read<NotesProvider>().readJsonData().then((_) {
-                  Future.wait([
-                    updateFolderList(context),
-                    context.read<NotesProvider>().readJsonData(),
-                    context.read<ReminderProvider>().readReminderJson()
-                  ]).then((_) {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    context.read<NotesProvider>().clearNoteDetail();
-                    setState(() {
-                      details = [];
-                    });
-                  });
-                });
-              });
+              saveNoteAndBack(context);
             },
           ),
           actions: [
@@ -420,13 +439,5 @@ class _NoteDetailScreenState extends State<NoteDetailScreen>
         ),
       ),
     );
-  }
-
-  Future<void> updateFolderList(BuildContext context) async {
-    if (widget.folderId != null) {
-      await context
-          .read<NotesProvider>()
-          .readFolderNoteListJson(widget.folderId ?? "");
-    }
   }
 }

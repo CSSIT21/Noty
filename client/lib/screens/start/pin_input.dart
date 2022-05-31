@@ -161,6 +161,7 @@ class _PinInputScreenState extends State<PinInputScreen> {
                   length: 6,
                   obscureText: false,
                   animationType: AnimationType.fade,
+                  keyboardType: TextInputType.number,
                   pinTheme: PinTheme(
                     shape: PinCodeFieldShape.underline,
                     fieldHeight: 60,
